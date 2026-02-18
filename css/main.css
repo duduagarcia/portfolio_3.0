@@ -62,3 +62,88 @@ html {scrollbar-width: none;}
     --size-font: calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
 }
 
+/* ------------------------- text selection ---------------------------------------- */
+::selection {
+  background-color: var(--brand_black_hover);
+  color: var(--brand_white);
+  text-shadow: none;
+}
+
+::-moz-selection {
+  background-color: var(--brand_black_hover);
+  color: var(--brand_white);
+  text-shadow: none;
+}
+
+
+/* Mobile Landscape */
+@media screen and (max-width: 767px) {
+  :root {
+    --size-container-ideal: 550; /* screen-size in design - no px */
+    --size-container-min: 480px;
+    --size-container-max: 767px;
+  }
+}
+
+/* Mobile Portrait */
+@media screen and (max-width: 479px) {
+  :root {
+    --size-container-ideal: 390; /* screen-size in design - no px */
+    --size-container-min: 320px;
+    --size-container-max: 479px;
+  }
+}
+
+h1, h2, h3, h4, p {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+h1 {
+  line-height: 1.15;
+  font-size: 6em;
+}
+
+h2 {
+  font-size: 2.5em;
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: 2.5em;
+  line-height: 1.1;
+}
+
+h4 {
+  font-size: 1.75em;
+  line-height: 1.15;
+}
+
+p {
+  font-size: 1em;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.container_base {
+  max-width: var(--size-container);
+}
+
+.container_base.medium {
+  max-width: calc(var(--size-container) * 0.85);
+}
+
+.container_base.small {
+  max-width: calc(var(--size-container) * 0.7);
+}
+
+body {
+  font-size: var(--size-font);
+}
+
+
+#hero{
+  height: 100vh;
+  background-color: #636468;
+}
