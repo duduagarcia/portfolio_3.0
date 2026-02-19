@@ -1,44 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <!-- LENIS CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.css">
-    <link rel="stylesheet" href="css/main.css">
-</head>
-<body data-barba="wrapper">
-   <main data-barba="container">
-        <div class="container_base parallax-demo-hero">
-            <div data-parallax-scroll-start="top top" data-parallax="trigger" data-parallax-start="0" data-parallax-end="40" class="parallax-demo-bg">
-                <!-- <img src="https://cdn.prod.website-files.com/68348a3398ed51b777cbfd0d/683d928d5346bddfd3ac9f94_pawel-czerwinski-H8kzolaZjIM-unsplash.avif" class="parallax-demo-img"> -->
-                <img src="/images/teste-dark 2.png" class="parallax-demo-img">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.css"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body data-barba="wrapper">
+    <main data-barba="container">
+      <section id="hero" class="parallax-demo-wrap">
+        <div class="parallax-demo-hero">
+          <div
+            data-parallax-scroll-start="top top"
+            data-parallax="trigger"
+            data-parallax-start="0"
+            data-parallax-end="40"
+            class="parallax-demo-bg"
+          >
+            <img
+              src="images/hero-desktop-FULL-QUALITY.jpg"
+              class="parallax-demo-img"
+            />
+          </div>
+          <h1 class="parallax-demo-h">
+            A software engineer that <br />delivers what AI can't
+          </h1>
+          <div data-css-marquee="" class="marquee-css">
+            <div data-css-marquee-list="" class="marquee-css__list">
+              <div class="marquee-css__item">
+                <p class="marquee-css__item-p">Eduardo A. Garcia</p>
+              </div>
             </div>
-            <h1 class="parallax-demo-h">Osmo Parallax Setup</h1>
-            <div class="parallax-demo-details">
-            <p class="parallax-demo-p">data-parallax-start=”0”<br>data-parallax-end=”40”<br>data-parallax-scroll-start=&quot;top top&quot;</p>
+          </div>
+        </div>
+      </section>
+      <section id="mission">
+        <div class="container-grid">
+            <div class="grid-12">
+                <p class="mission-label">(My mission)</p>
+                <h2 class="mission-text">As an engineer, I solve complex problems to help people achieve their goals, whether designing a complex simple architecture or crafting award-winning interfaces experiences.
+                </h2>
+                <p class="mission-quote">“Good engineering is knowing when not to over-engineer.”</p>
             </div>
         </div>
-        <section id="hero" class="container_base">
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eaque repudiandae iste sint amet necessitatibus laudantium quisquam eos harum cupiditate. Amet quisquam eligendi id laborum laudantium voluptatem delectus, iure voluptatibus facere!</p>
-        </section>
-        <section id="mission" class="container_medium">
-            <h1>mission</h1>
-        </section>
-        <section id="services" class="container_small">
-            <h2>services</h2>
-        </section>
-        <section id="works" class="container_small">
-            <h3>works</h3>
-        </section>
-        <section id="about" class="container_small">
-            <h3>about</h3>
-        </section>
-        <footer></footer>
+      </section>
+      <section id="services">
+        <p>services</p>
+      </section>
+      <section id="works" class="container_base">
+        <h3>works</h3>
+      </section>
+      <section id="about" class="container_base">
+        <h3>about</h3>
+      </section>
+      <div data-footer-parallax="" class="footer-wrap">
+        <footer data-footer-parallax-inner="" class="demo-footer">
+              <p class="demo-footer-p">© 2024 Eduardo A. Garcia</p>
+        </footer>
+      </div>
     </main>
-
-
 
     <!-- BARBA JS -->
     <script src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"></script>
@@ -48,7 +73,7 @@
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/CustomEase.min.js"></script>
     <!-- LENIS JS -->
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"></script>
     <script src="js/index.js"></script>
-</body>
+  </body>
 </html>

@@ -5,6 +5,8 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   gsap.registerPlugin(ScrollTrigger,SplitText,CustomEase)
   initGlobalParallax()
+  initFooterParallax();
+  initCSSMarquee();
 });
 
 const documentTitleStore = document.title;
@@ -393,4 +395,65 @@ function initGlobalParallax() {
       return () => ctx.revert()
     }
   )
+}
+
+function initFooterParallax(){
+  document.querySelectorAll('[data-footer-parallax]').forEach(el => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: 'clamp(top bottom)',
+        end: 'clamp(top top)',
+        scrub: true
+      }
+    });
+  
+    const inner = el.querySelector('[data-footer-parallax-inner]');
+    const dark  = el.querySelector('[data-footer-parallax-dark]');
+  
+    if (inner) {
+      tl.from(inner, {
+        yPercent: -25,
+        ease: 'linear'
+      });
+    }
+  
+    if (dark) {
+      tl.from(dark, {
+        opacity: 0.5,
+        ease: 'linear'
+      }, '<');
+    }
+  });
+}
+
+function initCSSMarquee() {
+  const pixelsPerSecond = 200; // Set the marquee speed (pixels per second)
+  const marquees = document.querySelectorAll('[data-css-marquee]');
+  
+  // Duplicate each [data-css-marquee-list] element inside its container
+  marquees.forEach(marquee => {
+    marquee.querySelectorAll('[data-css-marquee-list]').forEach(list => {
+      const duplicate = list.cloneNode(true);
+      marquee.appendChild(duplicate);
+    });
+  });
+
+  // Create an IntersectionObserver to check if the marquee container is in view
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      entry.target.querySelectorAll('[data-css-marquee-list]').forEach(list => 
+        list.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused'
+      );
+    });
+  }, { threshold: 0 });
+  
+  // Calculate the width and set the animation duration accordingly
+  marquees.forEach(marquee => {
+    marquee.querySelectorAll('[data-css-marquee-list]').forEach(list => {
+      list.style.animationDuration = (list.offsetWidth / pixelsPerSecond) + 's';
+      list.style.animationPlayState = 'paused';
+    });
+    observer.observe(marquee);
+  });
 }

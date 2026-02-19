@@ -54,12 +54,8 @@ html {scrollbar-width: none;}
     --black: #0f0f0f;
 
 
-    --size-unit: 16; /* body font-size in design - no px */
-    --size-container-ideal: 1920px; /* screen-size in design - no px */
-    --size-container-min: 992px;
-    --size-container-max: 1920px;
-    --size-container: clamp(var(--size-container-min), 100vw, var(--size-container-max));
-    --size-font: calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
+    --grid-width: 1680px;
+    --page-padding: 20px;
 }
 
 /* ------------------------- text selection ---------------------------------------- */
@@ -75,86 +71,34 @@ html {scrollbar-width: none;}
   text-shadow: none;
 }
 
-
-/* Mobile Landscape */
-@media screen and (max-width: 767px) {
-  :root {
-    --size-container-ideal: 550; /* screen-size in design - no px */
-    --size-container-min: 480px;
-    --size-container-max: 767px;
-  }
-}
-
-/* Mobile Portrait */
-@media screen and (max-width: 479px) {
-  :root {
-    --size-container-ideal: 390; /* screen-size in design - no px */
-    --size-container-min: 320px;
-    --size-container-max: 479px;
-  }
-}
-
 h1, h2, h3, h4, p {
   margin-top: 0;
   margin-bottom: 0;
   font-weight: 500;
 }
 
-h1 {
-  line-height: 1.15;
-  font-size: 6em;
+.container-grid {
+  width: 100%;
+  max-width: calc(var(--grid-width) + (var(--page-padding) * 2));
+  margin-inline: auto;
+  padding-inline: var(--page-padding);
+  /* background-color: yellow; */
 }
 
-h2 {
-  font-size: 2.5em;
-  line-height: 1.1;
-}
-
-h3 {
-  font-size: 2.5em;
-  line-height: 1.1;
-}
-
-h4 {
-  font-size: 1.75em;
-  line-height: 1.15;
-}
-
-p {
-  font-size: 1em;
-  line-height: 1.4;
-  font-weight: 400;
-}
-
-.container_base {
-  max-width: var(--size-container);
-}
-
-.container_base.medium {
-  max-width: calc(var(--size-container) * 0.85);
-}
-
-.container_base.small {
-  max-width: calc(var(--size-container) * 0.7);
-}
-
-body {
-  font-size: var(--size-font);
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px; 
 }
 
 
-#hero{
-  height: 100vh;
-  background-color: #636468;
-}
+/* ======== HERO ======== */
 
-
-.parallax-demo-wrap {
+#hero.parallax-demo-wrap {
   grid-column-gap: 15em;
   grid-row-gap: 15em;
   flex-flow: column;
   width: 100%;
-  padding-bottom: 50vh;
   font-size: min(.85vw, 1rem);
   display: flex;
 }
@@ -169,6 +113,7 @@ body {
   display: flex;
   position: relative;
   overflow: clip;
+  background-color: rosybrown;
 }
 
 .parallax-demo-bg {
@@ -180,18 +125,134 @@ body {
 
 .parallax-demo-img {
   object-fit: cover;
+  background-position: center;
   width: 100%;
   height: 100%;
 }
 
 .parallax-demo-h {
+  position: absolute;
   z-index: 1;
-  text-align: center;
-  max-width: 15ch;
-  margin-top: 0;
-  margin-bottom: 0;
-  font-size: 4em;
-  font-weight: 500;
+  left: 2rem;
+  top: 5rem;
+  text-transform: uppercase;
+  color: var(--white);
+  /* text-align: center; */
+  font-weight: 400;
+  line-height: 1.15;
+  font-size: 2.5em;
+  /* background-color: aqua; */
+}
+
+
+.marquee-css {
+  color: var(--white);
+  /* background-color: #000; */
+  width: 100%;
+  display: flex;
+  position: absolute;
+  overflow: hidden;
+  bottom: 4rem;
+}
+
+.marquee-css__list {
+  flex: none;
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+.marquee-css__item {
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  flex: 0;
+  align-items: center;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-right: 10em;
+  display: flex;
+  /* background-color: orange; */
+}
+
+.marquee-css__item-p {
+  white-space: nowrap;
   line-height: 1;
+  letter-spacing: -3%;
+  font-size: 20rem;
+  font-weight: 500;
+}
+
+/* CSS Keyframe Animation */
+@keyframes translateX { 
+	to {
+    transform: translateX(-100%);
+  }
+}
+
+[data-css-marquee-list] {
+  animation: translateX 30s linear;
+  animation-iteration-count: infinite;
+  animation-play-state: paused;
+}
+
+
+
+
+/* ======== MISSION ======== */
+#mission {
+  background-color: var(--white);
+  color: var(--black);
+  padding-top: clamp(5rem, 10vw, 14rem);
+  min-height: 100vh;
+}
+
+.mission-text{
+  grid-column: 5 / span 8;
+  font-size: clamp(36px, 4vw, 64px);
+}
+
+.mission-label {
+  grid-column: 1 / span 1;
+}
+
+.mission-quote{
+  margin-top: clamp(3rem, 4vw, 6rem);
+  grid-column: 5 / span 8;
+}
+
+
+/* ======== SERVICES ======== */
+#services{
+  background-color: var(--white);
+  height: 100vh;
+  color: var(--black);
+  border: 1px solid red;
+}
+
+
+/* ======== ABOUT ======== */
+#about{
+  background-color: var(--black);
+  height: 100vh;
+  color: var(--white);
+}
+
+
+/* ======== FOOTER PARALLAX ======== */
+.footer-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-footer {
+  grid-column-gap: 7.5em;
+  grid-row-gap: 7.5em;
+  letter-spacing: -.02em;
+  flex-flow: column;
+  justify-content: space-between;
+  min-height: 100svh;
+  padding: 2.5em;
+  font-weight: 600;
+  display: flex;
   position: relative;
 }
