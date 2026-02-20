@@ -180,6 +180,7 @@ h1, h2, h3, h4, p {
   letter-spacing: -3%;
   font-size: 20rem;
   font-weight: 500;
+  font-size: clamp(200px, 20vw, 20rem);
 }
 
 /* CSS Keyframe Animation */
