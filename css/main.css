@@ -195,6 +195,21 @@ h1, h2, h3, h4, p {
   animation-play-state: paused;
 }
 
+.hero-mobile-bg{
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  .hero-mobile-bg{
+    display: block;
+  }
+
+   .hero-bg{
+    display: none;
+   }
+  
+}
+
 
 
 
