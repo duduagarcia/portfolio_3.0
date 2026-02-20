@@ -201,23 +201,43 @@ h1, h2, h3, h4, p {
 /* ======== MISSION ======== */
 #mission {
   background-color: var(--white);
-  color: var(--black);
   padding-top: clamp(5rem, 10vw, 14rem);
   min-height: 100vh;
+  color: var(--dark_gray);
 }
 
 .mission-text{
   grid-column: 5 / span 8;
   font-size: clamp(36px, 4vw, 64px);
+  color: var(--black);
 }
 
 .mission-label {
-  grid-column: 1 / span 1;
+  grid-column: 1 / span 2;
 }
 
 .mission-quote{
   margin-top: clamp(3rem, 4vw, 6rem);
   grid-column: 5 / span 8;
+  font-size: clamp(18px, 2vw, 24px);
+}
+
+@media screen and (max-width: 800px) {
+  .mission-text {
+    grid-column: 1 / span 12;
+    font-size: clamp(40px, 6vw, 64px);
+  }
+
+  .mission-label {
+    grid-column: 1 / span 12;
+    margin-bottom: clamp(1rem, 3vw, 4rem);
+  }
+
+  .mission-quote {
+    grid-column: 1 / span 12;
+    margin-top: clamp(2rem, 3vw, 5rem);
+  }
+  
 }
 
 
