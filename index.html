@@ -3,15 +3,111 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <!-- LENIS CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.css"
+    <title>Eduardo A. Garcia – Software Engineer</title>
+    <meta
+      name="description"
+      content="Brazilian software engineer focused on solving complex problems, designing thoughtful architectures and crafting smooth, award-worthy interfaces."
     />
+    <meta name="author" content="Eduardo A. Garcia" />
+
+    <!-- Open Graph / social sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Eduardo A. Garcia – Software Engineer" />
+    <meta
+      property="og:description"
+      content="Brazilian software engineer focused on solving complex problems, designing thoughtful architectures and crafting smooth, award-worthy interfaces."
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Eduardo A. Garcia – Software Engineer"
+    />
+    <meta
+      name="twitter:description"
+      content="Brazilian software engineer focused on solving complex problems, designing thoughtful architectures and crafting smooth, award-worthy interfaces."
+    />
+    <!-- Hint browser to connect early to CDN -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body data-barba="wrapper">
+    <nav data-navigation-status="not-active" class="navigation">
+      <div data-navigation-toggle="close" class="navigation__dark-bg"></div>
+      <div class="centered-nav">
+        <div class="centered-nav__bg"></div>
+        <div class="centered-nav__header">
+          <a href="#" class="centered-nav__logo"> © Eduardo A. Garcia </a>
+          <button
+            data-theme="light"
+            data-btn-hover=""
+            class="btn w-inline-block"
+            data-navigation-toggle="toggle"
+            data-hover=""
+          >
+            <div class="btn__bg"></div>
+            <div class="btn__circle-wrap">
+              <div class="btn__circle">
+                <div class="before__100"></div>
+              </div>
+            </div>
+            <div class="btn__text">
+              <p class="btn-text-p">Menu</p>
+            </div>
+          </button>
+        </div>
+        <div class="centered-nav__content">
+          <div class="centered-nav__inner">
+            <ul class="centered-nav__ul">
+              <div data-navigation-item="" class="centered-nav__li">
+                <a href="/index.html" class="hamburger-nav__a">
+                  <p class="hamburger-nav__p">Home</p>
+                </a>
+              </div>
+              <div data-navigation-item="" class="centered-nav__li">
+                <a href="/about.html" class="hamburger-nav__a">
+                  <p class="hamburger-nav__p">About</p>
+                </a>
+              </div>
+              <div data-navigation-item="" class="centered-nav__li">
+                <a href="/works.html" class="hamburger-nav__a">
+                  <p class="hamburger-nav__p">Works</p>
+                </a>
+              </div>
+              <!-- <div data-navigation-item="" class="centered-nav__li">
+<a href="/contact.html" class="hamburger-nav__a">
+<p class="hamburger-nav__p">Contact</p>
+</a>
+</div> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- <div class="centered-nav__banner-w">
+<a href="#" data-css-marquee class="centered-nav__banner w-inline-block">
+<div data-css-marquee-list class="centered-nav__banner-item">
+<div class="centered-nav__banner-inner">
+<p class="centered-nav__banner-text">Scroll Down to Discover</p>
+</div>
+<div class="centered-nav__banner-inner">
+<p class="centered-nav__banner-text">Scroll Down to Discover</p>
+</div>
+<div class="centered-nav__banner-inner">
+<p class="centered-nav__banner-text">Scroll Down to Discover</p>
+</div>
+<div class="centered-nav__banner-inner">
+<p class="centered-nav__banner-text">Scroll Down to Discover</p>
+</div>
+<div class="centered-nav__banner-inner">
+<p class="centered-nav__banner-text">Scroll Down to Discover</p>
+</div>
+</div>
+</a>
+</div> -->
+
     <main data-barba="container">
       <section id="hero" class="parallax-demo-wrap">
         <div class="parallax-demo-hero">
@@ -23,12 +119,16 @@
             class="parallax-demo-bg"
           >
             <img
-              src="images/hero.jpg"
+              src="images/home/hero/hero.webp"
               class="parallax-demo-img hero-bg"
+              alt=""
+              aria-hidden="true"
             />
             <img
-              src="images/hero-mobile.jpg"
+              src="images/home/hero/hero-mobile.webp"
               class="parallax-demo-img hero-mobile-bg"
+              alt=""
+              aria-hidden="true"
             />
           </div>
           <h1 class="parallax-demo-h">
@@ -45,39 +145,258 @@
       </section>
       <section id="mission">
         <div class="container-grid">
-            <div class="grid-12">
-                <p class="mission-label" data-split="heading" data-split-reveal="lines">(My mission)</p>
-                <h2 class="mission-text" data-split="heading" data-split-reveal="lines">As an engineer, I solve complex problems to help people achieve their goals, whether designing a complex simple architecture or crafting award-winning interfaces experiences.
-                </h2>
-                <p class="mission-quote" data-split="heading" data-split-reveal="words">“Good engineering is knowing when not to over-engineer.”</p>
-            </div>
+          <div class="grid-12">
+            <p
+              class="mission-label"
+              data-split="heading"
+              data-split-reveal="lines"
+            >
+              (My mission)
+            </p>
+            <h2
+              class="mission-text"
+              data-split="heading"
+              data-split-reveal="lines"
+            >
+              As an engineer, I solve complex problems to help people achieve
+              their goals, whether designing a complex simple architecture or
+              crafting award-winning interfaces experiences.
+            </h2>
+            <p
+              class="mission-quote"
+              data-split="heading"
+              data-split-reveal="words"
+            >
+              “Good engineering is knowing when not to over-engineer.”
+            </p>
+          </div>
         </div>
       </section>
       <section id="services">
-        <p>services</p>
+        <div class="container-grid">
+          <div class="grid-12">
+            <p
+              class="services-label"
+              data-split="heading"
+              data-split-reveal="lines"
+            >
+              (How can i help)
+            </p>
+            <h2
+              class="services-text"
+              data-split="heading"
+              data-split-reveal="lines"
+            >
+              This is where my work typically lives.
+            </h2>
+          </div>
+        </div>
       </section>
-      <section id="works" class="container_base">
-        <h3>works</h3>
+      <section id="works">
+        <section class="container_base works-container">
+          <div class="sticky-title-container">
+            <div class="works-inner">
+              <h2 class="works-title">My work</h2>
+              <div class="works-stage" data-works-stage>
+                <div class="work-card">
+                  <img
+                    src="/images/home/projects/mockup-nubank-use.webp"
+                    alt=""
+                  />
+                </div>
+                <div class="work-card">
+                  <img
+                    src="/images/home/projects/mockup-infra-use.webp"
+                    alt=""
+                  />
+                </div>
+                <div class="work-card">
+                  <img src="/images/home/projects/optimus-mockup.webp" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="works-footer">
+          <a href="#" class="btn-icon-link w-inline-block">
+            <div class="btn-icon-content">
+              <div class="btn-icon-content__mask">
+                <span data-button-anim-target="" class="btn-icon-content__text"
+                  >See all work</span
+                >
+              </div>
+              <div data-icon-size="normal" class="btn-icon-icon">
+                <div data-button-anim-target="" class="btn-icon-icon__bg"></div>
+                <div class="btn-icon-icon__wrap">
+                  <div class="btn-icon-icon__list">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="100%"
+                      viewbox="0 0 10 8"
+                      fill="none"
+                      data-button-anim-target=""
+                      class="btn-icon-icon__arrow"
+                    >
+                      <path
+                        d="M4.45231 0.385986H6.02531L9.30131 3.99999L6.02531 7.61399H4.45231L7.40331 4.58499H0.695312V3.42799H7.41631L4.45231 0.385986Z"
+                        fill="#0F0F0F"
+                      ></path>
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="100%"
+                      viewbox="0 0 10 8"
+                      fill="none"
+                      data-button-anim-target=""
+                      class="btn-icon-icon__arrow"
+                    >
+                      <path
+                        d="M4.45231 0.385986H6.02531L9.30131 3.99999L6.02531 7.61399H4.45231L7.40331 4.58499H0.695312V3.42799H7.41631L4.45231 0.385986Z"
+                        fill="#0F0F0F"
+                      ></path>
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="100%"
+                      viewbox="0 0 10 8"
+                      fill="none"
+                      data-button-anim-target=""
+                      class="btn-icon-icon__arrow"
+                    >
+                      <path
+                        d="M4.45231 0.385986H6.02531L9.30131 3.99999L6.02531 7.61399H4.45231L7.40331 4.58499H0.695312V3.42799H7.41631L4.45231 0.385986Z"
+                        fill="#0F0F0F"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div
+                data-button-anim-target=""
+                class="btn-icon-content__bg"
+              ></div>
+            </div>
+          </a>
+        </div>
       </section>
       <section id="about" class="container_base">
-        <h3>about</h3>
+        <div
+          data-marquee-duplicate="2"
+          data-marquee-scroll-direction-target=""
+          data-marquee-direction="left"
+          data-marquee-status="normal"
+          data-marquee-speed="15"
+          data-marquee-scroll-speed="10"
+          class="marquee-advanced"
+        >
+          <div data-marquee-scroll-target="" class="marquee-advanced__scroll">
+            <div
+              data-marquee-collection-target=""
+              class="marquee-advanced__collection"
+            >
+              <div class="marquee-advanced__item">
+                <p class="marquee__advanced__p">Coding my way since 2020</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-grid">
+          <div class="grid-12">
+            <h2
+              class="about-text"
+              data-split="heading"
+              data-split-reveal="lines"
+            >
+              I'm a Brazillian software engineer rarely satisfied with my own
+              work, not out doubt, but driven by a constant pursuit of
+              refinement, improvement and better solutions.
+            </h2>
+            <div class="img-card">
+              <img src="/images/home/foto_perfil.webp" alt="" />
+            </div>
+            <p
+              class="about-subtitle"
+              data-split="heading"
+              data-split-reveal="lines"
+            >
+              Functionality is expected.<br />
+              Delight is what defines success, transforming interaction into
+              experience, and usability into emotion.<br /><br />
+              <span class="about-always-exploring">
+                <span class="pulsing-ball" aria-hidden="true"></span>
+                <span class="about-always-exploring-text"
+                  >Always exploring</span
+                >
+                <span class="about-exploring-dots" aria-hidden="true">
+                  <span class="dot">.</span>
+                  <span class="dot">.</span>
+                  <span class="dot">.</span>
+                </span>
+              </span>
+            </p>
+          </div>
+        </div>
       </section>
-      <div data-footer-parallax="" class="footer-wrap">
-        <footer data-footer-parallax-inner="" class="demo-footer">
-              <p class="demo-footer-p">© 2024 Eduardo A. Garcia</p>
+      <section id="links" class="container_base">
+        <div class="grid-12">
+          <h2 class="links-title">Elsewhere on the internet</h2>
+        </div>
+      </section>
+      <div data-footer-parallax="" id="footer" class="footer-wrap">
+        <footer data-footer-parallax-inner="" class="parallax-footer">
+          <div class="container-grid">
+            <div class="grid-12">
+              <h2>
+                Every project begins with a conversation.<br />Share your ideas,
+                your challenges and let's explore what we can build together.
+              </h2>
+              <div class="footer-links">
+                <a data-underline-link="alt" href="#" class="underline-link"
+                  >eduardo.agarcia117@gmail.com</a
+                >
+                <a data-underline-link="alt" href="#" class="underline-link"
+                  >+55 51 99415 1552</a
+                >
+              </div>
+              <div class="copyright">
+                <div class="logo-wrapper">
+                  <img src="/images/logo.svg" alt="" />
+                </div>
+                <p>©2026. All rights reserved.</p>
+              </div>
+            </div>
+          </div>
         </footer>
       </div>
     </main>
 
     <!-- BARBA JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"
+    ></script>
     <!-- GSAP JS -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/CustomEase.min.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/gsap.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/CustomEase.min.js"
+    ></script>
     <!-- LENIS JS -->
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"></script>
-    <script src="js/index.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"
+    ></script>
+    <script defer src="js/index.js"></script>
   </body>
 </html>
