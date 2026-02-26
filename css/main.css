@@ -129,6 +129,10 @@ h2 {
   gap: 16px;
 }
 
+main {
+  background-color: var(--white);
+}
+
 /* ======== NAVBAR ======== */
 /* full screen invisible overlay */
 .navigation {
@@ -281,7 +285,7 @@ h2 {
   position: absolute;
   z-index: 400;
   transition:
-    transform 0.6s cubic-bezier(0.625, 0.05, 0, 1),
+    transform 1s cubic-bezier(0.625, 0.05, 0, 1),
     opacity 0.6s cubic-bezier(0.625, 0.05, 0, 1);
 }
 
@@ -346,7 +350,7 @@ h2 {
 }
 
 [data-css-marquee-list] {
-  animation: translateX 20s linear;
+  animation: translateX 0.1s linear;
   animation-iteration-count: infinite;
   animation-play-state: paused;
 }
@@ -386,18 +390,6 @@ h2 {
   background-position: center;
   width: 100%;
   height: 100%;
-}
-
-#hero .parallax-demo-h {
-  position: absolute;
-  z-index: 1;
-  left: 2rem;
-  top: 5rem;
-  text-transform: uppercase;
-  color: var(--white);
-  font-weight: 400;
-  line-height: 1.15;
-  font-size: 2.5em;
 }
 
 #hero .marquee-css {
@@ -460,6 +452,50 @@ h2 {
 
   #hero .hero-bg {
     display: none;
+  }
+}
+
+#hero .grid-12 {
+  z-index: 1;
+  background: none;
+  position: relative;
+  /* background-color: red; */
+  /* left: unset;
+top: unset; */
+  /* background-color: #22c55e; */
+  /* Alinha o bloco ao topo do contêiner flex pai */
+  align-self: flex-start;
+  /* margin-top: clamp(100px, 50vw, 170px); */
+  /* Removido "bottom: 10" (sem unidade e conflitante). */
+}
+
+/* Garante que o container que envolve .grid-12 fique no topo do bloco hero */
+#hero .container-grid {
+  align-self: flex-start;
+  margin-top: clamp(100px, 50vw, 170px);
+}
+
+#hero .parallax-demo-h {
+  text-transform: uppercase;
+  color: var(--white);
+  grid-column: 1 / span 4;
+  font-size: clamp(22px, 20em, 32px);
+  width: 450px;
+}
+
+@media screen and (max-width: 1200px) {
+  #hero .container-grid {
+    align-self: flex-start;
+    margin-top: 50px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #hero .parallax-demo-h {
+    width: auto;
+    grid-column: 1 / span 12;
+    font-size: 28px !important;
+    max-width: 400px;
   }
 }
 
@@ -767,6 +803,12 @@ h2 {
   width: clamp(280px, 50vw, 700px);
   aspect-ratio: 700 / 990;
   background-color: #1a1a1a;
+}
+
+.img-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .about-subtitle {

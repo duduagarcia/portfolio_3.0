@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   // Global UI behaviors that live outside the Barba container
   initCenteredScalingNavigationBar();
   initDirectionalButtonHover();
-  initNavMarqueeScrollToggle();
 });
 
 const documentTitleStore = document.title;
@@ -358,11 +357,6 @@ function initLenis() {
   if (hasScrollTrigger) {
     lenis.on("scroll", ScrollTrigger.update);
   }
-
-  // Keep the navigation marquee banner in sync with smooth scroll
-  lenis.on("scroll", ({ scroll }) => {
-    handleNavBannerScroll(scroll);
-  });
 
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
@@ -730,9 +724,10 @@ function initWorksBackgroundTransition() {
   if (!hasScrollTrigger) return;
 
   const triggerSection = document.querySelector("#works");
-  if (!triggerSection) return;
 
-  const pageBackground = document.body;
+  if (!triggerSection) return;
+  const pageBackground = document.querySelector('[data-barba="container"]');
+  console.log("Trigger section for background transition:", pageBackground);
 
   // Garante estado inicial branco
   gsap.set(pageBackground, { backgroundColor: "var(--white)" });
@@ -835,6 +830,16 @@ function initCenteredScalingNavigationBar() {
       });
     });
 
+  // Close navbar when a nav link is clicked
+  document.querySelectorAll(".hamburger-nav__a").forEach((link) => {
+    link.addEventListener("click", () => {
+      const navStatusEl = document.querySelector("[data-navigation-status]");
+      if (!navStatusEl) return;
+      navStatusEl.setAttribute("data-navigation-status", "not-active");
+      // If you use Lenis you can 'start' Lenis here: Example Lenis.start();
+    });
+  });
+
   // Close Navigation
   document
     .querySelectorAll('[data-navigation-toggle="close"]')
@@ -902,41 +907,3 @@ function initDirectionalButtonHover() {
 // -----------------------------------------
 // NAV + MARQUEE INTERACTION (SCROLL TOP)
 // -----------------------------------------
-
-function handleNavBannerScroll(lenisScroll) {
-  const banner = document.querySelector(".centered-nav__banner-w");
-  if (!banner) return;
-
-  // Prefer Lenis scroll value when available, otherwise fall back to window scroll
-  let scrollTop;
-  if (typeof lenisScroll === "number") {
-    scrollTop = lenisScroll;
-  } else if (lenis && typeof lenis.scroll === "number") {
-    scrollTop = lenis.scroll;
-  } else {
-    scrollTop =
-      window.scrollY ||
-      document.documentElement.scrollTop ||
-      document.body.scrollTop ||
-      0;
-  }
-
-  const shouldHide = scrollTop > 0.5; // treat any small scroll offset as "not at top"
-
-  if (shouldHide) {
-    banner.classList.add("centered-nav__banner-w--hidden");
-  } else {
-    banner.classList.remove("centered-nav__banner-w--hidden");
-  }
-}
-
-function initNavMarqueeScrollToggle() {
-  const banner = document.querySelector(".centered-nav__banner-w");
-  if (!banner) return;
-
-  // Initial state on load
-  handleNavBannerScroll();
-
-  // Fallback for when Lenis is not available
-  window.addEventListener("scroll", () => handleNavBannerScroll());
-}
