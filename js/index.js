@@ -74,6 +74,12 @@ function initAfterEnterFunctions(next) {
   initMarqueeScrollDirection();
   initWorksBackgroundTransition();
   initWorksCardsAnimation();
+  initAccordionCSS();
+  initServicesAccordionSync();
+
+  // ABOUT PAGE
+  initRotatingText();
+
   if (hasLenis) {
     lenis.resize();
   }
@@ -736,8 +742,8 @@ function initWorksBackgroundTransition() {
     scrollTrigger: {
       trigger: triggerSection,
       // Transição rápida e suave quando a seção WORKS se aproxima do meio da viewport
-      start: "top 95%", // começa a escurecer pouco antes da WORKS entrar
-      end: "top 80%", // termina logo depois
+      start: "14% 95%", // começa a escurecer pouco antes da WORKS entrar
+      end: "14% 90%", // termina logo depois
       scrub: 0.4,
       markers: false, // defina como true se quiser depurar
     },
@@ -904,6 +910,247 @@ function initDirectionalButtonHover() {
   }
 }
 
-// -----------------------------------------
-// NAV + MARQUEE INTERACTION (SCROLL TOP)
-// -----------------------------------------
+function initAccordionCSS() {
+  document.querySelectorAll('[data-accordion-css-init]').forEach((accordion) => {
+    const closeSiblings = accordion.getAttribute('data-accordion-close-siblings') === 'true';
+
+    accordion.addEventListener('click', (event) => {
+      const toggle = event.target.closest('[data-accordion-toggle]');
+      if (!toggle) return; // Exit if the clicked element is not a toggle
+
+      const singleAccordion = toggle.closest('[data-accordion-status]');
+      if (!singleAccordion) return; // Exit if no accordion container is found
+
+      const isActive = singleAccordion.getAttribute('data-accordion-status') === 'active';
+      singleAccordion.setAttribute('data-accordion-status', isActive ? 'not-active' : 'active');
+      
+      // When [data-accordion-close-siblings="true"]
+      if (closeSiblings && !isActive) {
+        accordion.querySelectorAll('[data-accordion-status="active"]').forEach((sibling) => {
+          if (sibling !== singleAccordion) sibling.setAttribute('data-accordion-status', 'not-active');
+        });
+      }
+    });
+  });
+}
+
+function initServicesAccordionSync() {
+  if (!hasScrollTrigger) return;
+
+  const servicesSection = document.querySelector('#services');
+  if (!servicesSection) return;
+
+  const imgService = servicesSection.querySelector('.img-service');
+  const accordionItems = servicesSection.querySelectorAll('.accordion-css__item');
+  
+  if (!imgService || !accordionItems.length) return;
+
+  let isAutoScrolling = false;
+
+  // Function to find which accordion item is aligned with the middle of the red square
+  function updateAlignedItem() {
+    if (isAutoScrolling) return; // Don't update if auto-scrolling
+    
+    const imgRect = imgService.getBoundingClientRect();
+    const imgMiddle = imgRect.top + imgRect.height / 2;
+    
+    let closestItem = null;
+    let closestDistance = Infinity;
+    
+    accordionItems.forEach((item) => {
+      const itemRect = item.getBoundingClientRect();
+      const itemMiddle = itemRect.top + itemRect.height / 2;
+      const distance = Math.abs(imgMiddle - itemMiddle);
+      
+      // Find the item with the smallest distance to the red square's middle
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestItem = item;
+      }
+    });
+    
+    // Update accordion status only if it's not already manually set
+    accordionItems.forEach((item) => {
+      if (item === closestItem) {
+        item.setAttribute('data-accordion-status', 'active');
+      } else {
+        item.setAttribute('data-accordion-status', 'not-active');
+      }
+    });
+  }
+
+  // Function to scroll the page so that the red square middle aligns with the target accordion middle
+  function scrollToAlignAccordion(targetItem) {
+    // immediately open the clicked item so user sees it
+    accordionItems.forEach((item) => {
+      item.setAttribute(
+        "data-accordion-status",
+        item === targetItem ? "active" : "not-active",
+      );
+    });
+
+    isAutoScrolling = true;
+
+    const imgRect = imgService.getBoundingClientRect();
+    const imgMiddle = imgRect.top + imgRect.height / 2;
+    
+    const itemRect = targetItem.getBoundingClientRect();
+    const itemHeight = itemRect.height;
+    
+    // Calculate the scroll distance needed to align target item middle with red square middle
+    const scrollOffset = window.scrollY + itemRect.top + itemHeight / 2 - imgMiddle;
+    
+    // Create a proxy object to animate scroll
+    const proxy = { scroll: window.scrollY };
+    
+    // Animate scroll using GSAP with proxy object
+    // use a slower ease for gentle resistance near alignment
+    gsap.to(proxy, {
+      scroll: scrollOffset,
+      duration: 0.9,
+      ease: 'power2.out',
+      onUpdate: () => {
+        window.scrollTo(0, proxy.scroll);
+      },
+      onComplete: () => {
+        // Disable auto-scrolling flag immediately after animation completes
+        isAutoScrolling = false;
+      },
+    });
+  }
+
+  // Add click listener to accordion toggle buttons
+  accordionItems.forEach((item) => {
+    const toggle = item.querySelector('[data-accordion-toggle]');
+    if (toggle) {
+      toggle.addEventListener('click', (e) => {
+        // Prevent event from bubbling to the document accordion listener
+        e.stopPropagation();
+        // Scroll to align this accordion with the red square
+        scrollToAlignAccordion(item);
+      });
+    }
+  });
+  
+  // Create a ScrollTrigger that updates continuously as the user scrolls
+  ScrollTrigger.create({
+    trigger: servicesSection,
+    start: 'top center',
+    end: 'bottom center',
+    onUpdate: updateAlignedItem,
+  });
+  
+  // Also update on window resize
+  window.addEventListener('resize', updateAlignedItem);
+  
+  // Initial update
+  updateAlignedItem();
+}
+
+function initRotatingText() {
+  document.querySelectorAll('[data-rotating-title]').forEach((heading) => {
+
+    const stepDuration = parseFloat(heading.getAttribute('data-step-duration') || '1.75');
+
+    SplitText.create(heading, {
+      type: 'lines',
+      mask: 'lines',
+      autoSplit: true,
+      linesClass: 'rotating-line',
+      onSplit(instance) {
+        const rotatingSpan = heading.querySelector('[data-rotating-words]');
+        if (!rotatingSpan) return;
+
+        const rawWords = rotatingSpan.getAttribute('data-rotating-words') || '';
+        const words = rawWords
+          .split(',')
+          .map((w) => w.trim())
+          .filter(Boolean);
+
+        if (!words.length) return;
+
+        // Build inner wrapper with stacked words
+        const wrapper = document.createElement('span');
+        wrapper.className = 'rotating-text__inner';
+
+        const wordEls = words.map((word) => {
+          const el = document.createElement('span');
+          el.className = 'rotating-text__word';
+          el.textContent = word;
+          wrapper.appendChild(el);
+          return el;
+        });
+
+        // Replace the original content of the highlight span
+        rotatingSpan.textContent = '';
+        rotatingSpan.appendChild(wrapper);
+
+        requestAnimationFrame(() => {
+          
+          // Define duration of your in + out movement
+          const inDuration = 0.75;
+          const outDuration = 0.6;
+
+          // Initial state: everyone hidden below
+          gsap.set(wordEls, { yPercent: 150, autoAlpha: 0 });
+
+          // Show first word immediately
+          let activeIndex = 0;
+          const firstWord = wordEls[activeIndex];
+          gsap.set(firstWord, { yPercent: 0, autoAlpha: 1 });
+
+          // Set initial width to first word
+          const firstWidth = firstWord.getBoundingClientRect().width;
+          wrapper.style.width = firstWidth + 'px';
+
+          function showNext() {
+            const nextIndex = (activeIndex + 1) % wordEls.length;
+            const prev = wordEls[activeIndex];
+            const current = wordEls[nextIndex];
+
+            const targetWidth = current.getBoundingClientRect().width;
+
+            // Animate wrapper width to match new word
+            gsap.to(wrapper, {
+              width: targetWidth,
+              duration: inDuration,
+              ease: 'power4.inOut'
+            });
+
+            // Move old word out
+            if (prev && prev !== current) {
+              gsap.to(prev, {
+                yPercent: -150,
+                autoAlpha: 0,
+                duration: outDuration,
+                ease: 'power4.inOut'
+              });
+            }
+
+            // Reveal new word
+            gsap.fromTo(
+              current,
+              { yPercent: 150, autoAlpha: 0 },
+              {
+                yPercent: 0,
+                autoAlpha: 1,
+                duration: inDuration,
+                ease: 'power4.inOut'
+              }
+            );
+
+            activeIndex = nextIndex;
+
+            gsap.delayedCall(stepDuration, showNext);
+          }
+
+          // First word is already visible, start rotating after a full step
+          if (wordEls.length > 1) {
+            gsap.delayedCall(stepDuration, showNext);
+          }
+        });
+      }
+    });
+  });
+}
+
