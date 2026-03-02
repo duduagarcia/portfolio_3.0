@@ -608,16 +608,14 @@ main {
   top: clamp(70px, 20vw, 250px);
   align-self: start;
   will-change: transform;
-
-  background-color: #22c55e;
 }
 
 .img-service{
   grid-column: 1 / span 4;
-  width: 550px;
-  height: 400px;
-  /* aspect-ratio: 700 / 990; */
-
+  width: clamp(300px, 50vw, 550px);
+  aspect-ratio: 11 / 8; 
+  max-width: 100%;
+  height: clamp(200px, 30vw, 400px);
 
   background-color: red;
 }
@@ -630,7 +628,7 @@ main {
   padding: 10px;
   color: var(--gray);
 
-  padding-bottom: 200px;
+  padding-bottom: clamp(70px, 20vw, 150px);
 }
 
 .accordion-css__list {
@@ -701,6 +699,70 @@ main {
   font-size: clamp(16px, 2vw, 18px);
   line-height: 1.5;
 }
+
+@media screen and (max-width: 1100px) {
+  .accordion-css {  
+    padding-bottom: 50px;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .services-text {
+    grid-column: 6 / span 5;
+  }
+
+  .services-label {
+    grid-column: 1 / span 3;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  #services {
+    padding-bottom: clamp(5rem, 10vw, 14rem);
+  }
+
+  .accordion-css {
+    margin-top: clamp(70px, 20vw, 250px);
+    grid-column: 1 / span 12;
+    position: relative;
+
+    padding: 10px;
+    color: var(--gray);
+
+    padding-bottom: clamp(70px, 20vw, 150px);
+  }
+
+  .services-img-wrapper {
+    grid-column: 1 / span 12;
+    grid-row: 4;
+    margin: 0;
+    position: relative;
+    top: auto;
+    align-self: auto;
+    will-change: auto;
+  }
+
+  .img-service {
+    width: 100%;
+    min-height: 400px;
+    aspect-ratio: 11 / 8;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .services-text {
+    grid-column: 1 / span 8;
+    grid-row: 2;
+    margin-top: 30px;
+  }
+
+  .services-label {
+    grid-column: 1 / span 12;
+  }
+}
+
+
 
 /* ======== WORKS ======== */
 #works .works-container {

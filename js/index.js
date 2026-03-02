@@ -935,6 +935,10 @@ function initAccordionCSS() {
 }
 
 function initServicesAccordionSync() {
+  // Disable on mobile/small screens (less than 700px)
+  const isMobileScreen = window.matchMedia("(max-width: 700px)").matches;
+  if (isMobileScreen) return;
+
   if (!hasScrollTrigger) return;
 
   const servicesSection = document.querySelector('#services');
