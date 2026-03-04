@@ -280,6 +280,7 @@ barba.hooks.enter((data) => {
 barba.hooks.afterEnter((data) => {
   // Run page functions
   initAfterEnterFunctions(data.next.container);
+  initNavbarScrollHide(); // ensure nav show/hide logic is re‑attached after each page
   // Settle
   if (hasLenis) {
     lenis.resize();
@@ -401,6 +402,31 @@ const reloadOnWidthChange = debounceOnWidthChange(() => {
 }, 200);
 
 window.addEventListener('resize', reloadOnWidthChange);
+
+// hide navigation bar on scroll - down hides, up shows
+function initNavbarScrollHide() {
+  const nav = document.querySelector('.navigation');
+  if (!nav) return;
+
+  let lastY = window.scrollY || 0;
+  const delta = 2;
+
+  const onScroll = ({ scroll }) => {
+    const current = typeof scroll === 'number' ? scroll : window.scrollY;
+    if (current > lastY + delta) {
+      nav.classList.add('navigation--hidden');
+    } else if (current < lastY - delta) {
+      nav.classList.remove('navigation--hidden');
+    }
+    lastY = current;
+  };
+
+  if (hasLenis && lenis) {
+    lenis.on('scroll', onScroll);
+  } else {
+    window.addEventListener('scroll', () => onScroll({ scroll: window.scrollY }));
+  }
+}
 
 function initBarbaNavUpdate(data) {
   var tpl = document.createElement("template");

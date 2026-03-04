@@ -141,6 +141,13 @@ main {
   pointer-events: none;
   position: fixed;
   inset: 0;
+  /* allow slide-up/slide-down when scrolling */
+  transition: transform 0.3s ease;
+}
+
+/* when hidden we push the bar out of view */
+.navigation--hidden {
+  transform: translateY(100px);
 }
 
 /* dark opacity overlay */
