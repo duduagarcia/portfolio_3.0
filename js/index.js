@@ -394,6 +394,14 @@ function debounceOnWidthChange(fn, ms) {
   };
 }
 
+// reload page when width changes drastically to avoid broken listeners/animations
+const reloadOnWidthChange = debounceOnWidthChange(() => {
+  console.log('width changed — reloading to reset animations');
+  window.location.reload();
+}, 200);
+
+window.addEventListener('resize', reloadOnWidthChange);
+
 function initBarbaNavUpdate(data) {
   var tpl = document.createElement("template");
   tpl.innerHTML = data.next.html.trim();
