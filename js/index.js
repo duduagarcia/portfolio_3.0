@@ -403,7 +403,6 @@ const reloadOnWidthChange = debounceOnWidthChange(() => {
 
 window.addEventListener('resize', reloadOnWidthChange);
 
-// hide navigation bar on scroll - down hides, up shows
 function initNavbarScrollHide() {
   const nav = document.querySelector('.navigation');
   if (!nav) return;
@@ -969,21 +968,49 @@ function initAccordionCSS() {
 }
 
 function initServicesAccordionSync() {
-  // Disable on mobile/small screens (less than 700px)
   const isMobileScreen = window.matchMedia("(max-width: 700px)").matches;
-  if (isMobileScreen) return;
-
-  if (!hasScrollTrigger) return;
 
   const servicesSection = document.querySelector('#services');
   if (!servicesSection) return;
 
   const imgService = servicesSection.querySelector('.img-service');
   const accordionItems = servicesSection.querySelectorAll('.accordion-css__item');
+  const serviceImages = imgService ? imgService.querySelectorAll('img') : [];
   
-  if (!imgService || !accordionItems.length) return;
+  if (!imgService || !accordionItems.length || !serviceImages.length) return;
 
   let isAutoScrolling = false;
+
+  // Function to update which image is displayed based on image index
+  function updateImageDisplay(imageIndex) {
+    serviceImages.forEach((img, idx) => {
+      if (idx === imageIndex) {
+        img.setAttribute('data-image-visible', 'true');
+      } else {
+        img.removeAttribute('data-image-visible');
+      }
+    });
+  }
+
+  // MOBILE BEHAVIOR: Only change image on accordion click
+  if (isMobileScreen) {
+    // Add click listener to accordion toggle buttons for mobile
+    accordionItems.forEach((item) => {
+      const toggle = item.querySelector('[data-accordion-toggle]');
+      if (toggle) {
+        toggle.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // Update image based on the clicked accordion
+          const imageIndex = parseInt(item.getAttribute('data-accordion-index') || '0');
+          updateImageDisplay(imageIndex);
+        });
+      }
+    });
+    return; // Skip desktop-only logic
+  }
+
+  // DESKTOP BEHAVIOR: Sync with scroll + image change
+  if (!hasScrollTrigger) return;
 
   // Function to find which accordion item is aligned with the middle of the red square
   function updateAlignedItem() {
@@ -1007,10 +1034,13 @@ function initServicesAccordionSync() {
       }
     });
     
-    // Update accordion status only if it's not already manually set
+    // Update accordion status and corresponding image
     accordionItems.forEach((item) => {
       if (item === closestItem) {
         item.setAttribute('data-accordion-status', 'active');
+        // Get the index and update image display
+        const imageIndex = parseInt(item.getAttribute('data-accordion-index') || '0');
+        updateImageDisplay(imageIndex);
       } else {
         item.setAttribute('data-accordion-status', 'not-active');
       }
@@ -1026,6 +1056,10 @@ function initServicesAccordionSync() {
         item === targetItem ? "active" : "not-active",
       );
     });
+
+    // Update image immediately when accordion is clicked
+    const imageIndex = parseInt(targetItem.getAttribute('data-accordion-index') || '0');
+    updateImageDisplay(imageIndex);
 
     isAutoScrolling = true;
 

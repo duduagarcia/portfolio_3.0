@@ -33,6 +33,8 @@
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body data-barba="wrapper">
+    <!-- skip link for keyboard users -->
+    <a href="#main-content" class="skip-link" style="position:absolute;top:0;left:0;padding:1rem;background:#000;color:#fff;z-index:100;transform:translateY(-100%);transition:transform .3s;" onfocus="this.style.transform='translateY(0)';" onblur="this.style.transform='translateY(-100%)';">Skip to main content</a>
     <nav data-navigation-status="not-active" class="navigation">
       <div data-navigation-toggle="close" class="navigation__dark-bg"></div>
       <div class="centered-nav">
@@ -84,7 +86,7 @@
       </div>
     </nav>
 
-    <main data-barba="container">
+    <main id="main-content" data-barba="container">
       <section id="hero" class="parallax-demo-wrap">
         <div class="parallax-demo-hero">
           <div
@@ -126,13 +128,13 @@
       <section id="mission">
         <div class="container-grid">
           <div class="grid-12">
-            <p
+            <h3
               class="mission-label"
               data-split="heading"
               data-split-reveal="lines"
             >
               (My mission)
-            </p>
+            </h3>
             <h2
               class="mission-text"
               data-split="heading"
@@ -142,26 +144,22 @@
               their goals, whether designing a complex simple architecture or
               crafting award-winning interfaces experiences.
             </h2>
-            <p
-              class="mission-quote"
-              data-split="heading"
-              data-split-reveal="words"
-            >
-              “Good engineering is knowing when not to over-engineer.”
-            </p>
+            <blockquote class="mission-quote" data-split="heading" data-split-reveal="words">
+              <p>“Good engineering is knowing when not to over-engineer.”</p>
+            </blockquote>
           </div>
         </div>
       </section>
       <section id="services">
         <div class="container-grid">
           <div class="grid-12">
-            <p
+            <h3
               class="services-label"
               data-split="heading"
               data-split-reveal="lines"
             >
               (How can i help)
-            </p>
+            </h3>
             <h2
               class="services-text"
               data-split="heading"
@@ -171,7 +169,13 @@
             </h2>
 
             <div class="services-img-wrapper">
-              <div class="img-service"></div>
+              <div class="img-service">
+                <img src="./images/home/services/creative_development.webp" alt="Awwwards trophy ilustration">
+                <img src="./images/home/services/img1.jpg" alt="Service image 1">
+                <img src="./images/home/services/img4.avif" alt="Service image 4">
+                <img src="./images/home/services/cloud.webp" alt="Cloud infrastructure illustration for Azure, GCP and AWS cloud providers">
+                <img src="./images/home/services/ci_cd.webp" alt="CI CD pipeline diagram for AWS cloud">
+              </div>
             </div>
             <div
               data-accordion-close-siblings="true"
@@ -181,6 +185,7 @@
               <ul class="accordion-css__list">
                 <li
                   data-accordion-status="not-active"
+                  data-accordion-index="0"
                   class="accordion-css__item"
                 >
                   <div
@@ -204,6 +209,7 @@
                 </li>
                 <li
                   data-accordion-status="not-active"
+                  data-accordion-index="1"
                   class="accordion-css__item"
                 >
                   <div
@@ -227,6 +233,7 @@
                 </li>
                 <li
                   data-accordion-status="not-active"
+                  data-accordion-index="2"
                   class="accordion-css__item"
                 >
                   <div
@@ -249,6 +256,7 @@
                 </li>
                 <li
                   data-accordion-status="not-active"
+                  data-accordion-index="3"
                   class="accordion-css__item"
                 >
                   <div
@@ -273,6 +281,7 @@
                 </li>
                 <li
                   data-accordion-status="not-active"
+                  data-accordion-index="4"
                   class="accordion-css__item"
                 >
                   <div
@@ -306,18 +315,20 @@
               <div class="works-stage" data-works-stage>
                 <div class="work-card">
                   <img
-                    src="/images/home/projects/mockup-nubank-use.webp"
-                    alt=""
+                    src="/images/home/projects/nubank.webp"
+                    alt="mockup of Nubank's website on desktop and mobile screens"
+                    loading="lazy"
                   />
                 </div>
                 <div class="work-card">
                   <img
                     src="/images/home/projects/mockup-infra-use.webp"
-                    alt=""
+                    alt="mockup of Infrastructure project on desktop and mobile screens"
+                    loading="lazy"
                   />
                 </div>
                 <div class="work-card">
-                  <img src="/images/home/projects/optimus-mockup.webp" alt="" />
+                  <img src="/images/home/projects/optimus-mockup.webp" alt="mockup of Optimus project on desktop and mobile screens"  loading="lazy"/>
                 </div>
               </div>
             </div>
@@ -418,10 +429,10 @@
               refinement, improvement and better solutions.
             </h2>
             <div class="img-card">
-              <img src="/images/home/foto_perfil.webp" alt="" />
+              <img src="/images/home/foto_perfil.webp" alt="Portrait of Eduardo A. Garcia"  loading="lazy"/>
             </div>
             <div class="about-subtitle-wrapper">
-              <p
+              <h3
                 class="about-subtitle"
                 data-split="heading"
                 data-split-reveal="lines"
@@ -429,7 +440,7 @@
                 Functionality is expected.<br />
                 Delight is what defines success, transforming interaction into
                 experience, and usability into emotion.<br /><br />
-              </p>
+              </h3>
               <p class="about-always-exploring">
                 <span class="pulsing-ball" aria-hidden="true"></span>
                 <span class="about-always-exploring-text"
@@ -449,26 +460,24 @@
         <div class="grid-12">
           <h2 class="links-title">Elsewhere on the internet</h2>
           <div class="links-container-links">
-            <a
-              href="https://www.linkedin.com/in/eduardoamengualgarcia/"
-              rel="noopener noreferrer"
-              target="_blank"
-              style="text-decoration: none"
-            >
-              <div class="link-wrapper">
+            <div class="link-wrapper">
+              <a
+                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label="LinkedIn"
+                style="text-decoration: none"
+              >
                 <div class="grid-12">
                   <h2 class="link-wrapper-p title container is--medium">
                     LinkedIn
                   </h2>
                 </div>
-                <h2 class="link-wrapper-p is--duplicate">
+                <!-- duplicate animation content, not a link for screen readers -->
+                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <a
-                      href="https://www.linkedin.com/in/eduardoamengualgarcia/"
-                      class="centered-nav__banner w-inline-block"
+                    <div class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
                       <div class="centered-nav__banner-row">
                         <div
@@ -596,26 +605,23 @@
                 </h2>
               </div>
             </a>
-            <a
-              href="https://github.com/duduagarcia"
-              rel="noopener noreferrer"
-              target="_blank"
-              style="text-decoration: none"
-            >
-              <div class="link-wrapper">
+            <div class="link-wrapper">
+              <a
+                href="https://github.com/duduagarcia"
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label="GitHub"
+                style="text-decoration: none"
+              >
                 <div class="grid-12">
                   <h2 class="link-wrapper-p title container is--medium">
                     Github
                   </h2>
                 </div>
-                <h2 class="link-wrapper-p is--duplicate">
+                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <a
-                      href="https://github.com/duduagarcia"
-                      class="centered-nav__banner w-inline-block"
+                    <div class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
                       <div class="centered-nav__banner-row">
                         <div
@@ -743,26 +749,23 @@
                 </h2>
               </div>
             </a>
-            <a
-              href="https://www.instagram.com/duduagarcia_"
-              rel="noopener noreferrer"
-              target="_blank"
-              style="text-decoration: none"
-            >
-              <div class="link-wrapper">
+            <div class="link-wrapper">
+              <a
+                href="https://www.instagram.com/duduagarcia_"
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label="Instagram"
+                style="text-decoration: none"
+              >
                 <div class="grid-12">
                   <h2 class="link-wrapper-p title container is--medium">
                     Instagram
                   </h2>
                 </div>
-                <h2 class="link-wrapper-p is--duplicate">
+                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <a
-                      href="https://www.instagram.com/duduagarcia_"
-                      class="centered-nav__banner w-inline-block"
+                    <div class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
                       <div class="centered-nav__banner-row">
                         <div
@@ -890,26 +893,23 @@
                 </h2>
               </div>
             </a>
-            <a
-              href="https://www.awwwards.com/duduagarcia/"
-              rel="noopener noreferrer"
-              target="_blank"
-              style="text-decoration: none"
-            >
-              <div class="link-wrapper">
+            <div class="link-wrapper">
+              <a
+                href="https://www.awwwards.com/duduagarcia/"
+                rel="noopener noreferrer"
+                target="_blank"
+                aria-label="Awwwards"
+                style="text-decoration: none"
+              >
                 <div class="grid-12">
                   <h2 class="link-wrapper-p title container is--medium">
                     Awwwards
                   </h2>
                 </div>
-                <h2 class="link-wrapper-p is--duplicate">
+                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <a
-                      href="https://www.awwwards.com/duduagarcia/"
-                      class="centered-nav__banner w-inline-block"
+                    <div class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
-                      target="_blank"
-                      rel="noopener noreferrer"
                     >
                       <div class="centered-nav__banner-row">
                         <div
@@ -1049,10 +1049,10 @@
                 challenges and let's explore what we can build together.
               </h2>
               <div class="footer-links">
-                <a data-underline-link="alt" href="#" class="underline-link"
+                <a data-underline-link="alt" href="mailto:eduardo.agarcia117@gmail.com" class="underline-link"
                   >eduardo.agarcia117@gmail.com</a
                 >
-                <a data-underline-link="alt" href="#" class="underline-link"
+                <a data-underline-link="alt" href="tel:+5551994151552" class="underline-link"
                   >+55 51 99415 1552</a
                 >
               </div>
