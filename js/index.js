@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   initDirectionalButtonHover();
 });
 
-const documentTitleStore = document.title;
+let documentTitleStore = document.title;
 const documentTitleOnBlur = "Come back! We miss you"; // Define your custom title here
 
 // Set original title if user is on the site
@@ -76,6 +76,8 @@ function initAfterEnterFunctions(next) {
   initWorksCardsAnimation();
   initAccordionCSS();
   initServicesAccordionSync();
+  initNavbar();
+  initHowItWorks();
 
   // ABOUT PAGE
   initRotatingText();
@@ -1225,4 +1227,234 @@ function initRotatingText() {
     });
   });
 }
+
+function initNavbar() {
+  const navRoot = document.getElementById("nav-root");
+  if (!navRoot) return; // Skip if navbar elements don't exist
+
+  const navPill = document.getElementById("header");
+  const hint = document.getElementById("scroll-hint");
+  const HINT_H = hint.offsetHeight;
+  const PAD_B = parseFloat(getComputedStyle(navRoot).paddingBottom);
+  const GAP = 8;
+
+  const hintTl = gsap.timeline({
+    paused: true,
+    defaults: { duration: 0.5, ease: "power3.out" },
+  });
+  hintTl
+    .to(hint, { y: HINT_H + GAP + PAD_B }, 0)
+    .to(navPill, { y: HINT_H + GAP }, 0);
+
+  let atTop = true;
+  lenis.on("scroll", () => {
+    const nowAtTop = lenis.targetScroll < 10;
+    if (nowAtTop === atTop) return;
+    atTop = nowAtTop;
+    atTop ? hintTl.reverse() : hintTl.play();
+  });
+
+  /* ---- Navbar show/hide on scroll ---- */
+  let lastScrollPos = 0;
+  let navbarHidden = false;
+  const navRootHeight = navRoot.offsetHeight;
+
+  lenis.on("scroll", ({ scroll }) => {
+    const scrollDelta = Math.abs(scroll - lastScrollPos);
+    const isScrollingDown = scroll > lastScrollPos;
+
+    if (scrollDelta > 10) {
+      if (isScrollingDown && !navbarHidden) {
+        // Hide navbar
+        gsap.to(navRoot, { bottom: -navRootHeight, duration: 0.7, ease: "power2.inOut" });
+        navbarHidden = true;
+      } else if (!isScrollingDown && navbarHidden) {
+        // Show navbar
+        gsap.to(navRoot, { bottom: 0, duration: 0.7, ease: "power2.inOut" });
+        navbarHidden = false;
+      }
+      lastScrollPos = scroll;
+    }
+  });
+
+  /* ---- Menu open / close ---- */
+  const toggleBtn  = document.getElementById("nav-btn-toggle");
+  const menuPanel  = document.getElementById("menu");
+  const menuLinks  = menuPanel.querySelectorAll(".menu-nav__link");
+  // SVG path order in the button: [0] middle, [1] top, [2] bottom
+  const iconPaths  = toggleBtn.querySelectorAll("path");
+
+  // Collapsed initial state
+  gsap.set(menuPanel, { height: 0 });
+  gsap.set(menuLinks, { y: "110%" });
+
+  const menuTl = gsap.timeline({ paused: true, defaults: { ease: "expo.out" } });
+  menuTl
+    // 1. Expand the panel from height 0 → auto with rotation and slide
+    .to(menuPanel, { height: "auto", duration: 0.85, rotateZ: 0, x: 0 }, 0)
+    // 2. Hamburger → X  (middle fades, top & bottom morph to diagonals)
+    .to(iconPaths[0], { opacity: 0, duration: 0.2, ease: "power2.out" }, 0)
+    .to(iconPaths[1], { attr: { d: "M2.5 2.5L17.5 17.5" }, duration: 0.55 }, 0)
+    .to(iconPaths[2], { attr: { d: "M17.5 2.5L2.5 17.5" }, duration: 0.55 }, 0)
+    // 3. Links curtain-reveal upward, staggered
+    .to(menuLinks, { y: "0%", duration: 0.75, stagger: 0.08 }, 0.2);
+
+  let isOpen = false;
+  let scrollAtOpen = 0;
+  let closeTl = null;
+
+  function resetToClosedState() {
+    gsap.set(menuPanel, { height: 0 });
+    gsap.set(menuLinks, { y: "110%" });
+    gsap.set(iconPaths[0], { opacity: 1 });
+    gsap.set(iconPaths[1], { attr: { d: "M2.5 5L17.5 5" } });
+    gsap.set(iconPaths[2], { attr: { d: "M2.5 15L17.5 15" } });
+  }
+
+  function closeMenu() {
+    if (!isOpen) return;
+    isOpen = false;
+    lenis.start();
+    menuTl.pause();
+
+    if (closeTl) closeTl.kill();
+    closeTl = gsap.timeline({
+      defaults: { ease: "power3.inOut" },
+      onComplete: () => resetToClosedState(),
+    })
+      .to(menuLinks, { y: "110%", duration: 0.3, stagger: { each: 0.05, from: "end" }, ease: "power3.in" }, 0)
+      .to(iconPaths[0], { opacity: 1, duration: 0.35, ease: "power2.out" }, 0.05)
+      .to(iconPaths[1], { attr: { d: "M2.5 5L17.5 5" },   duration: 0.5, ease: "expo.out" }, 0.05)
+      .to(iconPaths[2], { attr: { d: "M2.5 15L17.5 15" }, duration: 0.5, ease: "expo.out" }, 0.05)
+      .to(menuPanel, { height: 0, duration: 0.6, ease: "power3.inOut" }, 0.1);
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    if (isOpen) {
+      closeMenu();
+    } else {
+      // Kill any in-flight close animation before opening
+      if (closeTl) { closeTl.kill(); closeTl = null; }
+      resetToClosedState();
+      isOpen = true;
+      scrollAtOpen = lenis.targetScroll;
+      menuTl.restart();
+      lenis.stop();
+    }
+  });
+
+  // Close on outside click (anything outside header#header)
+  document.addEventListener("click", (e) => {
+    if (isOpen && !navPill.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  // Close when user scrolls more than 10px from where they opened the menu
+  lenis.on("scroll", ({ scroll }) => {
+    if (isOpen && Math.abs(scroll - scrollAtOpen) > 10) {
+      closeMenu();
+    }
+  });
+}
+
+function initHowItWorks() {
+  const driver = document.getElementById("hiw-driver");
+  if (!driver) return; // Skip if hiw-driver doesn't exist
+
+  const steps = document.querySelectorAll(".hiw-step");
+  const images = document.querySelectorAll(".hiw-img");
+  const n = steps.length;
+  let currentIndex = 0;
+
+  // Stack all images below the container; first one starts visible
+  gsap.set(images, { yPercent: 100, zIndex: 0 });
+  gsap.set(images[0], { yPercent: 0, zIndex: 1 });
+
+  function setActive(index) {
+    if (index === currentIndex) return;
+
+    const prev = currentIndex;
+    currentIndex = index;
+    const direction = index > prev ? 1 : -1; // 1 = forward (up), -1 = backward (down)
+
+    // Steps: CSS handles opacity + translateX via class
+    steps.forEach((s, i) => s.classList.toggle("is-active", i === index));
+
+    // Images: GSAP slide
+    const outgoing = images[prev];
+    const incoming = images[index];
+
+    // Bring incoming on top
+    gsap.set(incoming, { zIndex: 2 });
+    gsap.set(outgoing, { zIndex: 1 });
+
+    // Kill any in-flight tweens first
+    gsap.killTweensOf(outgoing);
+    gsap.killTweensOf(incoming);
+
+    // Snap incoming to its entry position only if it's idle (not mid-animation)
+    const incomingY = gsap.getProperty(incoming, "yPercent");
+    if (Math.abs(incomingY) > 50) {
+      // Far enough away — snap to entry point for a clean slide
+      gsap.set(incoming, { yPercent: 100 * direction });
+    }
+
+    // Outgoing slides out in scroll direction
+    gsap.to(outgoing, {
+      yPercent: -100 * direction,
+      duration: 0.75,
+      ease: "power3.out",
+    });
+
+    // Incoming slides in from wherever it currently is
+    gsap.to(incoming, {
+      yPercent: 0,
+      duration: 0.75,
+      ease: "power3.out",
+      onComplete() {
+        gsap.set(outgoing, { zIndex: 0 });
+        gsap.set(incoming, { zIndex: 1 });
+      },
+    });
+  }
+
+  // ScrollTrigger: map scroll progress → active step
+  if (hasScrollTrigger) {
+    ScrollTrigger.create({
+      trigger: driver,
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate(self) {
+        const index = Math.min(Math.floor(self.progress * n), n - 1);
+        setActive(index);
+      },
+    });
+  }
+
+  // Click to focus a step
+  function scrollToStep(index) {
+    const driverTop = driver.getBoundingClientRect().top + window.scrollY;
+    const triggerStart = driverTop;
+    const triggerEnd = driverTop + driver.offsetHeight - window.innerHeight;
+    const totalRange = triggerEnd - triggerStart;
+
+    // Land in the middle of the target band
+    const targetY = triggerStart + ((index + 0.5) / n) * totalRange;
+
+    // Jump instantly — GSAP handles the visual transition, not the scroll
+    setActive(index);
+    if (lenis) {
+      lenis.scrollTo(targetY, { immediate: true });
+    } else {
+      window.scrollTo(0, targetY);
+    }
+  }
+
+  steps.forEach((step, i) => {
+    step.addEventListener("click", () => scrollToStep(i));
+  });
+}
+
+
 

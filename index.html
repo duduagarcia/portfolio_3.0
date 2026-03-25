@@ -10,14 +10,13 @@
     />
     <meta name="author" content="Eduardo A. Garcia" />
 
-    <!-- Open Graph / social sharing -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Eduardo A. Garcia - Software Engineer" />
     <meta
       property="og:description"
       content="Brazilian software engineer focused on solving complex problems, designing thoughtful architectures and crafting smooth, award-worthy interfaces."
     />
-
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta
@@ -28,69 +27,135 @@
       name="twitter:description"
       content="Brazilian software engineer focused on solving complex problems, designing thoughtful architectures and crafting smooth, award-worthy interfaces."
     />
-    <!-- Hint browser to connect early to CDN -->
+    <!-- Preload resources -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="preload"
+      href="/fonts/PPNeueMontreal-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body data-barba="wrapper">
-    <!-- skip link for keyboard users -->
-    <a href="#main-content" class="skip-link" style="position:absolute;top:0;left:0;padding:1rem;background:#000;color:#fff;z-index:100;transform:translateY(-100%);transition:transform .3s;" onfocus="this.style.transform='translateY(0)';" onblur="this.style.transform='translateY(-100%)';">Skip to main content</a>
-    <nav data-navigation-status="not-active" class="navigation">
-      <div data-navigation-toggle="close" class="navigation__dark-bg"></div>
-      <div class="centered-nav">
-        <div class="centered-nav__bg"></div>
-        <div class="centered-nav__header">
-           <a href="./index.html" class="centered-nav__logo logo__text">
-            <p class="logo__text-p">© Eduardo A. Garcia</p>
-            <p class="logo__text-p is--duplicate">© Eduardo A. Garcia</p>
-          </a>
-          <button
-            data-theme="light"
-            data-btn-hover=""
-            class="btn w-inline-block"
-            data-navigation-toggle="toggle"
-            data-hover=""
-          >
-            <div class="btn__bg"></div>
-            <div class="btn__circle-wrap">
-              <div class="btn__circle">
-                <div class="before__100"></div>
-              </div>
-            </div>
-            <div class="btn__text">
-              <p class="btn-text-p">Menu</p>
-            </div>
-          </button>
-        </div>
-        <div class="centered-nav__content">
-          <div class="centered-nav__inner">
-            <ul class="centered-nav__ul">
-              <div data-navigation-item="" class="centered-nav__li">
-                <a href="/index.html" class="hamburger-nav__a">
-                  <p class="hamburger-nav__p">Home</p>
-                </a>
-              </div>
-              <div data-navigation-item="" class="centered-nav__li">
-                <a href="/about.html" class="hamburger-nav__a">
-                  <p class="hamburger-nav__p">About</p>
-                </a>
-              </div>
-              <div data-navigation-item="" class="centered-nav__li">
-                <a href="/works.html" class="hamburger-nav__a">
-                  <p class="hamburger-nav__p">Works</p>
-                </a>
-              </div>
+    <div class="nav-root" id="nav-root">
+      <!-- Full-screen overlay -->
+      <header id="header">
+        <div class="menu" id="menu">
+          <nav class="menu-nav" aria-label="Main navigation">
+            <ul class="menu-nav__list">
+              <li class="menu-nav__item">
+                <div class="menu-nav__clip">
+                  <a href="./index.html" class="menu-nav__link">Home</a>
+                </div>
+              </li>
+              <li class="menu-nav__item">
+                <div class="menu-nav__clip">
+                  <a href="#work" class="menu-nav__link">Work</a>
+                </div>
+              </li>
+              <li class="menu-nav__item">
+                <div class="menu-nav__clip">
+                  <a href="#about" class="menu-nav__link">About</a>
+                </div>
+              </li>
+              <li class="menu-nav__item">
+                <div class="menu-nav__clip">
+                  <a href="#contact" class="menu-nav__link">Contact</a>
+                </div>
+              </li>
             </ul>
+          </nav>
+        </div>
+
+        <nav class="navbar" id="navbar">
+          <a href="./index.html" class="centered-nav__logo logo__brand">
+            <p class="logo__brand-p">© Eduardo A. Garcia</p>
+            <p class="logo__brand-p is--duplicate">© Eduardo A. Garcia</p>
+          </a>
+
+          <div class="nav-controls">
+            <button class="lang-btn" data-lang-open="false">
+              <svg
+                class="lang-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path
+                  d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                />
+              </svg>
+              <span class="lang-primary">EN</span>
+              <span class="lang-secondary">
+                <span class="lang-divider">/</span>
+                <span>ES</span>
+              </span>
+            </button>
+            <button class="nav-btn-toggle" id="nav-btn-toggle">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2.5 10L17.5 10"
+                  stroke="#636468"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.5 5L17.5 5"
+                  stroke="#636468"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M2.5 15L17.5 15"
+                  stroke="#636468"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
           </div>
+        </nav>
+      </header>
+
+      <div class="scroll-hint" id="scroll-hint">
+        <div class="scroll-hint__track">
+          <span class="scroll-hint__item">scroll down to discover</span>
+          <span class="scroll-hint__separator">—</span>
+          <span class="scroll-hint__item">scroll down to discover</span>
+          <span class="scroll-hint__separator">—</span>
+          <span class="scroll-hint__item">scroll down to discover</span>
+          <span class="scroll-hint__separator">—</span>
+          <span class="scroll-hint__item">scroll down to discover</span>
+          <span class="scroll-hint__separator">—</span>
+          <span class="scroll-hint__item">scroll down to discover</span>
+          <span class="scroll-hint__separator">—</span>
+          <span class="scroll-hint__item">scroll down to discover</span>
+          <span class="scroll-hint__separator">—</span>
+          <span class="scroll-hint__item">scroll down to discover</span>
+          <span class="scroll-hint__separator">—</span>
+          <span class="scroll-hint__item">scroll down to discover</span>
         </div>
       </div>
-    </nav>
-
+    </div>
     <main id="main-content" data-barba="container">
       <section id="hero" class="parallax-demo-wrap">
         <div class="parallax-demo-hero">
           <div
-            data-parallax-scroll-start="top top"
             data-parallax="trigger"
             data-parallax-start="0"
             data-parallax-end="40"
@@ -100,15 +165,16 @@
               src="images/home/hero/hero.webp"
               class="parallax-demo-img hero-bg"
               alt=""
-              aria-hidden="true"
+              aria-hidden
             />
             <img
               src="images/home/hero/hero-mobile.webp"
               class="parallax-demo-img hero-mobile-bg"
               alt=""
-              aria-hidden="true"
+              aria-hidden
             />
           </div>
+          <div class="hero-overlay"></div>
           <div class="container-grid">
             <div class="grid-12">
               <h1 class="parallax-demo-h">
@@ -144,165 +210,116 @@
               their goals, whether designing a complex simple architecture or
               crafting award-winning interfaces experiences.
             </h2>
-            <blockquote class="mission-quote" data-split="heading" data-split-reveal="words">
+            <blockquote
+              class="mission-quote"
+              data-split="heading"
+              data-split-reveal="words"
+            >
               <p>“Good engineering is knowing when not to over-engineer.”</p>
             </blockquote>
           </div>
         </div>
       </section>
       <section id="services">
-        <div class="container-grid">
-          <div class="grid-12">
-            <h3
-              class="services-label"
-              data-split="heading"
-              data-split-reveal="lines"
-            >
-              (How can i help)
-            </h3>
-            <h2
-              class="services-text"
-              data-split="heading"
-              data-split-reveal="lines"
-            >
-              This is where my work typically lives.
-            </h2>
-
-            <div class="services-img-wrapper">
-              <div class="img-service">
-                <img src="./images/home/services/creative_development.webp" alt="Awwwards trophy ilustration">
-                <img src="./images/home/services/img1.jpg" alt="Service image 1">
-                <img src="./images/home/services/img4.avif" alt="Service image 4">
-                <img src="./images/home/services/cloud.webp" alt="Cloud infrastructure illustration for Azure, GCP and AWS cloud providers">
-                <img src="./images/home/services/ci_cd.webp" alt="CI CD pipeline diagram for AWS cloud">
-              </div>
-            </div>
-            <div
-              data-accordion-close-siblings="true"
-              data-accordion-css-init=""
-              class="accordion-css"
-            >
-              <ul class="accordion-css__list">
-                <li
-                  data-accordion-status="not-active"
-                  data-accordion-index="0"
-                  class="accordion-css__item"
+        <div class="hiw-driver" id="hiw-driver">
+          <div class="hiw-sticky">
+            <div class="container-grid">
+              <div class="grid-12">
+                <h3
+                  class="services-label"
+                  data-split="heading"
+                  data-split-reveal="lines"
                 >
-                  <div
-                    data-hover=""
-                    data-accordion-toggle=""
-                    class="accordion-css__item-top"
-                  >
-                    <h3 class="accordion-css__item-h3">Creative development</h3>
+                  (How can i help)
+                </h3>
+                <h2
+                  class="services-text"
+                  data-split="heading"
+                  data-split-reveal="lines"
+                >
+                  This is where my work typically lives.
+                </h2>
+                <div class="hiw-content">
+                  <!-- Image (left) -->
+                  <div class="hiw-image-col">
+                    <div class="hiw-image-wrap">
+                      <img
+                        class="hiw-img"
+                        src="/images/home/services/creative_development.webp"
+                        alt="Creative development"
+                      />
+                      <img
+                        class="hiw-img"
+                        src="/images/home/services/img1.jpg"
+                        alt="Motion & animations"
+                      />
+                      <img
+                        class="hiw-img"
+                        src="/images/home/services/img4.avif"
+                        alt="Backend & APIs"
+                      />
+                      <img
+                        class="hiw-img"
+                        src="/images/home/services/ci_cd.webp"
+                        alt="CI/CD & Infrastructure"
+                      />
+                    </div>
                   </div>
-                  <div class="accordion-css__item-bottom">
-                    <div class="accordion-css__item-bottom-wrap">
-                      <div class="accordion-css__item-bottom-content">
-                        <p class="accordion-css__item-p">
+
+                  <!-- Steps (right) -->
+                  <div class="hiw-steps">
+                    <div class="hiw-step is-active" data-step="0">
+                      <div class="hiw-step-dot"></div>
+                      <div class="hiw-step-body">
+                        <p class="hiw-step-number">01</p>
+                        <h3 class="hiw-step-title">Creative development</h3>
+                        <p class="hiw-step-desc">
                           Not just a website — but the intersection of
                           creativity and engineering, crafting bespoke digital
                           experiences that spark emotion.
                         </p>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li
-                  data-accordion-status="not-active"
-                  data-accordion-index="1"
-                  class="accordion-css__item"
-                >
-                  <div
-                    data-hover=""
-                    data-accordion-toggle=""
-                    class="accordion-css__item-top"
-                  >
-                    <h3 class="accordion-css__item-h3">Motion & animations</h3>
-                  </div>
-                  <div class="accordion-css__item-bottom">
-                    <div class="accordion-css__item-bottom-wrap">
-                      <div class="accordion-css__item-bottom-content">
-                        <p class="accordion-css__item-p">
-                          Not just Fade-ins and hover effects, but motion with
+
+                    <div class="hiw-step" data-step="1">
+                      <div class="hiw-step-dot"></div>
+                      <div class="hiw-step-body">
+                        <p class="hiw-step-number">02</p>
+                        <h3 class="hiw-step-title">Motion & animations</h3>
+                        <p class="hiw-step-desc">
+                          Not just fade-ins and hover effects, but motion with
                           intention — designed to guide attention, create
                           rhythm, and leave a lasting impression.
                         </p>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li
-                  data-accordion-status="not-active"
-                  data-accordion-index="2"
-                  class="accordion-css__item"
-                >
-                  <div
-                    data-hover=""
-                    data-accordion-toggle=""
-                    class="accordion-css__item-top"
-                  >
-                    <h3 class="accordion-css__item-h3">Backend & APIs</h3>
-                  </div>
-                  <div class="accordion-css__item-bottom">
-                    <div class="accordion-css__item-bottom-wrap">
-                      <div class="accordion-css__item-bottom-content">
-                        <p class="accordion-css__item-p">
+
+                    <div class="hiw-step" data-step="2">
+                      <div class="hiw-step-dot"></div>
+                      <div class="hiw-step-body">
+                        <p class="hiw-step-number">03</p>
+                        <h3 class="hiw-step-title">Backend & APIs</h3>
+                        <p class="hiw-step-desc">
                           Invisible foundations that quietly power extraordinary
                           digital experiences.
                         </p>
                       </div>
                     </div>
-                  </div>
-                </li>
-                <li
-                  data-accordion-status="not-active"
-                  data-accordion-index="3"
-                  class="accordion-css__item"
-                >
-                  <div
-                    data-hover=""
-                    data-accordion-toggle=""
-                    class="accordion-css__item-top"
-                  >
-                    <h3 class="accordion-css__item-h3">
-                      Cloud & Infrastructure
-                    </h3>
-                  </div>
-                  <div class="accordion-css__item-bottom">
-                    <div class="accordion-css__item-bottom-wrap">
-                      <div class="accordion-css__item-bottom-content">
-                        <p class="accordion-css__item-p">
-                          Your infrastructure should adapt to your strategy —
-                          not the other way around.
+
+                    <div class="hiw-step" data-step="3">
+                      <div class="hiw-step-dot"></div>
+                      <div class="hiw-step-body">
+                        <p class="hiw-step-number">04</p>
+                        <h3 class="hiw-step-title">CI/CD & Infrastructure</h3>
+                        <p class="hiw-step-desc">
+                          Automated pipelines, scalable cloud architecture,
+                          built to move as fast as your product.
                         </p>
                       </div>
                     </div>
                   </div>
-                </li>
-                <li
-                  data-accordion-status="not-active"
-                  data-accordion-index="4"
-                  class="accordion-css__item"
-                >
-                  <div
-                    data-hover=""
-                    data-accordion-toggle=""
-                    class="accordion-css__item-top"
-                  >
-                    <h3 class="accordion-css__item-h3">CI/CD & Automation</h3>
-                  </div>
-                  <div class="accordion-css__item-bottom">
-                    <div class="accordion-css__item-bottom-wrap">
-                      <div class="accordion-css__item-bottom-content">
-                        <p class="accordion-css__item-p">
-                          The world doesn't stand still — your software
-                          shouldn't either.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -328,7 +345,11 @@
                   />
                 </div>
                 <div class="work-card">
-                  <img src="/images/home/projects/optimus-mockup.webp" alt="mockup of Optimus project on desktop and mobile screens"  loading="lazy"/>
+                  <img
+                    src="/images/home/projects/optimus-mockup.webp"
+                    alt="mockup of Optimus project on desktop and mobile screens"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             </div>
@@ -429,7 +450,11 @@
               refinement, improvement and better solutions.
             </h2>
             <div class="img-card">
-              <img src="/images/home/foto_perfil.webp" alt="Portrait of Eduardo A. Garcia"  loading="lazy"/>
+              <img
+                src="/images/home/foto_perfil.webp"
+                alt="Portrait of Eduardo A. Garcia"
+                loading="lazy"
+              />
             </div>
             <div class="about-subtitle-wrapper">
               <h3
@@ -476,7 +501,8 @@
                 <!-- duplicate animation content, not a link for screen readers -->
                 <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <div class="centered-nav__banner w-inline-block"
+                    <div
+                      class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
                     >
                       <div class="centered-nav__banner-row">
@@ -492,125 +518,19 @@
                               <span class="user">@eduardoamengualgarcia</span>
                             </p>
                           </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
                         </div>
                       </div>
-                    </a>
+                    </div>
                   </div>
                 </h2>
-              </div>
-            </a>
+              </a>
+            </div>
             <div class="link-wrapper">
               <a
-                href="https://github.com/duduagarcia"
+                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
                 rel="noopener noreferrer"
                 target="_blank"
-                aria-label="GitHub"
+                aria-label="LinkedIn"
                 style="text-decoration: none"
               >
                 <div class="grid-12">
@@ -618,9 +538,11 @@
                     Github
                   </h2>
                 </div>
+                <!-- duplicate animation content, not a link for screen readers -->
                 <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <div class="centered-nav__banner w-inline-block"
+                    <div
+                      class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
                     >
                       <div class="centered-nav__banner-row">
@@ -631,130 +553,24 @@
                           <div class="centered-nav__banner-inner">
                             <p class="centered-nav__banner-text">
                               <span class="star">*</span>
-                              <span class="app">Github</span>
+                              <span class="app">LinkedIn</span>
                               <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Github</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
+                              <span class="user">@eduardoamengualgarcia</span>
                             </p>
                           </div>
                         </div>
                       </div>
-                    </a>
+                    </div>
                   </div>
                 </h2>
-              </div>
-            </a>
+              </a>
+            </div>
             <div class="link-wrapper">
               <a
-                href="https://www.instagram.com/duduagarcia_"
+                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
                 rel="noopener noreferrer"
                 target="_blank"
-                aria-label="Instagram"
+                aria-label="LinkedIn"
                 style="text-decoration: none"
               >
                 <div class="grid-12">
@@ -762,9 +578,11 @@
                     Instagram
                   </h2>
                 </div>
+                <!-- duplicate animation content, not a link for screen readers -->
                 <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <div class="centered-nav__banner w-inline-block"
+                    <div
+                      class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
                     >
                       <div class="centered-nav__banner-row">
@@ -775,130 +593,24 @@
                           <div class="centered-nav__banner-inner">
                             <p class="centered-nav__banner-text">
                               <span class="star">*</span>
-                              <span class="app">Instagram</span>
+                              <span class="app">LinkedIn</span>
                               <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Instagram</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia_</span>
+                              <span class="user">@eduardoamengualgarcia</span>
                             </p>
                           </div>
                         </div>
                       </div>
-                    </a>
+                    </div>
                   </div>
                 </h2>
-              </div>
-            </a>
+              </a>
+            </div>
             <div class="link-wrapper">
               <a
-                href="https://www.awwwards.com/duduagarcia/"
+                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
                 rel="noopener noreferrer"
                 target="_blank"
-                aria-label="Awwwards"
+                aria-label="LinkedIn"
                 style="text-decoration: none"
               >
                 <div class="grid-12">
@@ -906,9 +618,11 @@
                     Awwwards
                   </h2>
                 </div>
+                <!-- duplicate animation content, not a link for screen readers -->
                 <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
                   <div class="centered-nav__banner-w">
-                    <div class="centered-nav__banner w-inline-block"
+                    <div
+                      class="centered-nav__banner w-inline-block"
                       style="text-decoration: none"
                     >
                       <div class="centered-nav__banner-row">
@@ -919,124 +633,18 @@
                           <div class="centered-nav__banner-inner">
                             <p class="centered-nav__banner-text">
                               <span class="star">*</span>
-                              <span class="app">Awwwards</span>
+                              <span class="app">LinkedIn</span>
                               <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
-                            </p>
-                          </div>
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">Awwwards</span>
-                              <span class="star">*</span>
-                              <span class="user">@duduagarcia</span>
+                              <span class="user">@eduardoamengualgarcia</span>
                             </p>
                           </div>
                         </div>
                       </div>
-                    </a>
+                    </div>
                   </div>
                 </h2>
-              </div>
-            </a>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -1049,10 +657,16 @@
                 challenges and let's explore what we can build together.
               </h2>
               <div class="footer-links">
-                <a data-underline-link="alt" href="mailto:eduardo.agarcia117@gmail.com" class="underline-link"
+                <a
+                  data-underline-link="alt"
+                  href="mailto:eduardo.agarcia117@gmail.com"
+                  class="underline-link"
                   >eduardo.agarcia117@gmail.com</a
                 >
-                <a data-underline-link="alt" href="tel:+5551994151552" class="underline-link"
+                <a
+                  data-underline-link="alt"
+                  href="tel:+5551994151552"
+                  class="underline-link"
                   >+55 51 99415 1552</a
                 >
               </div>
