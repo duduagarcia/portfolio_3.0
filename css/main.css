@@ -219,7 +219,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 12px;
+  padding: 12px;
   gap: 8px;
   min-height: 60px;
   background: #201d1d;
@@ -306,7 +306,7 @@ header {
   overflow: hidden;
   color: #d3d4d7;
   transition:
-    max-width 0.6s var(--e-expo),
+    max-width 0.6s cubic-bezier(0.625, 0.05, 0, 1),
     opacity 0.4s var(--e-expo) 0.05s;
 }
 
@@ -358,7 +358,7 @@ header {
 
 /* =============================================
          SCROLL HINT MARQUEE
-      ============================================= */
+============================================= */
 .scroll-hint {
   width: calc(100% - 40px);
   max-width: 30em;
@@ -540,7 +540,7 @@ header {
 
 /* ======== MISSION ======== */
 #mission {
-  padding-top: clamp(5rem, 10vw, 14rem);
+  padding-top: clamp(5rem, 14vw, 18em);
   min-height: 100vh;
   color: var(--dark_gray);
 }
@@ -561,7 +561,11 @@ header {
   font-size: clamp(18px, 2vw, 24px);
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 880px) {
+  #mission {
+    padding-top: 200px;
+  }
+
   #mission .mission-text {
     grid-column: 1 / span 12;
     font-size: clamp(40px, 6vw, 64px);
@@ -578,14 +582,26 @@ header {
   }
 }
 
+@media screen and (max-width: 880px) {
+    #mission .mission-text {
+      grid-column: 1 / span 12;
+      font-size: clamp(32px, 6vw, 64px);
+    }
+
+    #mission .mission-quote {
+      font-size: 16px;
+    }
+}
+
 
 /* ======== SERVICES / HOW IT WORKS ======== */
 #services {
   color: var(--black);
   min-height: 100vh;
   color: var(--dark_gray);
-  padding-top: clamp(5rem, 10vw, 14rem);
+  padding-top: clamp(5rem, 15vw, 18rem);
   padding-bottom: clamp(5rem, 10vw, 14rem);
+  /* background: rebeccapurple; */
 }
 
 #services .container-grid{
@@ -593,7 +609,7 @@ header {
 }
 
 .services-text {
-  grid-column: 5 / span 5;
+  grid-column: 3 / span 5;
   color: var(--black);
 }
 
@@ -613,7 +629,8 @@ header {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: clamp(24px, 3.5vw, 48px) clamp(24px, 5vw, 72px);
+  padding: 0 clamp(24px, 5vw, 72px);
+  /* background-color: #0ed285; */
 }
 
 .hiw-content {
@@ -631,6 +648,8 @@ header {
   flex-direction: column;
   justify-content: center;
   gap: clamp(20px, 4vw, 40px);
+  margin-left: 40px;
+
 }
 
 .hiw-step {
@@ -655,7 +674,7 @@ header {
 .hiw-step-dot {
   width: 9px;
   height: 9px;
-  background: #e85d3a;
+  background: #0ED285;
   flex-shrink: 0;
   margin-top: 7px;
   border-radius: 1px;
