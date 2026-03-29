@@ -807,6 +807,12 @@ header {
   }
 }
 
+@media screen and (max-width: 700px) {
+  .hiw-sticky {
+    height: max-content;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .services-label {
     grid-column: 1 / span 12;
@@ -883,7 +889,7 @@ header {
 @media screen and (max-width: 700px) {
   #works .work-card {
     width: min(90vw, 400px);
-    aspect-ratio: 400 / 700;
+    /* aspect-ratio: 400 / 700; */
     /* mais alto em telas pequenas */
   }
 }
