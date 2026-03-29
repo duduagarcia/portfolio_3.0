@@ -649,7 +649,6 @@ header {
   justify-content: center;
   gap: clamp(20px, 4vw, 40px);
   margin-left: 40px;
-
 }
 
 .hiw-step {
@@ -769,6 +768,12 @@ header {
   background: #dde0d5;
 }
 
+@media (max-width: 800px) {
+  .services-text {
+    grid-column: 3 / span 6;
+  }
+}
+
 @media (max-width: 768px) {
   .hiw-content {
     grid-template-columns: 1fr;
@@ -786,27 +791,29 @@ header {
 
 @media screen and (max-width: 770px) {
   .services-text {
-    grid-column: 6 / span 8;
+    grid-column: 1 / span 8;
   }
 
   .services-label {
     grid-column: 1 / span 4;
   }
+
+  .hiw-steps {
+    margin-left: 0px;
+  }
+
+  .hiw-content {
+    margin-top: 32px;
+  }
 }
 
 @media screen and (max-width: 600px) {
-  .services-text {
-    grid-column: 1 / span 12;
-    grid-row: 2;
-    margin-top: 20px;
-  }
-
   .services-label {
     grid-column: 1 / span 12;
   }
 
-  .hiw-content {
-    margin-top: clamp(24px, 8vw, 48px);
+  .services-text {
+    grid-column: 1 / span 12;
   }
 }
 
@@ -1077,6 +1084,8 @@ header {
   align-self: flex-start;
 
   max-width: 300px;
+  color: var(--dark_gray);
+
 }
 
 .about-always-exploring {
@@ -1201,6 +1210,16 @@ header {
 @media screen and (max-width: 500px) {
   .about-subtitle {
     grid-column: 3 / span 8;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .about-text {
+    grid-column: 1 / span 11;
+  }
+
+  .about-subtitle-wrapper {
+    grid-column: 3 / span 12;
   }
 }
 
