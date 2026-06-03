@@ -38,121 +38,86 @@
     />
     <link rel="stylesheet" href="css/main.css" />
   </head>
-  <body data-barba="wrapper">
-    <div class="nav-root" id="nav-root">
-      <!-- Full-screen overlay -->
-      <header id="header">
-        <div class="menu" id="menu">
-          <nav class="menu-nav" aria-label="Main navigation">
-            <ul class="menu-nav__list">
-              <li class="menu-nav__item">
-                <div class="menu-nav__clip">
-                  <a href="./index.html" class="menu-nav__link">Home</a>
-                </div>
-              </li>
-              <li class="menu-nav__item">
-                <div class="menu-nav__clip">
-                  <a href="#work" class="menu-nav__link">Work</a>
-                </div>
-              </li>
-              <li class="menu-nav__item">
-                <div class="menu-nav__clip">
-                  <a href="#about" class="menu-nav__link">About</a>
-                </div>
-              </li>
-              <li class="menu-nav__item">
-                <div class="menu-nav__clip">
-                  <a href="#contact" class="menu-nav__link">Contact</a>
-                </div>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
-        <nav class="navbar" id="navbar">
-          <a href="./index.html" class="centered-nav__logo logo__brand">
-            <p class="logo__brand-p">© Eduardo A. Garcia</p>
-            <p class="logo__brand-p is--duplicate">© Eduardo A. Garcia</p>
-          </a>
-
-          <div class="nav-controls">
-            <button class="lang-btn" data-lang-open="false">
-              <svg
-                class="lang-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+  <body>
+    <header>
+      <div class="container-grid">
+        <a href="#hero" class="centered-nav__logo logo__text">
+          <p class="logo__text-p">© Eduardo A. Garcia</p>
+          <p class="logo__text-p is--duplicate">© Eduardo A. Garcia</p>
+        </a>
+        <!-- Kerna-style nav pill: trigger LEFT, links expand RIGHT -->
+        <nav class="nav-pill" id="nav-pill" aria-label="Main navigation">
+          <div class="nav-pill__menu" id="nav-pill-menu">
+            <div class="nav-pill__inner" id="nav-pill-inner">
+              <div class="nav-pill__indicator" id="nav-pill-indicator"></div>
+              <a
+                href="#"
+                class="nav-pill__link"
+                data-tooltip-group="nav"
+                data-tooltip-content="Download my CV"
+                ><svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M21.3909 12.2606L12.8909 20.7606C12.3043 21.3593 11.6042 21.8349 10.8315 22.1596C10.0588 22.4843 9.22907 22.6515 8.39092 22.6515C7.55277 22.6515 6.72305 22.4843 5.95035 22.1596C5.17764 21.8349 4.4775 21.3593 3.89092 20.7606C3.29224 20.174 2.81663 19.4739 2.49194 18.7012C2.16724 17.9285 2 17.0988 2 16.2606C2 15.4225 2.16724 14.5927 2.49194 13.82C2.81663 13.0473 3.29224 12.3472 3.89092 11.7606L12.3909 3.26061C12.782 2.86149 13.2487 2.54442 13.7639 2.32796C14.279 2.1115 14.8322 2 15.3909 2C15.9497 2 16.5028 2.1115 17.018 2.32796C17.5331 2.54442 17.9999 2.86149 18.3909 3.26061C18.79 3.65167 19.1071 4.11843 19.3236 4.63356C19.54 5.1487 19.6515 5.70185 19.6515 6.26061C19.6515 6.81938 19.54 7.37253 19.3236 7.88766C19.1071 8.40279 18.79 8.86956 18.3909 9.26061L9.89092 17.7606C9.48366 18.1402 8.94764 18.3513 8.39092 18.3513C7.8342 18.3513 7.29817 18.1402 6.89092 17.7606C6.51133 17.3534 6.30027 16.8173 6.30027 16.2606C6.30027 15.7039 6.51133 15.1679 6.89092 14.7606L14.3909 7.26061"
+                    stroke="#ffffff"
+                    stroke-miterlimit="10"
+                  />
+                </svg>
+              </a>
+              <a
+                href="#works"
+                class="nav-pill__link"
+                data-tooltip-group="nav"
+                data-tooltip-content="View my work"
+                >Works</a
               >
-                <circle cx="12" cy="12" r="10" />
-                <path
-                  d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-                />
-              </svg>
-              <span class="lang-primary">EN</span>
-              <span class="lang-secondary">
-                <span class="lang-divider">/</span>
-                <span>ES</span>
-              </span>
-            </button>
-            <button class="nav-btn-toggle" id="nav-btn-toggle">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <a
+                href="#about"
+                class="nav-pill__link"
+                data-tooltip-group="nav"
+                data-tooltip-content="About me"
+                >About</a
               >
-                <path
-                  d="M2.5 10L17.5 10"
-                  stroke="#636468"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M2.5 5L17.5 5"
-                  stroke="#636468"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M2.5 15L17.5 15"
-                  stroke="#636468"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
+              <a
+                href="#contact"
+                class="nav-pill__link"
+                data-tooltip-group="nav"
+                data-tooltip-content="Say hello"
+                >Contact</a
+              >
+            </div>
           </div>
+          <button
+            class="nav-pill__trigger"
+            id="nav-pill-trigger"
+            aria-label="Toggle navigation"
+            aria-expanded="false"
+          >
+            <svg
+              id="nav-pill-icon"
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="4" cy="7" r="1.5" fill="currentColor" />
+              <circle cx="10" cy="7" r="1.5" fill="currentColor" />
+            </svg>
+          </button>
         </nav>
-      </header>
-
-      <div class="scroll-hint" id="scroll-hint">
-        <div class="scroll-hint__track">
-          <span class="scroll-hint__item">scroll down to discover</span>
-          <span class="scroll-hint__separator">—</span>
-          <span class="scroll-hint__item">scroll down to discover</span>
-          <span class="scroll-hint__separator">—</span>
-          <span class="scroll-hint__item">scroll down to discover</span>
-          <span class="scroll-hint__separator">—</span>
-          <span class="scroll-hint__item">scroll down to discover</span>
-          <span class="scroll-hint__separator">—</span>
-          <span class="scroll-hint__item">scroll down to discover</span>
-          <span class="scroll-hint__separator">—</span>
-          <span class="scroll-hint__item">scroll down to discover</span>
-          <span class="scroll-hint__separator">—</span>
-          <span class="scroll-hint__item">scroll down to discover</span>
-          <span class="scroll-hint__separator">—</span>
-          <span class="scroll-hint__item">scroll down to discover</span>
-        </div>
       </div>
+    </header>
+    <div id="nav-tooltip" class="nav-tooltip" aria-hidden="true">
+      <div class="nav-tooltip__bg"></div>
+      <span class="nav-tooltip__text"></span>
     </div>
-    <main id="main-content" data-barba="container">
+    <main id="main-content">
       <section id="hero" class="parallax-demo-wrap">
         <div class="parallax-demo-hero">
           <div
@@ -177,16 +142,22 @@
           <div class="hero-overlay"></div>
           <div class="container-grid">
             <div class="grid-12">
-              <h1 class="parallax-demo-h">
-                A software engineer that delivers what AI can't
+              <h1
+                class="parallax-demo-h"
+                data-rect-reveal
+                data-rect-reveal-color="#ffffff"
+              >
+                <span>Not just coding</span><br />
+                But real engineering
               </h1>
             </div>
           </div>
-          <div data-css-marquee="" class="marquee-css">
-            <div data-css-marquee-list="" class="marquee-css__list">
-              <div class="marquee-css__item">
-                <p class="marquee-css__item-p">Eduardo A. Garcia</p>
-              </div>
+        </div>
+        <div data-css-marquee="" class="marquee-css">
+          <div data-css-marquee-list="" class="marquee-css__list">
+            <div class="marquee-css__item">
+              <p class="marquee-css__item-p">Software Engineer</p>
+              <span class="divider"></span>
             </div>
           </div>
         </div>
@@ -194,499 +165,657 @@
       <section id="mission">
         <div class="container-grid">
           <div class="grid-12">
-            <h3
-              class="mission-label"
-              data-split="heading"
-              data-split-reveal="lines"
-            >
-              (My mission)
-            </h3>
-            <h2
-              class="mission-text"
-              data-split="heading"
-              data-split-reveal="lines"
-            >
+            <p class="mission-label" data-reveal-text>My mission</p>
+            <h2 data-rect-reveal data-rect-reveal-color="#FFFFFF">
               As an engineer, I solve complex problems to help people achieve
               their goals, whether designing a complex simple architecture or
               crafting award-winning interfaces experiences.
             </h2>
-            <blockquote
-              class="mission-quote"
-              data-split="heading"
-              data-split-reveal="words"
-            >
-              <p>“Good engineering is knowing when not to over-engineer.”</p>
-            </blockquote>
+            <p class="quote" data-reveal-text>
+              The Red Boasts 1.2 million square feet of office space over 45
+              floors, combining exceptional infrastructure with beautiful
+              aesthetics. We offer a tenant experience like no other, complete
+              with lobby ambassadors and a dedicated concierge. Our auditorium
+              seats 250 people, and comes complete with audio and visual
+              conferencing capabilities. A door-to-door shuttle service ensures
+              and effortless commute, whilst dedicated childcare facilities are
+              also provided.
+            </p>
           </div>
         </div>
-      </section>
-      <section id="services">
-        <div class="hiw-driver" id="hiw-driver">
-          <div class="hiw-sticky">
-            <div class="container-grid">
-              <div class="grid-12">
-                <!-- <h3
-                  class="services-label"
-                  data-split="heading"
-                  data-split-reveal="lines"
-                >
-                  (How can i help)
-                </h3> -->
-                <h2
-                  class="services-text"
-                  data-split="heading"
-                  data-split-reveal="lines"
-                >
-                  This is where my work typically lives.
-                </h2>
-                <div class="hiw-content">
-                  <!-- Image (left) -->
-                  <div class="hiw-image-col">
-                    <div class="hiw-image-wrap">
-                      <img
-                        class="hiw-img"
-                        src="/images/home/services/creative_development.webp"
-                        alt="Creative development"
-                      />
-                      <img
-                        class="hiw-img"
-                        src="/images/home/services/img1.jpg"
-                        alt="Motion & animations"
-                      />
-                      <img
-                        class="hiw-img"
-                        src="/images/home/services/img4.avif"
-                        alt="Backend & APIs"
-                      />
-                      <img
-                        class="hiw-img"
-                        src="/images/home/services/ci_cd.webp"
-                        alt="CI/CD & Infrastructure"
-                      />
-                    </div>
-                  </div>
-
-                  <!-- Steps (right) -->
-                  <div class="hiw-steps">
-                    <div class="hiw-step is-active" data-step="0">
-                      <div class="hiw-step-dot"></div>
-                      <div class="hiw-step-body">
-                        <!-- <p class="hiw-step-number">01</p> -->
-                        <h3 class="hiw-step-title">Creative development</h3>
-                        <p class="hiw-step-desc">
-                          Not just a website — but the intersection of
-                          creativity and engineering, crafting bespoke digital
-                          experiences that spark emotion.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="hiw-step" data-step="1">
-                      <div class="hiw-step-dot"></div>
-                      <div class="hiw-step-body">
-                        <!-- <p class="hiw-step-number">02</p> -->
-                        <h3 class="hiw-step-title">Motion & animations</h3>
-                        <p class="hiw-step-desc">
-                          Not just fade-ins and hover effects, but motion with
-                          intention — designed to guide attention, create
-                          rhythm, and leave a lasting impression.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="hiw-step" data-step="2">
-                      <div class="hiw-step-dot"></div>
-                      <div class="hiw-step-body">
-                        <!-- <p class="hiw-step-number">03</p> -->
-                        <h3 class="hiw-step-title">Backend & APIs</h3>
-                        <p class="hiw-step-desc">
-                          Invisible foundations that quietly power extraordinary
-                          digital experiences.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="hiw-step" data-step="3">
-                      <div class="hiw-step-dot"></div>
-                      <div class="hiw-step-body">
-                        <!-- <p class="hiw-step-number">04</p> -->
-                        <h3 class="hiw-step-title">CI/CD & Infrastructure</h3>
-                        <p class="hiw-step-desc">
-                          Automated pipelines, scalable cloud architecture,
-                          built to move as fast as your product.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="rows-container">
+          <div class="row1"></div>
+          <div class="row2"></div>
+          <div class="row3"></div>
         </div>
       </section>
       <section id="works">
-        <section class="container_base works-container">
-          <div class="sticky-title-container">
-            <div class="works-inner">
-              <h2 class="works-title">My work</h2>
-              <div class="works-stage" data-works-stage>
-                <div class="work-card">
-                  <img
-                    src="/images/home/projects/nubank.webp"
-                    alt="mockup of Nubank's website on desktop and mobile screens"
-                    loading="lazy"
-                  />
-                </div>
-                <div class="work-card">
-                  <img
-                    src="/images/home/projects/mockup-infra-use.webp"
-                    alt="mockup of Infrastructure project on desktop and mobile screens"
-                    loading="lazy"
-                  />
-                </div>
-                <div class="work-card">
-                  <img
-                    src="/images/home/projects/optimus-mockup.webp"
-                    alt="mockup of Optimus project on desktop and mobile screens"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <div class="works-footer">
-          <a href="./works.html" class="btn-icon-link w-inline-block">
-            <div class="btn-icon-content">
-              <div class="btn-icon-content__mask">
-                <span data-button-anim-target="" class="btn-icon-content__text"
-                  >See all work</span
-                >
-              </div>
-              <div data-icon-size="normal" class="btn-icon-icon">
-                <div data-button-anim-target="" class="btn-icon-icon__bg"></div>
-                <div class="btn-icon-icon__wrap">
-                  <div class="btn-icon-icon__list">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="100%"
-                      viewbox="0 0 10 8"
-                      fill="none"
-                      data-button-anim-target=""
-                      class="btn-icon-icon__arrow"
-                    >
-                      <path
-                        d="M4.45231 0.385986H6.02531L9.30131 3.99999L6.02531 7.61399H4.45231L7.40331 4.58499H0.695312V3.42799H7.41631L4.45231 0.385986Z"
-                        fill="#0F0F0F"
-                      ></path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="100%"
-                      viewbox="0 0 10 8"
-                      fill="none"
-                      data-button-anim-target=""
-                      class="btn-icon-icon__arrow"
-                    >
-                      <path
-                        d="M4.45231 0.385986H6.02531L9.30131 3.99999L6.02531 7.61399H4.45231L7.40331 4.58499H0.695312V3.42799H7.41631L4.45231 0.385986Z"
-                        fill="#0F0F0F"
-                      ></path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="100%"
-                      viewbox="0 0 10 8"
-                      fill="none"
-                      data-button-anim-target=""
-                      class="btn-icon-icon__arrow"
-                    >
-                      <path
-                        d="M4.45231 0.385986H6.02531L9.30131 3.99999L6.02531 7.61399H4.45231L7.40331 4.58499H0.695312V3.42799H7.41631L4.45231 0.385986Z"
-                        fill="#0F0F0F"
-                      ></path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div
-                data-button-anim-target=""
-                class="btn-icon-content__bg"
-              ></div>
-            </div>
-          </a>
-        </div>
-      </section>
-      <section id="about" class="container_base">
-        <div
-          data-marquee-duplicate="2"
-          data-marquee-scroll-direction-target=""
-          data-marquee-direction="left"
-          data-marquee-status="normal"
-          data-marquee-speed="15"
-          data-marquee-scroll-speed="10"
-          class="marquee-advanced"
-        >
-          <div data-marquee-scroll-target="" class="marquee-advanced__scroll">
-            <div
-              data-marquee-collection-target=""
-              class="marquee-advanced__collection"
-            >
-              <div class="marquee-advanced__item">
-                <p class="marquee__advanced__p">Coding my way since 2020</p>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="container-grid">
           <div class="grid-12">
-            <h2
-              class="about-text"
-              data-split="heading"
-              data-split-reveal="lines"
-            >
-              I'm a Brazillian software engineer rarely satisfied with my own
-              work, not out doubt, but driven by a constant pursuit of
-              refinement, improvement and better solutions.
-            </h2>
-            <div class="img-card">
-              <img
-                src="/images/home/foto_perfil.webp"
-                alt="Portrait of Eduardo A. Garcia"
-                loading="lazy"
-              />
-            </div>
-            <div class="about-subtitle-wrapper">
-              <h3
-                class="about-subtitle"
-                data-split="heading"
-                data-split-reveal="lines"
-              >
-                Functionality is expected.<br />
-                Delight is what defines success, transforming interaction into
-                experience, and usability into emotion.<br /><br />
-              </h3>
-              <p class="about-always-exploring">
-                <span class="pulsing-ball" aria-hidden="true"></span>
-                <span class="about-always-exploring-text"
-                  >Always exploring</span
-                >
-                <span class="about-exploring-dots" aria-hidden="true">
-                  <span class="dot">.</span>
-                  <span class="dot">.</span>
-                  <span class="dot">.</span>
-                </span>
-              </p>
-            </div>
+            <h1 class="works-label">Featured Works</h1>
           </div>
         </div>
       </section>
-      <section id="links" class="container_base">
-        <div class="grid-12">
-          <h2 class="links-title">Elsewhere on the internet</h2>
-          <div class="links-container-links">
-            <div class="link-wrapper">
-              <a
-                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
-                rel="noopener noreferrer"
-                target="_blank"
-                aria-label="LinkedIn"
-                style="text-decoration: none"
-              >
-                <div class="grid-12">
-                  <h2 class="link-wrapper-p title container is--medium">
-                    LinkedIn
-                  </h2>
-                </div>
-                <!-- duplicate animation content, not a link for screen readers -->
-                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
-                  <div class="centered-nav__banner-w">
-                    <div
-                      class="centered-nav__banner w-inline-block"
-                      style="text-decoration: none"
-                    >
-                      <div class="centered-nav__banner-row">
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </h2>
-              </a>
-            </div>
-            <div class="link-wrapper">
-              <a
-                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
-                rel="noopener noreferrer"
-                target="_blank"
-                aria-label="LinkedIn"
-                style="text-decoration: none"
-              >
-                <div class="grid-12">
-                  <h2 class="link-wrapper-p title container is--medium">
-                    Github
-                  </h2>
-                </div>
-                <!-- duplicate animation content, not a link for screen readers -->
-                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
-                  <div class="centered-nav__banner-w">
-                    <div
-                      class="centered-nav__banner w-inline-block"
-                      style="text-decoration: none"
-                    >
-                      <div class="centered-nav__banner-row">
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </h2>
-              </a>
-            </div>
-            <div class="link-wrapper">
-              <a
-                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
-                rel="noopener noreferrer"
-                target="_blank"
-                aria-label="LinkedIn"
-                style="text-decoration: none"
-              >
-                <div class="grid-12">
-                  <h2 class="link-wrapper-p title container is--medium">
-                    Instagram
-                  </h2>
-                </div>
-                <!-- duplicate animation content, not a link for screen readers -->
-                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
-                  <div class="centered-nav__banner-w">
-                    <div
-                      class="centered-nav__banner w-inline-block"
-                      style="text-decoration: none"
-                    >
-                      <div class="centered-nav__banner-row">
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </h2>
-              </a>
-            </div>
-            <div class="link-wrapper">
-              <a
-                href="https://www.linkedin.com/in/eduardoamengualgarcia/"
-                rel="noopener noreferrer"
-                target="_blank"
-                aria-label="LinkedIn"
-                style="text-decoration: none"
-              >
-                <div class="grid-12">
-                  <h2 class="link-wrapper-p title container is--medium">
-                    Awwwards
-                  </h2>
-                </div>
-                <!-- duplicate animation content, not a link for screen readers -->
-                <h2 class="link-wrapper-p is--duplicate" aria-hidden="true">
-                  <div class="centered-nav__banner-w">
-                    <div
-                      class="centered-nav__banner w-inline-block"
-                      style="text-decoration: none"
-                    >
-                      <div class="centered-nav__banner-row">
-                        <div
-                          data-css-marquee-list=""
-                          class="centered-nav__banner-item"
-                        >
-                          <div class="centered-nav__banner-inner">
-                            <p class="centered-nav__banner-text">
-                              <span class="star">*</span>
-                              <span class="app">LinkedIn</span>
-                              <span class="star">*</span>
-                              <span class="user">@eduardoamengualgarcia</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </h2>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div data-footer-parallax="" id="footer" class="footer-wrap">
-        <footer data-footer-parallax-inner="" class="parallax-footer">
-          <div class="container-grid">
-            <div class="grid-12">
-              <h2>
-                Every project begins with a conversation. Share your ideas, your
-                challenges and let's explore what we can build together.
+      <section id="about"></section>
+      <section id="experience">
+        <div class="container-grid">
+          <div class="grid-12">
+            <div class="experience-header">
+              <h2 class="experience-label">
+                A few chapters from my <br />road so far.
               </h2>
-              <div class="footer-links">
-                <a
-                  data-underline-link="alt"
-                  href="mailto:eduardo.agarcia117@gmail.com"
-                  class="underline-link"
-                  >eduardo.agarcia117@gmail.com</a
+            </div>
+            <ul class="experience-list">
+              <li class="experience-item">
+                <svg
+                  class="experience-item__bg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
                 >
-                <a
-                  data-underline-link="alt"
-                  href="tel:+5551994151552"
-                  class="underline-link"
-                  >+55 51 99415 1552</a
-                >
-              </div>
-              <div class="copyright">
-                <div class="logo-wrapper">
-                  <img src="/images/logo.svg" alt="" />
+                  <path
+                    class="experience-item__path"
+                    d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
+                    fill="#1925aa"
+                  />
+                </svg>
+                <div class="experience-item__content">
+                  <span class="exp-role">Software Engineer II</span>
+                  <span class="exp-company">ADP Brazil Labs</span>
+                  <span class="exp-period">Dec 2025 — Now</span>
                 </div>
-                <p>©2026. All rights reserved.</p>
+              </li>
+              <li class="experience-item">
+                <svg
+                  class="experience-item__bg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    class="experience-item__path"
+                    d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
+                    fill="#1925aa"
+                  />
+                </svg>
+                <div class="experience-item__content">
+                  <span class="exp-role">Software Engineer Junior</span>
+                  <span class="exp-company">Dell Technologies</span>
+                  <span class="exp-period">Jun 2025 — Dec 2025</span>
+                </div>
+              </li>
+              <li class="experience-item">
+                <svg
+                  class="experience-item__bg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    class="experience-item__path"
+                    d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
+                    fill="#1925aa"
+                  />
+                </svg>
+                <div class="experience-item__content">
+                  <span class="exp-role">Software Engineer Intern</span>
+                  <span class="exp-company">Dell Technologies</span>
+                  <span class="exp-period">May 2024 — Jun 2025</span>
+                </div>
+              </li>
+              <li class="experience-item">
+                <svg
+                  class="experience-item__bg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    class="experience-item__path"
+                    d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
+                    fill="#1925aa"
+                  />
+                </svg>
+                <div class="experience-item__content">
+                  <span class="exp-role">Freelance Software Engineer</span>
+                  <span class="exp-company">ONSTOQ</span>
+                  <span class="exp-period">Fev 2024 - Apr 2024</span>
+                </div>
+              </li>
+              <li class="experience-item">
+                <svg
+                  class="experience-item__bg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    class="experience-item__path"
+                    d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
+                    fill="#1925aa"
+                  />
+                </svg>
+                <div class="experience-item__content">
+                  <span class="exp-role">Freelance Software Engineer</span>
+                  <span class="exp-company">Manuteno</span>
+                  <span class="exp-period">Sep 2023 - Fev 2024</span>
+                </div>
+              </li>
+              <li class="experience-item">
+                <svg
+                  class="experience-item__bg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    class="experience-item__path"
+                    d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
+                    fill="#1925aa"
+                  />
+                </svg>
+                <div class="experience-item__content">
+                  <span class="exp-role">Software Engineer Intern</span>
+                  <span class="exp-company">Plugways Digital</span>
+                  <span class="exp-period">Aug 2023 - Jan 2024</span>
+                </div>
+              </li>
+              <li class="experience-item">
+                <svg
+                  class="experience-item__bg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    class="experience-item__path"
+                    d="M 0 100 V 100 Q 50 100 100 100 V 100 z"
+                    fill="#1925aa"
+                  />
+                </svg>
+                <div class="experience-item__content">
+                  <span class="exp-role">Software Engineer Intern</span>
+                  <span class="exp-company">027Capital</span>
+                  <span class="exp-period">Aug 2022 - Aug 2023 </span>
+                </div>
+              </li>
+            </ul>
+            <p class="mention">
+              And other mentions to my four academic projects developed in AGES
+              throughout my software engineering degree.
+            </p>
+          </div>
+        </div>
+        <div class="rows-container">
+          <div class="row1"></div>
+          <div class="row2"></div>
+          <div class="row3"></div>
+        </div>
+      </section>
+      <section id="skills">
+        <div class="container-grid">
+          <div class="grid-12">
+            <h2 data-reveal-text>
+              Throughout the years, I've worked across different kinds of
+              projects for both small and large clients. Here are a few tools &
+              skills I'm familiar with.
+            </h2>
+            <ul>
+              <li>Javascript ES11+</li>
+              <li>Typescript</li>
+              <li>Node.js & Express</li>
+              <li>React.js</li>
+              <li>Vue.js & Nuxt</li>
+              <li>Angular 24</li>
+              <li>GSAP</li>
+              <li>TailwindCSS</li>
+              <li>Bootstrap</li>
+              <li>Jest</li>
+              <li>Snyk</li>
+              <li>Python & FastAPI</li>
+              <li>Java & Spring</li>
+              <li>C# & .NET</li>
+              <li>PostgreSQL</li>
+              <li>Oracle</li>
+              <li>MySQL</li>
+              <li>Supabase</li>
+              <li>Firebase</li>
+              <li>Websockets</li>
+              <li>GRCP</li>
+              <li>AWS</li>
+              <li>Azure</li>
+              <li>Google Cloud Platform</li>
+              <li>Terraform</li>
+              <li>Docker</li>
+              <li>Kubernetes</li>
+              <li>CI/CD</li>
+              <li>Gitlab</li>
+              <li>Jenkins</li>
+              <li>RAG</li>
+              <li>MCPs</li>
+              <li>TensorFlow</li>
+              <li>Web Machine Learning</li>
+            </ul>
+            <p>
+              And many more<span class="dot">.</span><span class="dot">.</span
+              ><span class="dot">.</span>
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="contact">
+        <div class="contact-marquees">
+          <div
+            data-marquee-duplicate="3"
+            data-marquee-scroll-direction-target
+            data-marquee-direction="right"
+            data-marquee-status="normal"
+            data-marquee-speed="18"
+            data-marquee-scroll-speed="8"
+            class="marquee-advanced"
+          >
+            <div data-marquee-scroll-target class="marquee-advanced__scroll">
+              <div
+                data-marquee-collection-target
+                class="marquee-advanced__collection"
+              >
+                <div class="marquee-advanced__item">
+                  Go ahead! <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Hello world <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Don't be shy <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's chat <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Still scrolling? <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Say hello <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Drop a message <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Get in touch <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's make magic <span>*</span>
+                </div>
               </div>
             </div>
           </div>
-        </footer>
-      </div>
+          <div
+            data-marquee-duplicate="3"
+            data-marquee-scroll-direction-target
+            data-marquee-direction="left"
+            data-marquee-status="normal"
+            data-marquee-speed="16"
+            data-marquee-scroll-speed="8"
+            class="marquee-advanced"
+          >
+            <div data-marquee-scroll-target class="marquee-advanced__scroll">
+              <div
+                data-marquee-collection-target
+                class="marquee-advanced__collection"
+              >
+                <div class="marquee-advanced__item">
+                  Let's make magic <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Say hello <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Drop a message <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Go ahead! <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's chat <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Get in touch <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Don't be shy <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Hello world <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Still scrolling? <span>*</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-marquee-duplicate="3"
+            data-marquee-scroll-direction-target
+            data-marquee-direction="right"
+            data-marquee-status="normal"
+            data-marquee-speed="17"
+            data-marquee-scroll-speed="8"
+            class="marquee-advanced"
+          >
+            <div data-marquee-scroll-target class="marquee-advanced__scroll">
+              <div
+                data-marquee-collection-target
+                class="marquee-advanced__collection"
+              >
+                <div class="marquee-advanced__item">
+                  Still scrolling? <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's chat <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Get in touch <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Drop a message <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Hello world <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's make magic <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Say hello <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Don't be shy <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Go ahead! <span>*</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-marquee-duplicate="3"
+            data-marquee-scroll-direction-target
+            data-marquee-direction="left"
+            data-marquee-status="normal"
+            data-marquee-speed="15"
+            data-marquee-scroll-speed="8"
+            class="marquee-advanced"
+          >
+            <div data-marquee-scroll-target class="marquee-advanced__scroll">
+              <div
+                data-marquee-collection-target
+                class="marquee-advanced__collection"
+              >
+                <div class="marquee-advanced__item">
+                  Go ahead! <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Hello world <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Don't be shy <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's make magic <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Say hello <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Drop a message <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Still scrolling? <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's chat <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Get in touch <span>*</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-marquee-duplicate="3"
+            data-marquee-scroll-direction-target
+            data-marquee-direction="right"
+            data-marquee-status="normal"
+            data-marquee-speed="16"
+            data-marquee-scroll-speed="8"
+            class="marquee-advanced"
+          >
+            <div data-marquee-scroll-target class="marquee-advanced__scroll">
+              <div
+                data-marquee-collection-target
+                class="marquee-advanced__collection"
+              >
+                <div class="marquee-advanced__item">
+                  Let's make magic <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Say hello <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Drop a message <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Get in touch <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Don't be shy <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Hello world <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Still scrolling? <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Go ahead! <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's chat <span>*</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-marquee-duplicate="3"
+            data-marquee-scroll-direction-target
+            data-marquee-direction="left"
+            data-marquee-status="normal"
+            data-marquee-speed="18"
+            data-marquee-scroll-speed="8"
+            class="marquee-advanced"
+          >
+            <div data-marquee-scroll-target class="marquee-advanced__scroll">
+              <div
+                data-marquee-collection-target
+                class="marquee-advanced__collection"
+              >
+                <div class="marquee-advanced__item">
+                  Let's chat <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Get in touch <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Don't be shy <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Say hello <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Drop a message <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Go ahead! <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Hello world <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Let's make magic <span>*</span>
+                </div>
+                <div class="marquee-advanced__item">
+                  Still scrolling? <span>*</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-links">
+          <div class="contact-links__content">
+            <div class="container-grid">
+              <div class="grid-12">
+                <h3>Open to ideas and<br />conversations.</h3>
+              </div>
+            </div>
+            <div class="full-bleed link">
+              <div class="container-grid link-upper">
+                <div class="grid-12">
+                  <p>LinkedIn</p>
+                </div>
+              </div>
+              <div data-css-marquee class="link-marquee" aria-hidden="true">
+                <div data-css-marquee-list class="link-marquee__list">
+                  <div class="link-marquee__item">
+                    <span class="social-midia">LinkedIn</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@eduardoamengualgarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">LinkedIn</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@eduardoamengualgarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">LinkedIn</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@eduardoamengualgarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="full-bleed link">
+              <div class="container-grid link-upper">
+                <div class="grid-12">
+                  <p>Github</p>
+                </div>
+              </div>
+              <div data-css-marquee class="link-marquee" aria-hidden="true">
+                <div data-css-marquee-list class="link-marquee__list">
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Github</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Github</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Github</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="full-bleed link">
+              <div class="container-grid link-upper">
+                <div class="grid-12">
+                  <p>Instagram</p>
+                </div>
+              </div>
+              <div data-css-marquee class="link-marquee" aria-hidden="true">
+                <div data-css-marquee-list class="link-marquee__list">
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Instagram</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia_</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Instagram</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia_</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Instagram</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia_</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="full-bleed link">
+              <div class="container-grid link-upper">
+                <div class="grid-12">
+                  <p>Awwwards</p>
+                </div>
+              </div>
+              <div data-css-marquee class="link-marquee" aria-hidden="true">
+                <div data-css-marquee-list class="link-marquee__list">
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Awwwards</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Awwwards</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                  <div class="link-marquee__item">
+                    <span class="social-midia">Awwwards</span>
+                    <span class="link-marquee__divider">*</span>
+                    <span class="social-link">@duduagarcia</span>
+                    <span class="link-marquee__divider">*</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="container-grid copy-right">
+              <div class="grid-12">
+                <p class="copy-right-text">©2026. All Rights Reserved.</p>
+                <p class="testmony-text">Built with obsession and ❤️</p>
+              </div>
+            </div>
+          </div>
+          <footer data-footer-parallax class="contact-brand-footer">
+            <div data-footer-parallax-inner class="contact-brand-footer__inner">
+              <div class="container-grid">
+                <div class="grid-12">
+                  <div class="logo-wrapper">
+                    <img src="./images/logo 2.svg" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </section>
     </main>
 
-    <!-- BARBA JS -->
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"
-    ></script>
     <!-- GSAP JS -->
     <script
       defer
@@ -699,6 +828,10 @@
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/SplitText.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/Flip.min.js"
     ></script>
     <script
       defer

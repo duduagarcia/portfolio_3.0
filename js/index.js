@@ -1,13 +1,20 @@
-// -----------------------------------------
-// OSMO PAGE TRANSITION BOILERPLATE
-// -----------------------------------------
-
 document.addEventListener("DOMContentLoaded", (event) => {
-  gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase);
+  gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase, Flip);
 
-  // Global UI behaviors that live outside the Barba container
-  initCenteredScalingNavigationBar();
-  initDirectionalButtonHover();
+  initLenis();
+  initNavPill();
+  initNavTooltip();
+  initScrollTimeline();
+  initTextReveal();
+  initRectReveal();
+  initGlobalParallax();
+  initCSSMarquee();
+  initMissionRowsScroll();
+  initExperienceRowsScroll();
+  initExperienceList();
+  initSkillsTextFill();
+  initMarqueeScrollDirection();
+  initFooterParallax();
 });
 
 let documentTitleStore = document.title;
@@ -23,439 +30,231 @@ window.addEventListener("blur", () => {
   document.title = documentTitleOnBlur;
 });
 
-history.scrollRestoration = "manual";
+function initNavPill() {
+  const pill = document.getElementById("nav-pill");
+  const menu = document.getElementById("nav-pill-menu");
+  const inner = document.getElementById("nav-pill-inner");
+  const indicator = document.getElementById("nav-pill-indicator");
+  const trigger = document.getElementById("nav-pill-trigger");
+  const links = Array.from(document.querySelectorAll(".nav-pill__link"));
+  const langToggle = document.getElementById("lang-toggle");
+  const animItems = langToggle ? [...links, langToggle] : links;
 
-let lenis = null;
-let nextPage = document;
-let onceFunctionsInitialized = false;
+  if (!pill || !menu || !links.length) return;
 
-const hasLenis = typeof window.Lenis !== "undefined";
-const hasScrollTrigger = typeof window.ScrollTrigger !== "undefined";
+  // Kerna uses @petit-kit/scoped spring physics (not cubic-bezier):
+  // open: stiffness:200, damping:20 → ζ≈0.707 → ~5% overshoot
+  // close: stiffness:300, damping:29 → ζ≈0.837 → fast snap, minimal overshoot
+  const EASE_OUT = CustomEase.create("kernaOut", "0.22, 1, 0.36, 1"); // links stagger in
+  const EASE_IN = CustomEase.create("kernaIn", "0.64, 0, 0.78, 0"); // links stagger out
+  const EASE_SPRING = CustomEase.create("kernaSpring", "0.34, 1.05, 0.64, 1"); // open width: spring overshoot
 
-const rmMQ = window.matchMedia("(prefers-reduced-motion: reduce)");
-let reducedMotion = rmMQ.matches;
-rmMQ.addEventListener?.("change", (e) => (reducedMotion = e.matches));
-rmMQ.addListener?.((e) => (reducedMotion = e.matches));
+  let isOpen = false;
+  let expandedWidth = 0;
 
-const has = (s) => !!nextPage.querySelector(s);
-
-let staggerDefault = 0.05;
-let durationDefault = 0.6;
-
-CustomEase.create("osmo", "0.625, 0.05, 0, 1");
-gsap.defaults({ ease: "osmo", duration: durationDefault });
-
-// -----------------------------------------
-// FUNCTION REGISTRY
-// -----------------------------------------
-
-function initOnceFunctions() {
-  initLenis();
-  if (onceFunctionsInitialized) return;
-  onceFunctionsInitialized = true;
-  // Runs once on first load
-  // if (has('[data-something]')) initSomething();
-}
-
-function initBeforeEnterFunctions(next) {
-  nextPage = next || document;
-  // Runs before the enter animation
-  // if (has('[data-something]')) initSomething();
-}
-
-function initAfterEnterFunctions(next) {
-  nextPage = next || document;
-  // Runs after enter animation completes
-  // Re‑inicializa animações dependentes do conteúdo da página ativa
-  initGlobalParallax();
-  initFooterParallax();
-  initCSSMarquee();
-  initMaskTextScrollReveal();
-  initMarqueeScrollDirection();
-  initWorksBackgroundTransition();
-  initWorksCardsAnimation();
-  initAccordionCSS();
-  initServicesAccordionSync();
-  initNavbar();
-  initHowItWorks();
-
-  // ABOUT PAGE
-  initRotatingText();
-
-  if (hasLenis) {
-    lenis.resize();
+  function measureWidth() {
+    gsap.set(menu, { width: "auto" });
+    expandedWidth = menu.offsetWidth;
+    gsap.set(menu, { width: 0 });
   }
-  if (hasScrollTrigger) {
-    ScrollTrigger.refresh();
-  }
-}
-
-// -----------------------------------------
-// PAGE TRANSITIONS
-// -----------------------------------------
-
-function runPageOnceAnimation(next) {
-  const tl = gsap.timeline();
-
-  tl.call(
-    () => {
-      resetPage(next);
-    },
-    null,
-    0,
+  measureWidth();
+  window.addEventListener("resize", measureWidth);
+  window.addEventListener("orientationchange", () =>
+    setTimeout(measureWidth, 100),
   );
 
-  return tl;
-}
-
-function runPageLeaveAnimation(current, next) {
-  const parent = current.parentElement || document.body;
-  // Helper function to prepare transition structure
-  const { wrapper } = prepareForTransition(parent, current, next);
-  const tl = gsap.timeline({
-    onComplete: () => {
-      wrapper.remove();
-      gsap.set(parent, { clearProps: "perspective,transformStyle,overflow" });
-      gsap.set(next, {
-        clearProps:
-          "position,inset,width,height,zIndex,transformStyle,willChange,backfaceVisibility,transform",
-      });
-    },
-  });
-  if (reducedMotion) {
-    // Immediate swap behavior if user prefers reduced motion
-    return tl.set(current, { autoAlpha: 0 });
-  }
-
-  tl.to(
-    wrapper,
-    {
-      z: "-100vw",
-      duration: 0.9,
-      clipPath: "rect(0% 100% 100% 0% round 1.5em)",
-    },
-    0,
-  );
-  tl.to(
-    wrapper,
-    {
-      xPercent: -175,
-      duration: 1,
-      overwrite: "auto",
-    },
-    0.25,
-  );
-  tl.to(
-    next,
-    {
-      xPercent: 0,
-      duration: 1,
-      overwrite: "auto",
-    },
-    "<",
-  );
-  tl.to(
-    next,
-    {
-      z: 0,
-      duration: 0.9,
-      overwrite: "auto",
-      clipPath: "rect(0% 100% 100% 0% round 0em)",
-    },
-    ">-=0.4",
-  );
-
-  return tl;
-}
-
-function runPageEnterAnimation(next) {
-  const tl = gsap.timeline();
-  if (reducedMotion) {
-    // Immediate swap behavior if user prefers reduced motion
-    tl.set(next, { autoAlpha: 1 });
-    tl.add("pageReady");
-    tl.call(resetPage, [next], "pageReady");
-    return new Promise((resolve) => tl.call(resolve, null, "pageReady"));
-  }
-
-  tl.add("pageReady");
-  tl.call(resetPage, [next], "pageReady");
-
-  return new Promise((resolve) => {
-    tl.call(resolve, null, "pageReady");
-  });
-}
-
-function prepareForTransition(parent, current, next) {
-  // Wrap current so we can move it without breaking layout/styles
-  const wrapper = document.createElement("div");
-  wrapper.className = "page-transition__wrapper";
-
-  // Insert wrapper where current was, then move current into it
-  parent.insertBefore(wrapper, current);
-  wrapper.appendChild(current);
-
-  // Store scroll to visually "freeze" current in-place
-  const scrollY = window.scrollY || 0;
-  window.scrollTo(0, 0);
-
-  // Base 3D setup
-  gsap.set(parent, {
-    perspective: "100vw",
-    transformStyle: "preserve-3d",
-    overflow: "clip",
+  gsap.set(animItems, { opacity: 0, x: 10 });
+  gsap.set(indicator, {
+    opacity: 0,
+    scale: 0,
+    transformOrigin: "center center",
   });
 
-  gsap.set(wrapper, {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    width: "100%",
-    height: "100vh",
-    overflow: "clip",
-    zIndex: 2,
-    transformStyle: "preserve-3d",
-    willChange: "transform",
-    clipPath: "rect(0% 100% 100% 0% round 0em)",
+  let indicatorRevealed = false;
+
+  const triggerIcon = document.getElementById("nav-pill-icon");
+  gsap.set(triggerIcon, { rotation: 0, transformOrigin: "center center" });
+
+  function openMenu() {
+    if (isOpen) return;
+    isOpen = true;
+    trigger.setAttribute("aria-expanded", "true");
+
+    // Icon rotates 90° with bounce
+    gsap.to(triggerIcon, {
+      rotation: 90,
+      duration: 0.55,
+      ease: "back.out(1.8)",
+    });
+
+    // Width expands — spring open: slight overshoot then settles (ζ≈0.707)
+    gsap.to(menu, { width: expandedWidth, duration: 0.45, ease: EASE_SPRING });
+
+    // Links stagger in with slight delay so they trail the pill edge
+    gsap.to(animItems, {
+      opacity: 1,
+      x: 0,
+      duration: 0.35,
+      stagger: 0.035,
+      ease: EASE_OUT,
+      delay: 0.06,
+    });
+  }
+
+  function closeMenu() {
+    if (!isOpen) return;
+    isOpen = false;
+    trigger.setAttribute("aria-expanded", "false");
+
+    // Icon bounces back to 0°
+    gsap.to(triggerIcon, {
+      rotation: 0,
+      duration: 0.55,
+      ease: "back.out(1.8)",
+    });
+
+    // Indicator out
+    indicatorRevealed = false;
+    gsap.to(indicator, {
+      opacity: 0,
+      scale: 0,
+      duration: 0.15,
+      ease: EASE_IN,
+    });
+
+    // Links stagger out first (reverse order), fast
+    gsap.to(animItems, {
+      opacity: 0,
+      x: 10,
+      duration: 0.18,
+      stagger: { each: 0.025, from: "end" },
+      ease: EASE_IN,
+    });
+
+    // Pill collapses after links start disappearing — snappy spring close (ζ≈0.837)
+    gsap.to(menu, {
+      width: 0,
+      duration: 0.28,
+      ease: "power2.out",
+      delay: 0.04,
+    });
+  }
+
+  // Indicator slides to hovered link — spring overshoot on position + width
+  const indicatorTargets = langToggle ? [...links, langToggle] : links;
+  indicatorTargets.forEach((el) => {
+    el.addEventListener("mouseenter", () => {
+      // Snap position first so the pop happens in the right place
+      if (!indicatorRevealed) {
+        indicatorRevealed = true;
+        gsap.set(indicator, { left: el.offsetLeft, width: el.offsetWidth });
+        // First reveal: zoom pop from scale 0 → 1 with bounce
+        gsap.to(indicator, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.45,
+          ease: "back.out(1.8)",
+        });
+      } else {
+        // Already visible: just slide to new position with spring
+        gsap.to(indicator, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.18,
+          ease: EASE_OUT,
+        });
+        gsap.to(indicator, {
+          left: el.offsetLeft,
+          width: el.offsetWidth,
+          duration: 0.5,
+          ease: "back.out(0.8)",
+        });
+      }
+    });
   });
 
-  // Keep the current page visually aligned with where it was scrolled
-  gsap.set(current, {
-    position: "absolute",
-    top: -scrollY,
-    left: 0,
-    width: "100%",
-    willChange: "transform, opacity",
-    backfaceVisibility: "hidden",
+  // Fade indicator out when not over any link
+  inner.addEventListener("mouseleave", () => {
+    indicatorRevealed = false;
+    gsap.to(indicator, {
+      opacity: 0,
+      scale: 0,
+      duration: 0.2,
+      ease: "power2.in",
+    });
   });
-  // Initial state of the next page
-  gsap.set(next, {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    width: "100%",
-    height: "100vh",
-    overflow: "clip",
-    zIndex: 1,
-    transformStyle: "preserve-3d",
-    willChange: "transform, opacity",
-    backfaceVisibility: "hidden",
-    xPercent: 175,
-    z: "-100vw",
-    autoAlpha: 1,
-    clipPath: "rect(0% 100% 100% 0% round 1.5em)",
+
+  const isMobile = () => window.innerWidth <= 768;
+
+  // Desktop: hover opens/closes — close has a short delay to bridge the gap
+  // between the trigger and menu so crossing it quickly doesn't flicker
+  let closeTimer = null;
+
+  pill.addEventListener("mouseenter", () => {
+    if (isMobile()) return;
+    clearTimeout(closeTimer);
+    openMenu();
   });
-  return { wrapper, scrollY };
-}
 
-// -----------------------------------------
-// BARBA HOOKS + INIT
-// -----------------------------------------
-
-barba.hooks.beforeEnter((data) => {
-  // Position new container on top
-  gsap.set(data.next.container, {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
+  pill.addEventListener("mouseleave", () => {
+    if (isMobile()) return;
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => closeMenu(), 120);
   });
-  if (lenis && typeof lenis.stop === "function") {
-    lenis.stop();
-  }
-  initBeforeEnterFunctions(data.next.container);
-  applyThemeFrom(data.next.container);
-});
 
-barba.hooks.afterLeave(() => {
-  if (hasScrollTrigger) {
-    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-  }
-});
+  // Also cancel close if mouse enters the menu itself (floating over logo)
+  menu.addEventListener("mouseenter", () => clearTimeout(closeTimer));
+  menu.addEventListener("mouseleave", () => {
+    if (isMobile()) return;
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => closeMenu(), 120);
+  });
 
-barba.hooks.enter((data) => {
-  initBarbaNavUpdate(data);
-});
+  // Mobile: tap trigger to toggle
+  trigger.addEventListener("click", () => {
+    if (isMobile()) isOpen ? closeMenu() : openMenu();
+  });
 
-barba.hooks.afterEnter((data) => {
-  // Run page functions
-  initAfterEnterFunctions(data.next.container);
-  initNavbarScrollHide(); // ensure nav show/hide logic is re‑attached after each page
-  // Settle
-  if (hasLenis) {
-    lenis.resize();
-    lenis.start();
-  }
-  if (hasScrollTrigger) {
-    ScrollTrigger.refresh();
-  }
-});
-
-barba.init({
-  debug: true, // Set to 'false' in production
-  timeout: 7000,
-  preventRunning: true,
-  transitions: [
-    {
-      name: "default",
-      sync: true,
-      // First load
-      async once(data) {
-        initOnceFunctions();
-
-        return runPageOnceAnimation(data.next.container);
-      },
-
-      // Current page leaves
-      async leave(data) {
-        return runPageLeaveAnimation(
-          data.current.container,
-          data.next.container,
-        );
-      },
-
-      // New page enters
-      async enter(data) {
-        return runPageEnterAnimation(data.next.container);
-      },
-    },
-  ],
-});
-
-// -----------------------------------------
-// GENERIC + HELPERS
-// -----------------------------------------
-
-const themeConfig = {
-  light: {
-    nav: "dark",
-    transition: "light",
-  },
-  dark: {
-    nav: "light",
-    transition: "dark",
-  },
-};
-
-function applyThemeFrom(container) {
-  const pageTheme = container?.dataset?.pageTheme || "light";
-  const config = themeConfig[pageTheme] || themeConfig.light;
-  document.body.dataset.pageTheme = pageTheme;
-  const transitionEl = document.querySelector("[data-theme-transition]");
-  if (transitionEl) {
-    transitionEl.dataset.themeTransition = config.transition;
-  }
-
-  const nav = document.querySelector("[data-theme-nav]");
-  if (nav) {
-    nav.dataset.themeNav = config.nav;
-  }
+  // Smooth scroll on link click
+  links.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute("href"));
+      if (target && typeof lenis !== "undefined") {
+        lenis.scrollTo(target, { duration: 1.4 });
+      } else if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+      }
+      closeMenu();
+    });
+  });
 }
 
 function initLenis() {
-  if (lenis) return; // already created
-  if (!hasLenis) return;
-
   lenis = new Lenis({
-    // lerp: 0.165,
-    // wheelMultiplier: 1.25,
+    lerp: 0.06,
   });
 
-  if (hasScrollTrigger) {
-    lenis.on("scroll", ScrollTrigger.update);
-  }
+  lenis.on("scroll", ScrollTrigger.update);
 
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
 
   gsap.ticker.lagSmoothing(0);
-}
 
-function resetPage(container) {
-  window.scrollTo(0, 0);
-  gsap.set(container, { clearProps: "position,top,left,right" });
-  if (hasLenis) {
-    lenis.resize();
-    lenis.start();
-  }
-}
-
-function debounceOnWidthChange(fn, ms) {
-  let last = innerWidth,
-    timer;
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      if (innerWidth !== last) {
-        last = innerWidth;
-        fn.apply(this, args);
-      }
-    }, ms);
-  };
-}
-
-// reload page when width changes drastically to avoid broken listeners/animations
-const reloadOnWidthChange = debounceOnWidthChange(() => {
-  console.log('width changed — reloading to reset animations');
-  window.location.reload();
-}, 200);
-
-window.addEventListener('resize', reloadOnWidthChange);
-
-function initNavbarScrollHide() {
-  const nav = document.querySelector('.navigation');
-  if (!nav) return;
-
-  let lastY = window.scrollY || 0;
-  const delta = 2;
-
-  const onScroll = ({ scroll }) => {
-    const current = typeof scroll === 'number' ? scroll : window.scrollY;
-    if (current > lastY + delta) {
-      nav.classList.add('navigation--hidden');
-    } else if (current < lastY - delta) {
-      nav.classList.remove('navigation--hidden');
-    }
-    lastY = current;
-  };
-
-  if (hasLenis && lenis) {
-    lenis.on('scroll', onScroll);
-  } else {
-    window.addEventListener('scroll', () => onScroll({ scroll: window.scrollY }));
-  }
-}
-
-function initBarbaNavUpdate(data) {
-  var tpl = document.createElement("template");
-  tpl.innerHTML = data.next.html.trim();
-  var nextNodes = tpl.content.querySelectorAll("[data-barba-update]");
-  var currentNodes = document.querySelectorAll("nav [data-barba-update]");
-
-  currentNodes.forEach(function (curr, index) {
-    var next = nextNodes[index];
-    if (!next) return;
-
-    // Aria-current sync
-    var newStatus = next.getAttribute("aria-current");
-    if (newStatus !== null) {
-      curr.setAttribute("aria-current", newStatus);
-    } else {
-      curr.removeAttribute("aria-current");
-    }
-
-    // Class list sync
-    var newClassList = next.getAttribute("class") || "";
-    curr.setAttribute("class", newClassList);
+  // Smooth scroll for all anchor hash links not handled by nav pill
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    if (anchor.closest("#nav-pill")) return; // nav pill handles its own
+    anchor.addEventListener("click", (e) => {
+      const href = anchor.getAttribute("href");
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { duration: 1.4 });
+    });
   });
 }
-
-// -----------------------------------------
-// YOUR FUNCTIONS GO BELOW HERE
-// -----------------------------------------
 
 function initGlobalParallax() {
   const mm = gsap.matchMedia();
@@ -532,37 +331,6 @@ function initGlobalParallax() {
   );
 }
 
-function initFooterParallax() {
-  document.querySelectorAll("[data-footer-parallax]").forEach((el) => {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: "clamp(top bottom)",
-        end: "clamp(top top)",
-        scrub: true,
-      },
-    });
-    const inner = el.querySelector("[data-footer-parallax-inner]");
-    const dark = el.querySelector("[data-footer-parallax-dark]");
-    if (inner) {
-      tl.from(inner, {
-        yPercent: -25,
-        ease: "linear",
-      });
-    }
-    if (dark) {
-      tl.from(
-        dark,
-        {
-          opacity: 0.5,
-          ease: "linear",
-        },
-        "<",
-      );
-    }
-  });
-}
-
 function initCSSMarquee() {
   const pixelsPerSecond = 200; // Set the marquee speed (pixels per second)
   // Only initialize marquees that haven't been processed yet
@@ -575,6 +343,22 @@ function initCSSMarquee() {
   marquees.forEach((marquee) => {
     marquee.setAttribute("data-css-marquee-initialized", "true");
     marquee.querySelectorAll("[data-css-marquee-list]").forEach((list) => {
+      const originalItems = Array.from(list.children);
+      let guard = 0;
+
+      while (
+        originalItems.length &&
+        list.offsetWidth < marquee.offsetWidth * 1.5 &&
+        guard < 8
+      ) {
+        const fragment = document.createDocumentFragment();
+        originalItems.forEach((item) => {
+          fragment.appendChild(item.cloneNode(true));
+        });
+        list.appendChild(fragment);
+        guard += 1;
+      }
+
       const duplicate = list.cloneNode(true);
       marquee.appendChild(duplicate);
     });
@@ -606,54 +390,12 @@ function initCSSMarquee() {
   });
 }
 
-const splitConfig = {
-  lines: { duration: 0.8, stagger: 0.08 },
-  words: { duration: 0.6, stagger: 0.06 },
-  chars: { duration: 0.4, stagger: 0.01 },
-};
-
-function initMaskTextScrollReveal() {
-  document.querySelectorAll('[data-split="heading"]').forEach((heading) => {
-    // Find the split type, the default is 'lines'
-    const type = heading.dataset.splitReveal || "lines";
-    const typesToSplit =
-      type === "lines"
-        ? ["lines"]
-        : type === "words"
-          ? ["lines", "words"]
-          : ["lines", "words", "chars"];
-    // Split the text
-    SplitText.create(heading, {
-      type: typesToSplit.join(", "), // split into required elements
-      mask: "lines", // wrap each line in an overflow:hidden div
-      autoSplit: true,
-      linesClass: "line",
-      wordsClass: "word",
-      charsClass: "letter",
-      onSplit: function (instance) {
-        const targets = instance[type]; // Register animation targets
-        const config = splitConfig[type]; // Find matching duration and stagger from our splitConfig
-        return gsap.from(targets, {
-          yPercent: 110,
-          duration: config.duration,
-          stagger: config.stagger,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: heading,
-            start: "clamp(top 80%)",
-            once: true,
-          },
-        });
-      },
-    });
-  });
-}
-
 function initMarqueeScrollDirection() {
   document
-    .querySelectorAll("[data-marquee-scroll-direction-target]")
+    .querySelectorAll(
+      "[data-marquee-scroll-direction-target]:not([data-marquee-initialized])",
+    )
     .forEach((marquee) => {
-      // Query marquee elements
       const marqueeContent = marquee.querySelector(
         "[data-marquee-collection-target]",
       );
@@ -662,32 +404,25 @@ function initMarqueeScrollDirection() {
       );
       if (!marqueeContent || !marqueeScroll) return;
 
-      // Get data attributes
+      marquee.setAttribute("data-marquee-initialized", "true");
+
       const {
         marqueeSpeed: speed,
         marqueeDirection: direction,
         marqueeDuplicate: duplicate,
-        marqueeScrollSpeed: scrollSpeed,
       } = marquee.dataset;
 
-      // Convert data attributes to usable types
-      const marqueeSpeedAttr = parseFloat(speed);
-      const marqueeDirectionAttr = direction === "right" ? 1 : -1; // 1 for right, -1 for left
-      const duplicateAmount = parseInt(duplicate || 0);
-      const scrollSpeedAttr = parseFloat(scrollSpeed);
+      const marqueeSpeedAttr = parseFloat(speed) || 15;
+      const marqueeDirectionAttr = direction === "right" ? 1 : -1;
+      const duplicateAmount = parseInt(duplicate || 0, 10);
       const speedMultiplier =
         window.innerWidth < 479 ? 0.25 : window.innerWidth < 991 ? 0.5 : 1;
 
-      let marqueeSpeed =
+      const marqueeSpeed =
         marqueeSpeedAttr *
         (marqueeContent.offsetWidth / window.innerWidth) *
         speedMultiplier;
 
-      // Precompute styles for the scroll container
-      marqueeScroll.style.marginLeft = `${scrollSpeedAttr * -1}%`;
-      marqueeScroll.style.width = `${scrollSpeedAttr * 2 + 100}%`;
-
-      // Duplicate marquee content
       if (duplicateAmount > 0) {
         const fragment = document.createDocumentFragment();
         for (let i = 0; i < duplicateAmount; i++) {
@@ -696,765 +431,506 @@ function initMarqueeScrollDirection() {
         marqueeScroll.appendChild(fragment);
       }
 
-      // GSAP animation for marquee content
       const marqueeItems = marquee.querySelectorAll(
         "[data-marquee-collection-target]",
       );
-      const animation = gsap
-        .to(marqueeItems, {
-          xPercent: -100, // Move completely out of view
-          repeat: -1,
-          duration: marqueeSpeed,
-          ease: "linear",
-        })
+
+      gsap
+        .fromTo(
+          marqueeItems,
+          {
+            xPercent: marqueeDirectionAttr === 1 ? -100 : 0,
+          },
+          {
+            xPercent: marqueeDirectionAttr === 1 ? 0 : -100,
+            repeat: -1,
+            duration: marqueeSpeed,
+            ease: "linear",
+          },
+        )
         .totalProgress(0.5);
-
-      // Initialize marquee in the correct direction
-      gsap.set(marqueeItems, {
-        xPercent: marqueeDirectionAttr === 1 ? 100 : -100,
-      });
-      animation.timeScale(marqueeDirectionAttr); // Set correct direction
-      animation.play(); // Start animation immediately
-
-      // Set initial marquee status
       marquee.setAttribute("data-marquee-status", "normal");
-
-      // ScrollTrigger logic for direction inversion
-      ScrollTrigger.create({
-        trigger: marquee,
-        start: "top bottom",
-        end: "bottom top",
-        onUpdate: (self) => {
-          const isInverted = self.direction === 1; // Scrolling down
-          const currentDirection = isInverted
-            ? -marqueeDirectionAttr
-            : marqueeDirectionAttr;
-
-          // Update animation direction and marquee status
-          animation.timeScale(currentDirection);
-          marquee.setAttribute(
-            "data-marquee-status",
-            isInverted ? "normal" : "inverted",
-          );
-        },
-      });
-
-      // Extra speed effect on scroll
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: marquee,
-          start: "0% 100%",
-          end: "100% 0%",
-          scrub: 0,
-        },
-      });
-
-      const scrollStart =
-        marqueeDirectionAttr === -1 ? scrollSpeedAttr : -scrollSpeedAttr;
-      const scrollEnd = -scrollStart;
-
-      tl.fromTo(
-        marqueeScroll,
-        { x: `${scrollStart}vw` },
-        { x: `${scrollEnd}vw`, ease: "none" },
-      );
     });
 }
 
-function initWorksBackgroundTransition() {
-  if (!hasScrollTrigger) return;
+function initMissionRowsScroll() {
+  const mission = document.querySelector("#mission");
+  if (!mission) return;
 
-  const triggerSection = document.querySelector("#works");
+  const rows = [".row3", ".row2", ".row1"]
+    .map((selector) => mission.querySelector(selector))
+    .filter(Boolean);
+  if (!rows.length) return;
 
-  if (!triggerSection) return;
-  const pageBackground = document.querySelector('[data-barba="container"]');
-  console.log("Trigger section for background transition:", pageBackground);
-
-  // Garante estado inicial branco
-  gsap.set(pageBackground, { backgroundColor: "var(--white)" });
-
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: triggerSection,
-      // Transição rápida e suave quando a seção WORKS se aproxima do meio da viewport
-      start: "14% 95%", // começa a escurecer pouco antes da WORKS entrar
-      end: "14% 90%", // termina logo depois
-      scrub: 0.4,
-      markers: false, // defina como true se quiser depurar
-    },
+  gsap.set(rows, {
+    xPercent: -105,
+    force3D: true,
   });
 
-  tl.to(pageBackground, {
-    backgroundColor: "var(--black)",
+  gsap.to(rows, {
+    xPercent: 0,
     ease: "none",
-  });
-}
-
-function initWorksCardsAnimation() {
-  if (!hasScrollTrigger) return;
-
-  const section = document.querySelector("#works");
-  if (!section) return;
-
-  const cards = section.querySelectorAll(".work-card");
-  if (!cards.length) return;
-
-  // Todos os cards começam fora da viewport, abaixo da tela, com scale menor
-  cards.forEach((card, index) => {
-    gsap.set(card, {
-      y: "100vh",
-      scale: 0.2,
-      zIndex: cards.length - index,
-    });
-  });
-
-  const tl = gsap.timeline({
+    stagger: 0.08,
     scrollTrigger: {
-      trigger: section,
-      // Começa quando o topo da seção WORKS encosta no topo da viewport,
-      // momento em que o bloco sticky "My work" já está centralizado.
-      start: "top top",
-      end: "bottom bottom",
-      // Usa scrub com inércia para não acelerar demais em scrolls muito rápidos
-      scrub: 1.2,
+      trigger: mission,
+      start: "30% 70%",
+      end: "bottom 35%",
+      scrub: 0.8,
+      invalidateOnRefresh: true,
+      // markers: true
     },
   });
+}
 
-  // Cada card atravessa a tela de baixo para cima, com scale animando
-  cards.forEach((card, index) => {
-    const isLast = index === cards.length - 1;
+function initExperienceRowsScroll() {
+  const experience = document.querySelector("#experience");
+  if (!experience) return;
 
-    // Fase 1: entra de baixo, escala de 0.2 até 1 no meio
-    tl.to(card, {
-      y: "0vh",
-      scale: 1,
-      duration: 2,
-      ease: "power1.out",
-    });
+  const rows = [".row3", ".row2", ".row1"]
+    .map((selector) => experience.querySelector(selector))
+    .filter(Boolean);
+  if (!rows.length) return;
 
-    // Fase 2: só para os primeiros cards - o último fica parado no centro
-    if (!isLast) {
-      tl.to(card, {
-        y: "-100vh",
-        scale: 0.2,
-        duration: 2,
-        ease: "power3.in",
-      });
-    }
+  gsap.set(rows, {
+    xPercent: -105,
+    force3D: true,
+  });
+
+  gsap.to(rows, {
+    xPercent: 0,
+    ease: "none",
+    stagger: 0.08,
+    scrollTrigger: {
+      trigger: experience,
+      start: "30% 70%",
+      end: "bottom 35%",
+      scrub: 0.8,
+      invalidateOnRefresh: true,
+      // markers: true
+    },
   });
 }
 
-function initCenteredScalingNavigationBar() {
-  const navigationInnerItems = document.querySelectorAll(
-    "[data-navigation-item]",
-  );
-  // Apply CSS transition delay
-  navigationInnerItems.forEach((item, index) => {
-    item.style.transitionDelay = `${index * 0.05}s`;
-  });
-  // Toggle Navigation
-  document
-    .querySelectorAll('[data-navigation-toggle="toggle"]')
-    .forEach((toggleBtn) => {
-      toggleBtn.addEventListener("click", () => {
-        const navStatusEl = document.querySelector("[data-navigation-status]");
-        if (!navStatusEl) return;
-        if (
-          navStatusEl.getAttribute("data-navigation-status") === "not-active"
-        ) {
-          navStatusEl.setAttribute("data-navigation-status", "active");
-          // If you use Lenis you can 'stop' Lenis here: Example Lenis.stop();
-        } else {
-          navStatusEl.setAttribute("data-navigation-status", "not-active");
-          // If you use Lenis you can 'start' Lenis here: Example Lenis.start();
-        }
-      });
-    });
+function initExperienceList() {
+  const items = document.querySelectorAll(".experience-item");
+  if (!items.length) return;
 
-  // Close navbar when a nav link is clicked
-  document.querySelectorAll(".hamburger-nav__a").forEach((link) => {
-    link.addEventListener("click", () => {
-      const navStatusEl = document.querySelector("[data-navigation-status]");
-      if (!navStatusEl) return;
-      navStatusEl.setAttribute("data-navigation-status", "not-active");
-      // If you use Lenis you can 'start' Lenis here: Example Lenis.start();
-    });
-  });
+  // Exact SVG path definitions from Annnimate source
+  const paths = {
+    fromTop: {
+      start: "M 0 100 V 0 Q 50 0 100 0 V 0 H 0 z",
+      end: "M 0 100 V 100 Q 50 125 100 100 V 0 H 0 z",
+    },
+    fromBottom: {
+      start: "M 0 100 V 100 Q 75 50 100 100 V 100 z",
+      end: "M 0 100 V 0 Q 50 0 100 0 V 100 z",
+    },
+    toTop: {
+      start: "M 0 100 V 100 Q 50 50 100 100 V 0 H 0 z",
+      end: "M 0 100 V 0 Q 50 0 100 0 V 0 H 0 z",
+    },
+    toBottom: {
+      start: "M 0 100 V 0 Q 50 50 100 0 V 100 z",
+      end: "M 0 100 V 100 Q 50 100 100 100 V 100 z",
+    },
+  };
 
-  // Close Navigation
-  document
-    .querySelectorAll('[data-navigation-toggle="close"]')
-    .forEach((closeBtn) => {
-      closeBtn.addEventListener("click", () => {
-        const navStatusEl = document.querySelector("[data-navigation-status]");
-        if (!navStatusEl) return;
-        navStatusEl.setAttribute("data-navigation-status", "not-active");
-        // If you use Lenis you can 'start' Lenis here: Example Lenis.start();
-      });
-    });
-
-  // Key ESC - Close Navigation
-  document.addEventListener("keydown", (e) => {
-    if (e.keyCode === 27) {
-      const navStatusEl = document.querySelector("[data-navigation-status]");
-      if (!navStatusEl) return;
-      if (navStatusEl.getAttribute("data-navigation-status") === "active") {
-        navStatusEl.setAttribute("data-navigation-status", "not-active");
-        // If you use Lenis you can 'start' Lenis here: Example Lenis.start();
-      }
-    }
-  });
-}
-
-function initDirectionalButtonHover() {
-  // Button hover animation
-  document.querySelectorAll("[data-btn-hover]").forEach((button) => {
-    button.addEventListener("mouseenter", handleHover);
-    button.addEventListener("mouseleave", handleHover);
-  });
-
-  function handleHover(event) {
-    const button = event.currentTarget;
-    const buttonRect = button.getBoundingClientRect();
-
-    // Get the button's dimensions and center
-    const buttonWidth = buttonRect.width;
-    const buttonHeight = buttonRect.height;
-
-    // Calculate mouse position
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
-    // Offset from the top-left corner in percentage (for position)
-    const offsetXFromLeft = ((mouseX - buttonRect.left) / buttonWidth) * 100;
-    const offsetYFromTop = ((mouseY - buttonRect.top) / buttonHeight) * 100;
-    // Compute a fixed diameter large enough to cover the button
-    // Use 2x the diagonal to be safe even when the circle originates from an edge
-    const diagonal = Math.sqrt(
-      buttonWidth * buttonWidth + buttonHeight * buttonHeight,
+  const getDir = (e, item) => {
+    const rect = item.getBoundingClientRect();
+    const edges = {
+      top: Math.abs(rect.top - e.clientY),
+      bottom: Math.abs(rect.bottom - e.clientY),
+    };
+    return Object.keys(edges).find(
+      (k) => edges[k] === Math.min(...Object.values(edges)),
     );
-    const circleDiameter = diagonal * 2;
+  };
 
-    // Update position and size of .btn__circle
-    const circle = button.querySelector(".btn__circle");
-    if (circle) {
-      circle.style.left = `${offsetXFromLeft.toFixed(1)}%`;
-      circle.style.top = `${offsetYFromTop.toFixed(1)}%`;
-      circle.style.width = `${circleDiameter}px`;
-    }
-  }
-}
+  items.forEach((item) => {
+    const pathEl = item.querySelector(".experience-item__path");
+    const arrow = item.querySelector(".exp-arrow");
+    if (!pathEl) return;
 
-function initAccordionCSS() {
-  document.querySelectorAll('[data-accordion-css-init]').forEach((accordion) => {
-    const closeSiblings = accordion.getAttribute('data-accordion-close-siblings') === 'true';
+    if (arrow) gsap.set(arrow, { opacity: 0, x: -4, y: 4 });
 
-    accordion.addEventListener('click', (event) => {
-      const toggle = event.target.closest('[data-accordion-toggle]');
-      if (!toggle) return; // Exit if the clicked element is not a toggle
-
-      const singleAccordion = toggle.closest('[data-accordion-status]');
-      if (!singleAccordion) return; // Exit if no accordion container is found
-
-      const isActive = singleAccordion.getAttribute('data-accordion-status') === 'active';
-      singleAccordion.setAttribute('data-accordion-status', isActive ? 'not-active' : 'active');
-      
-      // When [data-accordion-close-siblings="true"]
-      if (closeSiblings && !isActive) {
-        accordion.querySelectorAll('[data-accordion-status="active"]').forEach((sibling) => {
-          if (sibling !== singleAccordion) sibling.setAttribute('data-accordion-status', 'not-active');
+    item.addEventListener("mouseenter", (e) => {
+      const def = getDir(e, item) === "top" ? paths.fromTop : paths.fromBottom;
+      gsap.fromTo(
+        pathEl,
+        { attr: { d: def.start } },
+        {
+          attr: { d: def.end },
+          duration: 0.5,
+          ease: "power3.out",
+          force3D: true,
+        },
+      );
+      if (arrow)
+        gsap.to(arrow, {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          duration: 0.4,
+          ease: "power3.out",
         });
-      }
+    });
+
+    item.addEventListener("mouseleave", (e) => {
+      const def = getDir(e, item) === "top" ? paths.toTop : paths.toBottom;
+      gsap.fromTo(
+        pathEl,
+        { attr: { d: def.start } },
+        {
+          attr: { d: def.end },
+          duration: 0.5,
+          ease: "power3.out",
+          force3D: true,
+        },
+      );
+      if (arrow)
+        gsap.to(arrow, {
+          opacity: 0,
+          x: -4,
+          y: 4,
+          duration: 0.3,
+          ease: "power3.out",
+        });
     });
   });
 }
 
-function initServicesAccordionSync() {
-  const isMobileScreen = window.matchMedia("(max-width: 700px)").matches;
+function initSkillsTextFill() {
+  const skills = gsap.utils.toArray("#skills .container-grid .grid-12 ul li");
+  if (!skills.length) return;
 
-  const servicesSection = document.querySelector('#services');
-  if (!servicesSection) return;
+  skills.forEach((skill) => {
+    gsap.to(skill, {
+      backgroundPositionX: "0%",
+      ease: "none",
+      scrollTrigger: {
+        trigger: skill,
+        start: "top 85%",
+        end: "top 35%",
+        scrub: 1,
+      },
+    });
+  });
+}
 
-  const imgService = servicesSection.querySelector('.img-service');
-  const accordionItems = servicesSection.querySelectorAll('.accordion-css__item');
-  const serviceImages = imgService ? imgService.querySelectorAll('img') : [];
-  
-  if (!imgService || !accordionItems.length || !serviceImages.length) return;
+function initScrollTimeline() {
+  const timeline = document.getElementById("scroll-timeline");
+  const label = document.getElementById("st-label");
+  const isMobile = () => window.innerWidth <= 768;
 
-  let isAutoScrolling = false;
+  // Sections to track — must match data-section attrs in HTML
+  const sections = Array.from(
+    document.querySelectorAll("#st-bar .st-seg[data-section]"),
+  )
+    .map((seg) => ({
+      seg,
+      fill: seg.querySelector(".st-seg-fill"),
+      label: seg.dataset.label,
+      id: seg.dataset.section,
+      el: document.getElementById(seg.dataset.section),
+    }))
+    .filter((s) => s.el);
 
-  // Function to update which image is displayed based on image index
-  function updateImageDisplay(imageIndex) {
-    serviceImages.forEach((img, idx) => {
-      if (idx === imageIndex) {
-        img.setAttribute('data-image-visible', 'true');
+  if (!sections.length || !timeline) return;
+
+  // Compute proportional flex values based on section heights
+  function setSizes() {
+    const totalHeight = sections.reduce((sum, s) => sum + s.el.offsetHeight, 0);
+    sections.forEach((s) => {
+      const ratio = s.el.offsetHeight / totalHeight;
+      s.seg.style.flex = `${ratio} 1 0%`;
+    });
+  }
+
+  setSizes();
+  ScrollTrigger.addEventListener("refreshInit", setSizes);
+
+  // Build a ScrollTrigger per section that drives the fill height/width
+  sections.forEach((s) => {
+    ScrollTrigger.create({
+      trigger: s.el,
+      start: "top top",
+      end: "bottom top",
+      scrub: true,
+      onUpdate(self) {
+        const pct = Math.min(Math.max(self.progress, 0), 1) * 100;
+        if (isMobile()) {
+          s.fill.style.width = `${pct}%`;
+          s.fill.style.height = "100%";
+        } else {
+          s.fill.style.height = `${pct}%`;
+          s.fill.style.width = "100%";
+        }
+      },
+      onEnter() {
+        if (label) label.textContent = s.label;
+      },
+      onEnterBack() {
+        if (label) label.textContent = s.label;
+      },
+    });
+  });
+
+  // Re-apply fill direction on resize
+  window.addEventListener("resize", () => {
+    sections.forEach((s) => {
+      if (isMobile()) {
+        s.fill.style.width = s.fill.style.height || "0%";
+        s.fill.style.height = "100%";
       } else {
-        img.removeAttribute('data-image-visible');
+        s.fill.style.height = s.fill.style.width || "0%";
+        s.fill.style.width = "100%";
       }
     });
-  }
+    setSizes();
+    ScrollTrigger.refresh();
+  });
+}
 
-  // MOBILE BEHAVIOR: Only change image on accordion click
-  if (isMobileScreen) {
-    // Add click listener to accordion toggle buttons for mobile
-    accordionItems.forEach((item) => {
-      const toggle = item.querySelector('[data-accordion-toggle]');
-      if (toggle) {
-        toggle.addEventListener('click', (e) => {
-          e.stopPropagation();
-          // Update image based on the clicked accordion
-          const imageIndex = parseInt(item.getAttribute('data-accordion-index') || '0');
-          updateImageDisplay(imageIndex);
-        });
-      }
+function initRectReveal() {
+  const elements = gsap.utils.toArray("[data-rect-reveal]");
+  if (!elements.length) return;
+
+  elements.forEach((el) => {
+    const color = el.dataset.rectRevealColor || getComputedStyle(el).color; // defaults to element's own text color
+
+    const split = new SplitText(el, { type: "lines" });
+
+    // Build wrapper + rect overlay for each line
+    const lineData = split.lines.map((line) => {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("rect-reveal-wrapper");
+      line.parentNode.insertBefore(wrapper, line);
+      wrapper.appendChild(line);
+
+      const rect = document.createElement("div");
+      rect.classList.add("rect-reveal-block");
+      rect.style.backgroundColor = color;
+      wrapper.appendChild(rect);
+
+      gsap.set(line, { opacity: 0 });
+
+      return { line, rect };
     });
-    return; // Skip desktop-only logic
-  }
 
-  // DESKTOP BEHAVIOR: Sync with scroll + image change
-  if (!hasScrollTrigger) return;
-
-  // Function to find which accordion item is aligned with the middle of the red square
-  function updateAlignedItem() {
-    if (isAutoScrolling) return; // Don't update if auto-scrolling
-    
-    const imgRect = imgService.getBoundingClientRect();
-    const imgMiddle = imgRect.top + imgRect.height / 2;
-    
-    let closestItem = null;
-    let closestDistance = Infinity;
-    
-    accordionItems.forEach((item) => {
-      const itemRect = item.getBoundingClientRect();
-      const itemMiddle = itemRect.top + itemRect.height / 2;
-      const distance = Math.abs(imgMiddle - itemMiddle);
-      
-      // Find the item with the smallest distance to the red square's middle
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestItem = item;
-      }
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: "top 85%",
+        toggleActions: "play none restart restart",
+      },
     });
-    
-    // Update accordion status and corresponding image
-    accordionItems.forEach((item) => {
-      if (item === closestItem) {
-        item.setAttribute('data-accordion-status', 'active');
-        // Get the index and update image display
-        const imageIndex = parseInt(item.getAttribute('data-accordion-index') || '0');
-        updateImageDisplay(imageIndex);
-      } else {
-        item.setAttribute('data-accordion-status', 'not-active');
-      }
-    });
-  }
 
-  // Function to scroll the page so that the red square middle aligns with the target accordion middle
-  function scrollToAlignAccordion(targetItem) {
-    // immediately open the clicked item so user sees it
-    accordionItems.forEach((item) => {
-      item.setAttribute(
-        "data-accordion-status",
-        item === targetItem ? "active" : "not-active",
+    lineData.forEach(({ line, rect }, i) => {
+      const offset = i * 0.1;
+
+      // Rect wipes in from the left
+      tl.to(
+        rect,
+        {
+          scaleX: 1,
+          duration: 0.4,
+          ease: "power3.inOut",
+          transformOrigin: "0% 50%",
+        },
+        offset,
+      );
+      // Reveal text and wipe rect out to the right
+      tl.set(line, { opacity: 1 }, offset + 0.4);
+      tl.to(
+        rect,
+        {
+          scaleX: 0,
+          duration: 0.4,
+          ease: "power3.inOut",
+          transformOrigin: "100% 50%",
+        },
+        offset + 0.4,
       );
     });
+  });
+}
 
-    // Update image immediately when accordion is clicked
-    const imageIndex = parseInt(targetItem.getAttribute('data-accordion-index') || '0');
-    updateImageDisplay(imageIndex);
+function initTextReveal() {
+  const elements = gsap.utils.toArray("[data-reveal-text]");
+  if (!elements.length) return;
 
-    isAutoScrolling = true;
+  elements.forEach((el) => {
+    // Split the element into lines
+    const split = new SplitText(el, { type: "lines" });
 
-    const imgRect = imgService.getBoundingClientRect();
-    const imgMiddle = imgRect.top + imgRect.height / 2;
-    
-    const itemRect = targetItem.getBoundingClientRect();
-    const itemHeight = itemRect.height;
-    
-    // Calculate the scroll distance needed to align target item middle with red square middle
-    const scrollOffset = window.scrollY + itemRect.top + itemHeight / 2 - imgMiddle;
-    
-    // Create a proxy object to animate scroll
-    const proxy = { scroll: window.scrollY };
-    
-    // Animate scroll using GSAP with proxy object
-    // use a slower ease for gentle resistance near alignment
-    gsap.to(proxy, {
-      scroll: scrollOffset,
+    // Wrap each line in an overflow:clip mask so only the sliding
+    // portion is visible — the "rectangle" wipe effect
+    split.lines.forEach((line) => {
+      const mask = document.createElement("div");
+      mask.classList.add("text-reveal-mask");
+      line.parentNode.insertBefore(mask, line);
+      mask.appendChild(line);
+    });
+
+    // Animate all lines in this element together with a stagger
+    gsap.from(split.lines, {
+      yPercent: 110,
+      ease: "power3.out",
       duration: 0.9,
-      ease: 'power2.out',
-      onUpdate: () => {
-        window.scrollTo(0, proxy.scroll);
-      },
-      onComplete: () => {
-        // Disable auto-scrolling flag immediately after animation completes
-        isAutoScrolling = false;
+      stagger: 0.08,
+      scrollTrigger: {
+        trigger: el,
+        start: "top 88%",
+        toggleActions: "play none restart restart",
       },
     });
-  }
+  });
+}
 
-  // Add click listener to accordion toggle buttons
-  accordionItems.forEach((item) => {
-    const toggle = item.querySelector('[data-accordion-toggle]');
-    if (toggle) {
-      toggle.addEventListener('click', (e) => {
-        // Prevent event from bubbling to the document accordion listener
-        e.stopPropagation();
-        // Scroll to align this accordion with the red square
-        scrollToAlignAccordion(item);
+function initFooterParallax() {
+  document.querySelectorAll("[data-footer-parallax]").forEach((el) => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: "clamp(top bottom)",
+        end: "clamp(top top)",
+        scrub: true,
+      },
+    });
+    const inner = el.querySelector("[data-footer-parallax-inner]");
+    const dark = el.querySelector("[data-footer-parallax-dark]");
+    if (inner) {
+      tl.from(inner, {
+        yPercent: -25,
+        ease: "linear",
       });
     }
-  });
-  
-  // Create a ScrollTrigger that updates continuously as the user scrolls
-  ScrollTrigger.create({
-    trigger: servicesSection,
-    start: 'top center',
-    end: 'bottom center',
-    onUpdate: updateAlignedItem,
-  });
-  
-  // Also update on window resize
-  window.addEventListener('resize', updateAlignedItem);
-  
-  // Initial update
-  updateAlignedItem();
-}
-
-function initRotatingText() {
-  document.querySelectorAll('[data-rotating-title]').forEach((heading) => {
-
-    const stepDuration = parseFloat(heading.getAttribute('data-step-duration') || '1.75');
-
-    SplitText.create(heading, {
-      type: 'lines',
-      mask: 'lines',
-      autoSplit: true,
-      linesClass: 'rotating-line',
-      onSplit(instance) {
-        const rotatingSpan = heading.querySelector('[data-rotating-words]');
-        if (!rotatingSpan) return;
-
-        const rawWords = rotatingSpan.getAttribute('data-rotating-words') || '';
-        const words = rawWords
-          .split(',')
-          .map((w) => w.trim())
-          .filter(Boolean);
-
-        if (!words.length) return;
-
-        // Build inner wrapper with stacked words
-        const wrapper = document.createElement('span');
-        wrapper.className = 'rotating-text__inner';
-
-        const wordEls = words.map((word) => {
-          const el = document.createElement('span');
-          el.className = 'rotating-text__word';
-          el.textContent = word;
-          wrapper.appendChild(el);
-          return el;
-        });
-
-        // Replace the original content of the highlight span
-        rotatingSpan.textContent = '';
-        rotatingSpan.appendChild(wrapper);
-
-        requestAnimationFrame(() => {
-          
-          // Define duration of your in + out movement
-          const inDuration = 0.75;
-          const outDuration = 0.6;
-
-          // Initial state: everyone hidden below
-          gsap.set(wordEls, { yPercent: 150, autoAlpha: 0 });
-
-          // Show first word immediately
-          let activeIndex = 0;
-          const firstWord = wordEls[activeIndex];
-          gsap.set(firstWord, { yPercent: 0, autoAlpha: 1 });
-
-          // Set initial width to first word
-          const firstWidth = firstWord.getBoundingClientRect().width;
-          wrapper.style.width = firstWidth + 'px';
-
-          function showNext() {
-            const nextIndex = (activeIndex + 1) % wordEls.length;
-            const prev = wordEls[activeIndex];
-            const current = wordEls[nextIndex];
-
-            const targetWidth = current.getBoundingClientRect().width;
-
-            // Animate wrapper width to match new word
-            gsap.to(wrapper, {
-              width: targetWidth,
-              duration: inDuration,
-              ease: 'power4.inOut'
-            });
-
-            // Move old word out
-            if (prev && prev !== current) {
-              gsap.to(prev, {
-                yPercent: -150,
-                autoAlpha: 0,
-                duration: outDuration,
-                ease: 'power4.inOut'
-              });
-            }
-
-            // Reveal new word
-            gsap.fromTo(
-              current,
-              { yPercent: 150, autoAlpha: 0 },
-              {
-                yPercent: 0,
-                autoAlpha: 1,
-                duration: inDuration,
-                ease: 'power4.inOut'
-              }
-            );
-
-            activeIndex = nextIndex;
-
-            gsap.delayedCall(stepDuration, showNext);
-          }
-
-          // First word is already visible, start rotating after a full step
-          if (wordEls.length > 1) {
-            gsap.delayedCall(stepDuration, showNext);
-          }
-        });
-      }
-    });
-  });
-}
-
-function initNavbar() {
-  const navRoot = document.getElementById("nav-root");
-  if (!navRoot) return; // Skip if navbar elements don't exist
-
-  const navPill = document.getElementById("header");
-  const hint = document.getElementById("scroll-hint");
-  const HINT_H = hint.offsetHeight;
-  const PAD_B = parseFloat(getComputedStyle(navRoot).paddingBottom);
-  const GAP = 8;
-
-  const hintTl = gsap.timeline({
-    paused: true,
-    defaults: { duration: 0.5, ease: "power3.out" },
-  });
-  hintTl
-    .to(hint, { y: HINT_H + GAP + PAD_B }, 0)
-    .to(navPill, { y: HINT_H + GAP }, 0);
-
-  let atTop = true;
-  lenis.on("scroll", () => {
-    const nowAtTop = lenis.targetScroll < 10;
-    if (nowAtTop === atTop) return;
-    atTop = nowAtTop;
-    atTop ? hintTl.reverse() : hintTl.play();
-  });
-
-  /* ---- Navbar show/hide on scroll ---- */
-  let lastScrollPos = 0;
-  let navbarHidden = false;
-  const navRootHeight = navRoot.offsetHeight;
-
-  lenis.on("scroll", ({ scroll }) => {
-    const scrollDelta = Math.abs(scroll - lastScrollPos);
-    const isScrollingDown = scroll > lastScrollPos;
-
-    if (scrollDelta > 10) {
-      if (isScrollingDown && !navbarHidden) {
-        // Hide navbar
-        gsap.to(navRoot, { bottom: -navRootHeight, duration: 0.7, ease: "power2.inOut" });
-        navbarHidden = true;
-      } else if (!isScrollingDown && navbarHidden) {
-        // Show navbar
-        gsap.to(navRoot, { bottom: 0, duration: 0.7, ease: "power2.inOut" });
-        navbarHidden = false;
-      }
-      lastScrollPos = scroll;
+    if (dark) {
+      tl.from(
+        dark,
+        {
+          opacity: 0.5,
+          ease: "linear",
+        },
+        "<",
+      );
     }
   });
+}
 
-  /* ---- Menu open / close ---- */
-  const toggleBtn  = document.getElementById("nav-btn-toggle");
-  const menuPanel  = document.getElementById("menu");
-  const menuLinks  = menuPanel.querySelectorAll(".menu-nav__link");
-  // SVG path order in the button: [0] middle, [1] top, [2] bottom
-  const iconPaths  = toggleBtn.querySelectorAll("path");
+// ── Nav Tooltip ────────────────────────────────────────────────────────────────
+// Replicates Annnimate's tooltip effect: shared floating label above each link.
+// First hover: scale+y+opacity in. Moving between links: GSAP Flip slide.
+// Leaves: fade out after short delay.
+function initNavTooltip() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  // Collapsed initial state
-  gsap.set(menuPanel, { height: 0 });
-  gsap.set(menuLinks, { y: "110%" });
+  const tooltip = document.getElementById("nav-tooltip");
+  const tooltipBg = tooltip?.querySelector(".nav-tooltip__bg");
+  const tooltipText = tooltip?.querySelector(".nav-tooltip__text");
+  const triggers = Array.from(
+    document.querySelectorAll("[data-tooltip-content]"),
+  );
 
-  const menuTl = gsap.timeline({ paused: true, defaults: { ease: "expo.out" } });
-  menuTl
-    // 1. Expand the panel from height 0 → auto with rotation and slide
-    .to(menuPanel, { height: "auto", duration: 0.85, rotateZ: 0, x: 0 }, 0)
-    // 2. Hamburger → X  (middle fades, top & bottom morph to diagonals)
-    .to(iconPaths[0], { opacity: 0, duration: 0.2, ease: "power2.out" }, 0)
-    .to(iconPaths[1], { attr: { d: "M2.5 2.5L17.5 17.5" }, duration: 0.55 }, 0)
-    .to(iconPaths[2], { attr: { d: "M17.5 2.5L2.5 17.5" }, duration: 0.55 }, 0)
-    // 3. Links curtain-reveal upward, staggered
-    .to(menuLinks, { y: "0%", duration: 0.75, stagger: 0.08 }, 0.2);
+  if (!tooltip || !triggers.length) return;
 
-  let isOpen = false;
-  let scrollAtOpen = 0;
-  let closeTl = null;
+  const ENTER_DURATION = 0.28;
+  const ENTER_EASE = "power3.out";
+  const HIDE_DURATION = 0.22;
+  const HIDE_EASE = "power3.in";
+  const FLIP_DURATION = 0.32;
+  const FLIP_EASE = "back.out(1.4)";
+  const OFFSET = 10; // px above trigger
 
-  function resetToClosedState() {
-    gsap.set(menuPanel, { height: 0 });
-    gsap.set(menuLinks, { y: "110%" });
-    gsap.set(iconPaths[0], { opacity: 1 });
-    gsap.set(iconPaths[1], { attr: { d: "M2.5 5L17.5 5" } });
-    gsap.set(iconPaths[2], { attr: { d: "M2.5 15L17.5 15" } });
+  let currentTrigger = null;
+  let hideTimer = null;
+  let isVisible = false;
+
+  function getPosition(trigger) {
+    const rect = trigger.getBoundingClientRect();
+    const ttRect = tooltip.getBoundingClientRect();
+    const top = rect.bottom + OFFSET;
+    const left = rect.left + rect.width / 2 - ttRect.width / 2;
+    // Clamp horizontally so it doesn't overflow viewport
+    const clamped = Math.max(
+      8,
+      Math.min(left, window.innerWidth - ttRect.width - 8),
+    );
+    return { top, left: clamped };
   }
 
-  function closeMenu() {
-    if (!isOpen) return;
-    isOpen = false;
-    lenis.start();
-    menuTl.pause();
+  function show(trigger) {
+    clearTimeout(hideTimer);
+    const content = trigger.dataset.tooltipContent;
+    if (!content) return;
 
-    if (closeTl) closeTl.kill();
-    closeTl = gsap.timeline({
-      defaults: { ease: "power3.inOut" },
-      onComplete: () => resetToClosedState(),
-    })
-      .to(menuLinks, { y: "110%", duration: 0.3, stagger: { each: 0.05, from: "end" }, ease: "power3.in" }, 0)
-      .to(iconPaths[0], { opacity: 1, duration: 0.35, ease: "power2.out" }, 0.05)
-      .to(iconPaths[1], { attr: { d: "M2.5 5L17.5 5" },   duration: 0.5, ease: "expo.out" }, 0.05)
-      .to(iconPaths[2], { attr: { d: "M2.5 15L17.5 15" }, duration: 0.5, ease: "expo.out" }, 0.05)
-      .to(menuPanel, { height: 0, duration: 0.6, ease: "power3.inOut" }, 0.1);
-  }
+    const sameGroup =
+      currentTrigger &&
+      currentTrigger !== trigger &&
+      currentTrigger.dataset.tooltipGroup === trigger.dataset.tooltipGroup;
 
-  toggleBtn.addEventListener("click", () => {
-    if (isOpen) {
-      closeMenu();
+    tooltipText.textContent = content;
+
+    if (sameGroup && isVisible) {
+      // Capture state BEFORE repositioning → Flip slides it
+      const state = Flip.getState(tooltip);
+      const { top, left } = getPosition(trigger);
+      gsap.set(tooltip, { top, left });
+      Flip.from(state, {
+        duration: FLIP_DURATION,
+        ease: FLIP_EASE,
+        absolute: true,
+      });
     } else {
-      // Kill any in-flight close animation before opening
-      if (closeTl) { closeTl.kill(); closeTl = null; }
-      resetToClosedState();
-      isOpen = true;
-      scrollAtOpen = lenis.targetScroll;
-      menuTl.restart();
-      lenis.stop();
+      // First show: measure position then animate in
+      gsap.set(tooltip, { opacity: 0, scale: 0.85, y: -6 });
+      const { top, left } = getPosition(trigger);
+      gsap.set(tooltip, { top, left });
+      gsap.to(tooltip, {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: ENTER_DURATION,
+        ease: ENTER_EASE,
+        overwrite: true,
+      });
     }
-  });
 
-  // Close on outside click (anything outside header#header)
-  document.addEventListener("click", (e) => {
-    if (isOpen && !navPill.contains(e.target)) {
-      closeMenu();
-    }
-  });
+    isVisible = true;
+    currentTrigger = trigger;
+  }
 
-  // Close when user scrolls more than 10px from where they opened the menu
-  lenis.on("scroll", ({ scroll }) => {
-    if (isOpen && Math.abs(scroll - scrollAtOpen) > 10) {
-      closeMenu();
-    }
+  function hide() {
+    hideTimer = setTimeout(() => {
+      gsap.to(tooltip, {
+        opacity: 0,
+        scale: 0.85,
+        y: -6,
+        duration: HIDE_DURATION,
+        ease: HIDE_EASE,
+        overwrite: true,
+        onComplete: () => {
+          isVisible = false;
+          currentTrigger = null;
+        },
+      });
+    }, 80);
+  }
+
+  const isMobile = () => window.matchMedia("(hover: none)").matches;
+
+  triggers.forEach((el) => {
+    el.addEventListener("mouseenter", () => {
+      if (!isMobile()) show(el);
+    });
+    el.addEventListener("mouseleave", () => {
+      if (!isMobile()) hide();
+    });
+    el.addEventListener("focus", () => {
+      if (!isMobile()) show(el);
+    });
+    el.addEventListener("blur", () => {
+      if (!isMobile()) hide();
+    });
   });
 }
-
-function initHowItWorks() {
-  const driver = document.getElementById("hiw-driver");
-  if (!driver) return; // Skip if hiw-driver doesn't exist
-
-  const steps = document.querySelectorAll(".hiw-step");
-  const images = document.querySelectorAll(".hiw-img");
-  const n = steps.length;
-  let currentIndex = 0;
-
-  // Stack all images below the container; first one starts visible
-  gsap.set(images, { yPercent: 100, zIndex: 0 });
-  gsap.set(images[0], { yPercent: 0, zIndex: 1 });
-
-  function setActive(index) {
-    if (index === currentIndex) return;
-
-    const prev = currentIndex;
-    currentIndex = index;
-    const direction = index > prev ? 1 : -1; // 1 = forward (up), -1 = backward (down)
-
-    // Steps: CSS handles opacity + translateX via class
-    steps.forEach((s, i) => s.classList.toggle("is-active", i === index));
-
-    // Images: GSAP slide
-    const outgoing = images[prev];
-    const incoming = images[index];
-
-    // Bring incoming on top
-    gsap.set(incoming, { zIndex: 2 });
-    gsap.set(outgoing, { zIndex: 1 });
-
-    // Kill any in-flight tweens first
-    gsap.killTweensOf(outgoing);
-    gsap.killTweensOf(incoming);
-
-    // Snap incoming to its entry position only if it's idle (not mid-animation)
-    const incomingY = gsap.getProperty(incoming, "yPercent");
-    if (Math.abs(incomingY) > 50) {
-      // Far enough away — snap to entry point for a clean slide
-      gsap.set(incoming, { yPercent: 100 * direction });
-    }
-
-    // Outgoing slides out in scroll direction
-    gsap.to(outgoing, {
-      yPercent: -100 * direction,
-      duration: 0.75,
-      ease: "power3.out",
-    });
-
-    // Incoming slides in from wherever it currently is
-    gsap.to(incoming, {
-      yPercent: 0,
-      duration: 0.75,
-      ease: "power3.out",
-      onComplete() {
-        gsap.set(outgoing, { zIndex: 0 });
-        gsap.set(incoming, { zIndex: 1 });
-      },
-    });
-  }
-
-  // ScrollTrigger: map scroll progress → active step
-  if (hasScrollTrigger) {
-    ScrollTrigger.create({
-      trigger: driver,
-      start: "top top",
-      end: "bottom bottom",
-      onUpdate(self) {
-        const index = Math.min(Math.floor(self.progress * n), n - 1);
-        setActive(index);
-      },
-    });
-  }
-
-  // Click to focus a step
-  function scrollToStep(index) {
-    const driverTop = driver.getBoundingClientRect().top + window.scrollY;
-    const triggerStart = driverTop;
-    const triggerEnd = driverTop + driver.offsetHeight - window.innerHeight;
-    const totalRange = triggerEnd - triggerStart;
-
-    // Land in the middle of the target band
-    const targetY = triggerStart + ((index + 0.5) / n) * totalRange;
-
-    // Jump instantly — GSAP handles the visual transition, not the scroll
-    setActive(index);
-    if (lenis) {
-      lenis.scrollTo(targetY, { immediate: true });
-    } else {
-      window.scrollTo(0, targetY);
-    }
-  }
-
-  steps.forEach((step, i) => {
-    step.addEventListener("click", () => scrollToStep(i));
-  });
-}
-
-
-
