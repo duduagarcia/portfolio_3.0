@@ -1,7 +1,9 @@
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", async () => {
   gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase, Flip);
 
   initFPSCounter();
+  // await initInitialLoader();
+  initLoaderThreeSteps();
   initLenis();
   initNavPill();
   initNavTooltip();
@@ -30,6 +32,184 @@ window.addEventListener("focus", () => {
 window.addEventListener("blur", () => {
   document.title = documentTitleOnBlur;
 });
+
+function initLoaderThreeSteps() {
+  var tl = gsap.timeline();
+  // gsap.defaults({
+  // ease: "Expo.easeInOut",
+  // duration: 1.2
+  // });
+
+  const ease = "Expo.easeInOut";
+  const duration = 1.2;
+
+  /* Loading numbers */
+  var randomNumbers1 = gsap.utils.random([2, 3, 4]);
+  var randomNumbers2 = gsap.utils.random([5, 6]);
+  var randomNumbers3 = gsap.utils.random([1, 5]);
+  var randomNumbers4 = gsap.utils.random([7, 8, 9]);
+
+  /* Loading Timeline */
+  tl.set(".loading-screen", {
+    display: "block",
+  });
+
+  tl.set(".loading__progress-inner", {
+    scaleY: 0,
+  });
+
+  tl.set(
+    ".loading__number-group.is--first .loading__number-wrap, .loading__percentage",
+    {
+      yPercent: 100,
+    },
+  );
+
+  tl.set(
+    ".loading__number-group.is--second .loading__number-wrap, .loading__number-group.is--third .loading__number-wrap",
+    {
+      yPercent: 10,
+    },
+  );
+
+  tl.to(".loading__progress-inner", {
+    scaleY: (randomNumbers1 + "" + randomNumbers3) / 100,
+    ease,
+    duration,
+  });
+
+  tl.to(
+    ".loading__percentage",
+    {
+      yPercent: 0,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  tl.to(
+    ".loading__number-group.is--second .loading__number-wrap",
+    {
+      yPercent: (randomNumbers1 - 1) * -10,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  tl.to(
+    ".loading__number-group.is--third .loading__number-wrap",
+    {
+      yPercent: (randomNumbers3 - 1) * -10,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  tl.to(".loading__progress-inner", {
+    scaleY: (randomNumbers2 + "" + randomNumbers4) / 100,
+    ease,
+    duration,
+  });
+
+  tl.to(
+    ".loading__number-group.is--second .loading__number-wrap",
+    {
+      yPercent: (randomNumbers2 - 1) * -10,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  tl.to(
+    ".loading__number-group.is--third .loading__number-wrap",
+    {
+      yPercent: (randomNumbers4 - 1) * -10,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  tl.to(".loading__progress-inner", {
+    scaleY: 1,
+    ease,
+    duration,
+  });
+
+  tl.to(
+    ".loading__number-group.is--second .loading__number-wrap",
+    {
+      yPercent: -90,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  tl.to(
+    ".loading__number-group.is--third .loading__number-wrap",
+    {
+      yPercent: -90,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  tl.to(
+    ".loading__number-group.is--first .loading__number-wrap",
+    {
+      yPercent: 0,
+      ease,
+      duration,
+    },
+    "<",
+  );
+
+  // removing numbers
+  // Remover os números e o símbolo de porcentagem
+  // Remover os números e o símbolo de porcentagem
+  tl.to(
+    [
+      ".loading__percentage",
+      ".loading__number-group.is--third .loading__number-wrap",
+      ".loading__number-group.is--second .loading__number-wrap",
+      ".loading__number-group.is--first .loading__number-wrap",
+    ],
+    {
+      yPercent: -200,
+      duration: 0.5, // mais rápido!
+      ease: "power3.inOut",
+    },
+  );
+
+  tl.from(".rows_initial_loader", {
+    xPercent: -100,
+    stagger: 0.1,
+    duration: 0.7,
+    ease: "power4.inOut",
+  });
+
+  tl.to(".rows_initial_loader", {
+    delay: 0.2,
+    xPercent: 100,
+    stagger: 0.1,
+    duration: 0.7,
+    ease: "power4.inOut",
+    onStart: () => {
+      document.querySelector(".loading__progress").style.display = "none";
+      document.querySelector(".loading-container").style.backgroundColor =
+        "transparent";
+    },
+    onComplete: () => {
+      document.querySelector(".loading-container").style.display = "none";
+    },
+  });
+}
 
 function initFPSCounter() {
   const meter = document.createElement("div");

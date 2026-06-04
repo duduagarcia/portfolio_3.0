@@ -24,6 +24,11 @@ body {
   background-color: var(--white);
 }
 
+html.is-loading,
+html.is-loading body {
+  overflow: hidden;
+}
+
 .fps-meter {
   position: fixed;
   top: 8px;
@@ -207,13 +212,114 @@ overflow-wrap: break-word;
 
 */
 
+/* ==================== INITIAL LOADER ==================== */
+.loading-screen {
+  pointer-events: auto;
+  /* background-color: var(--black); */
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.rows_initial_loader {
+  background: var(--white);
+  z-index: 999;
+  top: 0;
+  height: 20vh;
+  width: 100vw;
+  max-width: 100%;
+  /* border: 1px solid #000; */
+}
+
+.loading-container {
+  z-index: 999;
+  pointer-events: none;
+  background-color: var(--blue);
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  color: var(--white);
+}
+
+.loading__progress {
+  width: 1em;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.loading__progress-inner {
+  transform-origin: bottom;
+  background-color: var(--white);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.loading__numbers {
+  flex-flow: row;
+  align-items: flex-start;
+  font-size: calc(10vw + 10vh);
+  display: flex;
+  position: absolute;
+  bottom: 0.1em;
+  left: 0.23em;
+}
+
+.loading__number-group {
+  flex-flow: column;
+  height: 1em;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading__number-wrap {
+  will-change: transform;
+  flex-flow: column;
+  display: flex;
+  position: relative;
+}
+
+.loading__number {
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1;
+  position: relative;
+}
+
+.loading__percentage-wrap {
+  flex-flow: column;
+  justify-content: flex-start;
+  margin-top: 0.375em;
+  font-size: 0.3em;
+  display: flex;
+  overflow: hidden;
+  /* background: red; */
+}
+
+.loading__percentage {
+  text-transform: uppercase;
+  will-change: transform;
+  /* font-family: PP Neue Corp Tight, Arial, sans-serif; */
+  font-weight: 700;
+  line-height: 1;
+  position: relative;
+}
+
 /* ==================== HEADER ==================== */
 header {
   position: fixed;
   top: clamp(16px, calc(100vw * 20 / 1920), 20px);
   left: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 998;
 }
 
 header .container-grid {
@@ -417,15 +523,18 @@ header .container-grid {
   position: absolute;
 }
 
-#hero .parallax-demo-img {
-  object-fit: cover;
-  background-position: center;
+#hero .parallax-demo-bg picture {
+  display: block;
   width: 100%;
   height: 100%;
 }
 
-#hero .parallax-demo-img.hero-mobile-bg {
-  display: none;
+#hero .parallax-demo-img {
+  display: block;
+  object-fit: cover;
+  background-position: center;
+  width: 100%;
+  height: 100%;
 }
 
 .hero-overlay {
@@ -509,16 +618,6 @@ header .container-grid {
   }
 }
 
-@media screen and (max-width: 600px) {
-  #hero .parallax-demo-img.hero-mobile-bg {
-    display: block;
-  }
-
-  #hero .parallax-demo-img.hero-bg {
-    display: none;
-  }
-}
-
 /* ==================== TEXT REVEAL ==================== */
 .text-reveal-mask {
   display: block;
@@ -550,7 +649,8 @@ header .container-grid {
 #mission {
   /* --row-h drives both row height and container padding-bottom so
 the quote text always clears the rows. Scales down on smaller screens. */
-  --row-h: calc(100vh / 5); /* 3 rows = 60vh */
+  --row-h: calc(100vh / 5);
+  /* 3 rows = 60vh */
 
   min-height: 100vh;
   width: 100%;
@@ -597,7 +697,8 @@ the quote text always clears the rows. Scales down on smaller screens. */
 #mission .rows-container {
   position: absolute;
   left: 0;
-  bottom: -2px; /* overlap by 2px to kill sub-pixel blue sliver */
+  bottom: -2px;
+  /* overlap by 2px to kill sub-pixel blue sliver */
   width: 100%;
   z-index: 1;
   pointer-events: none;
@@ -615,9 +716,11 @@ the quote text always clears the rows. Scales down on smaller screens. */
 #mission .rows-container .row1 {
   width: calc(50vw * (2 / 4));
 }
+
 #mission .rows-container .row2 {
   width: calc(50vw * (3 / 4));
 }
+
 #mission .rows-container .row3 {
   width: 50vw;
 }
@@ -627,9 +730,11 @@ the quote text always clears the rows. Scales down on smaller screens. */
   #mission .rows-container .row1 {
     width: calc(100vw * (2 / 4));
   }
+
   #mission .rows-container .row2 {
     width: calc(100vw * (3 / 4));
   }
+
   #mission .rows-container .row3 {
     width: 100vw;
   }
@@ -639,14 +744,18 @@ the quote text always clears the rows. Scales down on smaller screens. */
 @media (max-width: 900px) {
   #mission {
     --row-h: calc(100vh / 7);
-  } /* 3 rows ≈ 43vh */
+  }
+
+  /* 3 rows ≈ 43vh */
 }
 
 /* — Mobile ≤ 640px: stack quote full-width, rows even smaller — */
 @media (max-width: 640px) {
   #mission {
     --row-h: calc(100vh / 7);
-  } /* 3 rows = 30vh */
+  }
+
+  /* 3 rows = 30vh */
 
   #mission .quote {
     grid-column: 1 / span 12;
@@ -660,11 +769,144 @@ the quote text always clears the rows. Scales down on smaller screens. */
 
 /* ==================== WORKS ==================== */
 #works {
-  height: 100vh;
   background-color: var(--white);
   color: var(--black);
   padding-top: clamp(80px, 8vw, 120px);
-  padding-bottom: clamp(80px, 8vw, 140px);
+  padding-bottom: 200px;
+}
+
+#works .container-grid {
+  margin-bottom: clamp(40px, 5vw, 72px);
+}
+
+#works .container-grid h2 {
+  font-size: clamp(52px, calc(100vw * 128 / 1920), 128px);
+}
+
+#works .container-grid .works-title-featured {
+  grid-column: 1 / span 5;
+}
+
+#works .container-grid .works-title-work {
+  grid-column: 8 / span 4;
+}
+
+/* 2-column grid — Lusion layout */
+.works-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding: 0 var(--grid-margin);
+}
+
+.work-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  margin-bottom: 40px;
+}
+
+/* Image container — DOM img hidden; WebGL renders on top.
+NO background: the SDF entrance grows from the page bg,
+so any fill here bleeds through during animation. */
+.work-item__media-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 12px;
+  background: transparent;
+  position: relative;
+}
+
+.work-item__media {
+  width: 100%;
+  height: 100%;
+}
+
+/* The DOM img acts as a texture source only — opacity set to 0 by WebGL */
+.work-item__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+}
+
+.work-item__footer {
+  padding-top: clamp(12px, 1.2vw, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.work-item__tags {
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark_gray);
+}
+
+.work-item__footer-bottom {
+  margin-top: 12px;
+  /* overflow removed — clipping now handled per-character by .work-item__char-wrap */
+}
+
+/* ── Per-character slot-machine reel (Lusion title animation) ── */
+.work-item__name {
+  font-size: clamp(24px, calc(100vw * 52 / 1920), 52px);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--black);
+  /* name becomes a flex row of character columns */
+  display: flex;
+  align-items: flex-end;
+  overflow: visible;
+}
+
+/* Each character column: clips to exactly 1 line-height */
+.work-item__char-wrap {
+  display: inline-block;
+  overflow: hidden;
+  height: 1em;
+  line-height: 1;
+}
+
+/* Space between words */
+.work-item__char-wrap.is-space {
+  width: 0.3em;
+  flex-shrink: 0;
+}
+
+/* The inner reel: 4 duplicates stacked, slides up on reveal */
+.work-item__char-inner {
+  display: flex;
+  flex-direction: column;
+  /* start translated down so char[0] is visible at bottom of clip */
+  transform: translateY(0%);
+  will-change: transform;
+}
+
+.work-item__char-inner span {
+  display: block;
+  line-height: 1;
+  height: 1em;
+}
+
+@media (max-width: 768px) {
+  .works-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .work-item__media-wrap {
+    aspect-ratio: 3 / 2;
+  }
+
+  .work-item__name {
+    font-size: clamp(22px, 8vw, 40px);
+  }
 }
 
 /* ==================== ABOUT ==================== */
@@ -1036,8 +1278,8 @@ padding: 0 20px;
   }
 
   /* #experience .mention {
-    grid-column: 1 / span 4;
-  } */
+grid-column: 1 / span 4;
+} */
 }
 
 @media screen and (max-width: 700px) {
@@ -1122,6 +1364,7 @@ padding: 0 20px;
     opacity: 0.3;
     transform: translateY(0);
   }
+
   30% {
     opacity: 1;
     transform: translateY(-4px);
@@ -1133,6 +1376,7 @@ padding: 0 20px;
   100% {
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
@@ -1147,6 +1391,7 @@ padding: 0 20px;
 #skills .container-grid .grid-12 p .dot:nth-child(2) {
   animation-delay: 0.6s;
 }
+
 #skills .container-grid .grid-12 p .dot:nth-child(3) {
   animation-delay: 1.2s;
 }
@@ -1500,7 +1745,6 @@ height: 100%;
 }
 
 @media screen and (max-width: 500px) {
-
   #contact .contact-links__content .link .container-grid .grid-12 p {
     padding: 28px 10px;
   }

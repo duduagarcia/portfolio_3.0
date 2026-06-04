@@ -36,9 +36,66 @@
       type="font/woff2"
       crossorigin
     />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js"
+        }
+      }
+    </script>
     <link rel="stylesheet" href="css/main.css" />
   </head>
   <body>
+    <div class="loading-container">
+      <div class="loading-screen">
+        <div class="rows_initial_loader"></div>
+        <div class="rows_initial_loader"></div>
+        <div class="rows_initial_loader"></div>
+        <div class="rows_initial_loader"></div>
+        <div class="rows_initial_loader"></div>
+        <div class="loading__progress">
+          <div class="loading__progress-inner"></div>
+        </div>
+        <div class="loading__numbers">
+          <div class="loading__number-group is--first">
+            <div class="loading__number-wrap">
+              <span class="loading__number">1</span>
+            </div>
+          </div>
+          <div class="loading__number-group is--second">
+            <div class="loading__number-wrap">
+              <span class="loading__number">1</span
+              ><span class="loading__number">2</span
+              ><span class="loading__number">3</span
+              ><span class="loading__number">4</span
+              ><span class="loading__number">5</span
+              ><span class="loading__number">6</span
+              ><span class="loading__number">7</span
+              ><span class="loading__number">8</span
+              ><span class="loading__number">9</span
+              ><span class="loading__number">0</span>
+            </div>
+          </div>
+          <div class="loading__number-group is--third">
+            <div class="loading__number-wrap">
+              <span class="loading__number">1</span
+              ><span class="loading__number">2</span
+              ><span class="loading__number">3</span
+              ><span class="loading__number">4</span
+              ><span class="loading__number">5</span
+              ><span class="loading__number">6</span
+              ><span class="loading__number">7</span
+              ><span class="loading__number">8</span
+              ><span class="loading__number">9</span
+              ><span class="loading__number">0</span>
+            </div>
+          </div>
+          <div class="loading__percentage-wrap">
+            <span class="loading__percentage">%</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <header>
       <div class="container-grid">
         <a href="#hero" class="centered-nav__logo logo__text">
@@ -126,18 +183,29 @@
             data-parallax-end="40"
             class="parallax-demo-bg"
           >
-            <img
-              src="images/home/hero/hero.webp"
-              class="parallax-demo-img hero-bg"
-              alt=""
-              aria-hidden
-            />
-            <img
-              src="images/home/hero/hero-mobile.webp"
-              class="parallax-demo-img hero-mobile-bg"
-              alt=""
-              aria-hidden
-            />
+            <picture>
+              <source
+                media="(max-width: 600px)"
+                type="image/webp"
+                srcset="
+                  images/home/hero/hero-mobile-768.webp   768w,
+                  images/home/hero/hero-mobile-1280.webp 1280w,
+                  images/home/hero/hero-mobile.webp      2500w
+                "
+                sizes="100vw"
+              />
+              <img
+                id="hero-image"
+                src="images/home/hero/hero.webp"
+                class="parallax-demo-img"
+                alt=""
+                aria-hidden="true"
+                width="3999"
+                height="2455"
+                fetchpriority="high"
+                decoding="async"
+              />
+            </picture>
           </div>
           <div class="hero-overlay"></div>
           <div class="container-grid">
@@ -192,8 +260,112 @@
       <section id="works">
         <div class="container-grid">
           <div class="grid-12">
-            <h1 class="works-label">Featured Works</h1>
+            <h2 class="works-title-featured">Featured</h2>
+            <h2 class="works-title-work">Work</h2>
           </div>
+        </div>
+        <div class="works-grid">
+          <a
+            class="work-item"
+            href="#"
+            data-work-item
+            aria-label="View first project"
+          >
+            <div class="work-item__media-wrap" data-work-media>
+              <div class="work-item__media">
+                <img
+                  src="images/home/projects/mockup-orange.png"
+                  alt="Project 01"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div class="work-item__footer">
+              <span class="work-item__tags"
+                >WEB &middot; DESIGN &middot; ENGINEERING &middot;
+                ARCHITECTURE</span
+              >
+              <div class="work-item__footer-bottom">
+                <h3 class="work-item__name">Project One</h3>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="work-item"
+            href="#"
+            data-work-item
+            aria-label="View second project"
+          >
+            <div class="work-item__media-wrap" data-work-media>
+              <div class="work-item__media">
+                <img
+                  src="./images/home/projects/mockup-infra-use.webp"
+                  alt="Project 02"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div class="work-item__footer">
+              <span class="work-item__tags"
+                >CREATIVE DEV &middot; INTERACTION DESIGN</span
+              >
+              <div class="work-item__footer-bottom">
+                <h3 class="work-item__name">Project Two</h3>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="work-item"
+            href="#"
+            data-work-item
+            aria-label="View first project"
+          >
+            <div class="work-item__media-wrap" data-work-media>
+              <div class="work-item__media">
+                <img
+                  src="images/home/projects/nubank.webp"
+                  alt="Project 01"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div class="work-item__footer">
+              <span class="work-item__tags"
+                >WEB &middot; DESIGN &middot; ENGINEERING &middot;
+                ARCHITECTURE</span
+              >
+              <div class="work-item__footer-bottom">
+                <h3 class="work-item__name">Project One</h3>
+              </div>
+            </div>
+          </a>
+
+          <a
+            class="work-item"
+            href="#"
+            data-work-item
+            aria-label="View second project"
+          >
+            <div class="work-item__media-wrap" data-work-media>
+              <div class="work-item__media">
+                <img
+                  src="./images/home/projects/mocktup-macbook.png"
+                  alt="Project 02"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div class="work-item__footer">
+              <span class="work-item__tags"
+                >CREATIVE DEV &middot; INTERACTION DESIGN</span
+              >
+              <div class="work-item__footer-bottom">
+                <h3 class="work-item__name">Project Two</h3>
+              </div>
+            </div>
+          </a>
         </div>
       </section>
       <section id="about"></section>
@@ -849,8 +1021,12 @@
 
             <div class="container-grid copy-right">
               <div class="grid-12">
-                <p class="copy-right-text" data-reveal-text>©2026. All Rights Reserved.</p>
-                <p class="testmony-text" data-reveal-text>Built with obsession and ❤️</p>
+                <p class="copy-right-text" data-reveal-text>
+                  ©2026. All Rights Reserved.
+                </p>
+                <p class="testmony-text" data-reveal-text>
+                  Built with obsession and ❤️
+                </p>
               </div>
             </div>
           </div>
@@ -896,5 +1072,6 @@
       src="https://cdn.jsdelivr.net/npm/lenis@1.2.3/dist/lenis.min.js"
     ></script>
     <script defer src="js/index.js"></script>
+    <script type="module" src="js/shaders-gl.js"></script>
   </body>
 </html>
