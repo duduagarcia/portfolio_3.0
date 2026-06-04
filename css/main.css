@@ -890,6 +890,70 @@ padding: 0 20px;
   width: 50vw;
 }
 
+.underline-link {
+  margin-top: 20px;
+  color: #131313;
+  font-size: 1em;
+  line-height: 1.25;
+  text-decoration: none;
+  position: relative;
+
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: flex-start;
+  justify-self: start;
+  gap: 2px;
+  grid-row: 4;
+  grid-column: 6;
+  white-space: nowrap;
+}
+
+.underline-link::before,
+.underline-link.is--alt::before,
+.underline-link.is--alt::after {
+  content: "";
+  position: absolute;
+  bottom: 0em;
+  left: 0;
+  width: 100%;
+  height: 0.0625em;
+  background-color: #131313;
+  transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+}
+
+.underline-link:hover::before {
+  transform-origin: left;
+  transform: scaleX(1) rotate(0.001deg);
+}
+
+/* Alt */
+.underline-link.is--alt::before {
+  transform-origin: left;
+  transform: scaleX(1) rotate(0.001deg);
+  transition-delay: 0.3s;
+}
+
+.underline-link.is--alt:hover::before {
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+  transition-delay: 0s;
+}
+
+.underline-link.is--alt::after {
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+  transition-delay: 0s;
+}
+
+.underline-link.is--alt:hover::after {
+  transform-origin: left;
+  transform: scaleX(1) rotate(0.001deg);
+  transition-delay: 0.3s;
+}
+
 @media screen and (max-width: 1000px) {
   #experience .rows-container .row3 {
     width: 100vw;
@@ -941,9 +1005,9 @@ padding: 0 20px;
     grid-template-columns: 1fr 1fr 1fr;
   }
 
-  #experience .mention {
+  /* #experience .mention {
     grid-column: 1 / span 4;
-  }
+  } */
 }
 
 @media screen and (max-width: 700px) {
@@ -956,7 +1020,11 @@ padding: 0 20px;
   }
 
   #experience .mention {
-    grid-column: 1 / span 8;
+    grid-column: 4 / span 8;
+  }
+
+  .underline-link {
+    grid-column: 4 / span 6;
   }
 }
 
@@ -1076,11 +1144,11 @@ padding: 0 20px;
   }
 
   #skills .container-grid .grid-12 ul {
-    grid-column: 7 / span 6;
+    grid-column: 8 / span 4;
   }
 
   #skills .container-grid .grid-12 p {
-    grid-column: 7 / span 6;
+    grid-column: 8 / span 4;
   }
 }
 
@@ -1090,12 +1158,22 @@ padding: 0 20px;
   }
 
   #skills .container-grid .grid-12 ul {
-    grid-column: 7 / span 12;
+    grid-column: 8 / span 4;
     margin-top: clamp(32px, calc(100vw * 60 / 1920), 60px);
   }
 
   #skills .container-grid .grid-12 p {
-    grid-column: 7 / span 12;
+    grid-column: 8 / span 4;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #skills .container-grid .grid-12 ul {
+    grid-column: 5 / span 8;
+  }
+
+  #skills .container-grid .grid-12 p {
+    grid-column: 5 / span 8;
   }
 }
 
