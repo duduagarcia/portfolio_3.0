@@ -24,6 +24,36 @@ body {
   background-color: var(--white);
 }
 
+.fps-meter {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 10000;
+  padding: 5px 7px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 5px;
+  background: rgb(15 15 15 / 78%);
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.fps-meter__value {
+  color: #75f0aa;
+}
+
+.fps-meter[data-fps-state="warn"] .fps-meter__value {
+  color: #ffd166;
+}
+
+.fps-meter[data-fps-state="bad"] .fps-meter__value {
+  color: #ff6b6b;
+}
+
 /* Lenis base styles (inlined to avoid external render-blocking CSS) */
 html.lenis {
   height: auto;
@@ -1122,20 +1152,19 @@ padding: 0 20px;
 }
 
 #skills .container-grid .grid-12 ul li {
+  position: relative;
+  contain: paint;
   font-size: clamp(32px, calc(100vw * 52 / 1920), 52px);
   letter-spacing: -0.03em;
-  color: transparent;
-  background: linear-gradient(
-      to right,
-      var(--black) 50%,
-      rgb(15 15 15 / 20%) 50%
-    )
-    no-repeat;
-  background-size: 200% 100%;
-  background-position-x: 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  will-change: background-position;
+  color: rgb(15 15 15 / 20%);
+}
+
+#skills .container-grid .grid-12 ul li .skill-fill {
+  position: absolute;
+  inset: 0;
+  color: var(--black);
+  clip-path: inset(0% 100% 0% 0%);
+  pointer-events: none;
 }
 
 @media screen and (max-width: 1025px) {
@@ -1303,13 +1332,15 @@ height: 100%;
   display: flex;
   align-items: center;
   position: relative;
-  will-change: transform;
 }
 
 #contact .marquee-advanced__collection {
   display: flex;
   align-items: center;
   position: relative;
+}
+
+#contact .marquee-advanced.is-marquee-active .marquee-advanced__collection {
   will-change: transform;
 }
 

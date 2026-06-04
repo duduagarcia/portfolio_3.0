@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", (event) => {
   gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase, Flip);
 
+  initFPSCounter();
   initLenis();
   initNavPill();
   initNavTooltip();
@@ -29,6 +30,42 @@ window.addEventListener("focus", () => {
 window.addEventListener("blur", () => {
   document.title = documentTitleOnBlur;
 });
+
+function initFPSCounter() {
+  const meter = document.createElement("div");
+  meter.className = "fps-meter";
+  meter.setAttribute("aria-hidden", "true");
+  meter.innerHTML =
+    '<span class="fps-meter__value">--</span><span class="fps-meter__label"> FPS</span>';
+  document.body.appendChild(meter);
+
+  const value = meter.querySelector(".fps-meter__value");
+  const sampleDuration = 500;
+  let frameCount = 0;
+  let sampleStart = performance.now();
+
+  function update(now) {
+    frameCount += 1;
+    const elapsed = now - sampleStart;
+
+    if (elapsed >= sampleDuration) {
+      const fps = Math.round((frameCount * 1000) / elapsed);
+      value.textContent = String(fps);
+      meter.dataset.fpsState = fps >= 55 ? "good" : fps >= 45 ? "warn" : "bad";
+      frameCount = 0;
+      sampleStart = now;
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    frameCount = 0;
+    sampleStart = performance.now();
+  });
+
+  requestAnimationFrame(update);
+}
 
 function initNavPill() {
   const pill = document.getElementById("nav-pill");
@@ -391,6 +428,35 @@ function initCSSMarquee() {
 }
 
 function initMarqueeScrollDirection() {
+  const marqueeTweens = new Map();
+  const visibleMarquees = new Set();
+  const syncMarqueePhase = (tween) => {
+    const elapsed = (performance.now() - tween.marqueeStartTime) / 1000;
+    tween.totalTime(tween.duration() * 0.5 + elapsed);
+  };
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const tween = marqueeTweens.get(entry.target);
+        if (!tween) return;
+
+        if (entry.isIntersecting) {
+          visibleMarquees.add(entry.target);
+          entry.target.classList.add("is-marquee-active");
+          if (!document.hidden) {
+            syncMarqueePhase(tween);
+            tween.play();
+          }
+        } else {
+          visibleMarquees.delete(entry.target);
+          entry.target.classList.remove("is-marquee-active");
+          tween.pause();
+        }
+      });
+    },
+    { rootMargin: "25% 0px", threshold: 0 },
+  );
+
   document
     .querySelectorAll(
       "[data-marquee-scroll-direction-target]:not([data-marquee-initialized])",
@@ -435,7 +501,7 @@ function initMarqueeScrollDirection() {
         "[data-marquee-collection-target]",
       );
 
-      gsap
+      const tween = gsap
         .fromTo(
           marqueeItems,
           {
@@ -446,11 +512,27 @@ function initMarqueeScrollDirection() {
             repeat: -1,
             duration: marqueeSpeed,
             ease: "linear",
+            paused: true,
           },
         )
         .totalProgress(0.5);
+
+      tween.marqueeStartTime = performance.now();
+      marqueeTweens.set(marquee, tween);
+      observer.observe(marquee);
       marquee.setAttribute("data-marquee-status", "normal");
     });
+
+  document.addEventListener("visibilitychange", () => {
+    marqueeTweens.forEach((tween, marquee) => {
+      if (document.hidden || !visibleMarquees.has(marquee)) {
+        tween.pause();
+      } else {
+        syncMarqueePhase(tween);
+        tween.play();
+      }
+    });
+  });
 }
 
 function initMissionRowsScroll() {
@@ -604,8 +686,15 @@ function initSkillsTextFill() {
   if (!skills.length) return;
 
   skills.forEach((skill) => {
-    gsap.to(skill, {
-      backgroundPositionX: "0%",
+    const text = skill.textContent;
+    const fill = document.createElement("span");
+    fill.className = "skill-fill";
+    fill.textContent = text;
+    fill.setAttribute("aria-hidden", "true");
+    skill.appendChild(fill);
+
+    gsap.to(fill, {
+      clipPath: "inset(0% 0% 0% 0%)",
       ease: "none",
       scrollTrigger: {
         trigger: skill,
