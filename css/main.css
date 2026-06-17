@@ -5,6 +5,9 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+      appearance: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 @font-face {
@@ -149,7 +152,7 @@ p {
 }
 
 h2 {
-  font-size: clamp(24px, calc(100vw * 40 / 1920), 40px);
+font-size: clamp(32px, calc(100vw * 70 / 1920), 48px);
 }
 
 h3 {
@@ -618,76 +621,57 @@ header .container-grid {
   }
 }
 
-/* ==================== TEXT REVEAL ==================== */
-.text-reveal-mask {
-  display: block;
-  overflow: clip;
-  padding-bottom: 0.08em;
-  /* prevent descenders from clipping */
-}
-
-/* ==================== RECT REVEAL ==================== */
-.rect-reveal-wrapper {
-  position: relative;
-  display: block;
-  width: fit-content;
-}
-
-.rect-reveal-block {
-  position: absolute;
-  top: -0.06em;
-  bottom: -0.06em;
-  left: -0.08em;
-  right: -0.08em;
-  z-index: 1;
-  pointer-events: none;
-  transform-origin: 100% 50%;
-  transform: scaleX(0);
-}
-
 /* ==================== MISSION ==================== */
 #mission {
-  --row-h: calc(100vh / 5);
-  /* 3 rows = 60vh */
-
   width: 100%;
   background-color: var(--blue);
   color: var(--white);
-  position: relative;
-  overflow: hidden;
-  padding-bottom: clamp(200px, calc(100vw * 300 / 1920), 300px);
 }
 
-.mwg_effect005 {
-  background-color: var(--blue);
-  color: var(--white);
-  position: relative;
-  overflow-x: clip;
-}
-
-.mwg_effect005 .pin-height {
-  height: 350vh;
-}
-
-.mwg_effect005 .container {
+#mission .container-grid {
   height: 100vh;
   display: flex;
   align-items: center;
-  padding: 0 clamp(20px, var(--grid-margin), 80px);
   overflow: hidden;
 }
 
-.mwg_effect005 .paragraph {
-  width: 60%;
-  width: clamp(300px, 60%, 700px);
-  font-size: clamp(28px, 3.9vw, 48px);
-  line-height: 0.97;
-  letter-spacing: -0.03em;
-  font-weight: 400;
+#mission .word {
+  display: inline-block;
+  transform: translate(calc(100vw - 25px), 0);
 }
 
-.mwg_effect005 .word {
-  display: inline-block;
+#mission .paragraph {
+  letter-spacing: -0.03em;
+  grid-column: 1 / span 6;
+  display: block;
+}
+
+@media (max-width: 1200px) {
+  #mission .paragraph {
+    grid-column: 1 / span 7;
+  }
+}
+
+@media (max-width: 768px) {
+  #mission .paragraph {
+    grid-column: 1 / span 7;
+  }
+
+  #mission .word {
+    transform: translate(calc(100vw - 15px), 0);
+  }
+}
+
+@media (max-width: 768px) {
+  #mission .paragraph {
+    grid-column: 1 / span 9;
+  }
+}
+
+@media (max-width: 400px) {
+  #mission .paragraph {
+    grid-column: 1 / span 12;
+  }
 }
 
 /* ==================== WORKS ==================== */

@@ -3,156 +3,33 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   initFPSCounter();
   // initLoaderThreeSteps();
+
   initLenis();
+
   initNavPill();
+
   initNavTooltip();
-  // initScrollTimeline();
-  // initTextReveal();
-  // initRectReveal();
+
   initGlobalParallax();
+
   initCSSMarquee();
-  // initMissionRowsScroll();
-  // initExperienceRowsScroll();
+
+  initTextAnimationMISSION();
+
   initExperienceList();
+
   initSkillsTextFill();
+
   initMarqueeScrollDirection();
+
   initFooterParallax();
 
-  initWorksTitleReveal();
   initWorksCharAnimation();
-
-  const paragraph = document.querySelector(".mwg_effect005 .paragraph");
-  if (!paragraph) return;
-  wrapWordsInSpan(paragraph);
-
-  const pinHeight = document.querySelector(".mwg_effect005 .pin-height");
-  const container = document.querySelector(".mwg_effect005 .container");
-  const words = document.querySelectorAll(".mwg_effect005 .word");
-
-  // Set initial position via GSAP (CSS calc() is not readable by GSAP)
-  gsap.set(words, { x: () => window.innerWidth - 25 });
-
-  gsap.to(words, {
-    x: 0,
-    stagger: 0.02,
-    ease: "power4.inOut",
-    scrollTrigger: {
-      trigger: pinHeight,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-      pin: container,
-      pinType: "transform",
-      anticipatePin: 1,
-    },
-  });
-
-  // RESOURCE 29
-
-  const paragraph2 = document.querySelector(".mwg_effect029 .paragraph");
-  wrapWordsInSpan2(paragraph2);
-
-  const words2 = paragraph2.querySelectorAll("span");
-  words2.forEach((word) => {
-    // Assign a class between word0, word1, word2, word3
-    word.classList.add("word" + Math.floor(Math.random() * 4));
-  });
-
-  // For all words with the class word1
-  document.querySelectorAll(".mwg_effect029 .word1").forEach((el) => {
-    gsap.to(el, {
-      x: "-0.8em", // Same value as in CSS
-      ease: "none", // Linear movement
-      scrollTrigger: {
-        trigger: el, // Track the word's position
-        start: "top 80%", // Start when the word’s top reaches 80% of the viewport height
-        end: "bottom 60%", // End when the word’s bottom reaches 60% of the viewport height
-        scrub: 0.2, // Syncs with the scroll and takes 0.2s to update
-      },
-    });
-  });
-  document.querySelectorAll(".mwg_effect029 .word2").forEach((el) => {
-    gsap.to(el, {
-      x: "1.6em", // Same value as in CSS
-      ease: "none",
-      scrollTrigger: {
-        trigger: el, // We listen to the word's position
-        start: "top 80%",
-        end: "bottom 60%",
-        scrub: 0.2,
-      },
-    });
-  });
-  document.querySelectorAll(".mwg_effect029 .word3").forEach((el) => {
-    gsap.to(el, {
-      x: "-2.4em", // Same value as in CSS
-      ease: "none",
-      scrollTrigger: {
-        trigger: el, // We listen to the word's position
-        start: "top 80%",
-        end: "bottom 60%",
-        scrub: 0.2,
-      },
-    });
-  });
+  
 });
-
-function wrapWordsInSpan(element) {
-  const text = element.textContent.trim();
-  element.innerHTML = text
-    .split(/\s+/)
-    .map((word) => `<span class="word">${word}</span>`)
-    .join(" ");
-}
-
-function wrapWordsInSpan2(element) {
-  const text = element.textContent;
-  element.innerHTML = text
-    .split(" ")
-    .map((word) => `<span>${word}</span>`)
-    .join(" ");
-}
 
 let documentTitleStore = document.title;
 const documentTitleOnBlur = "Come back! We miss you"; // Define your custom title here
-
-// ── Works: "Featured" / "Work" heading split-slide reveal ────────────────────
-// Left title slides in from left, right title from right — fires once on entry
-function initWorksTitleReveal() {
-  const featured = document.querySelector(".works-title-featured");
-  const work = document.querySelector(".works-title-work");
-  if (!featured || !work) return;
-
-  gsap.set(featured, { xPercent: -12, opacity: 0 });
-  gsap.set(work, { xPercent: 12, opacity: 0 });
-
-  ScrollTrigger.create({
-    trigger: "#works",
-    start: "top 78%",
-    onEnter: () => {
-      gsap.to(featured, {
-        xPercent: 0,
-        opacity: 1,
-        duration: 1.1,
-        ease: "power3.out",
-      });
-      gsap.to(work, {
-        xPercent: 0,
-        opacity: 1,
-        duration: 1.1,
-        ease: "power3.out",
-        delay: 0.08,
-      });
-    },
-    onLeaveBack: () => {
-      gsap.to([featured, work], {
-        opacity: 0,
-        duration: 0.4,
-        ease: "power2.in",
-      });
-    },
-  });
-}
 
 // ── Works: slot-machine character reveal on project titles ──────────────────
 // Each letter gets a 4-copy reel column (overflow:hidden clip).
@@ -915,64 +792,6 @@ function initMarqueeScrollDirection() {
   });
 }
 
-function initMissionRowsScroll() {
-  const mission = document.querySelector("#mission");
-  if (!mission) return;
-
-  const rows = [".row3", ".row2", ".row1"]
-    .map((selector) => mission.querySelector(selector))
-    .filter(Boolean);
-  if (!rows.length) return;
-
-  gsap.set(rows, {
-    xPercent: -105,
-    force3D: true,
-  });
-
-  gsap.to(rows, {
-    xPercent: 0,
-    ease: "none",
-    stagger: 0.08,
-    scrollTrigger: {
-      trigger: mission,
-      start: "30% 70%",
-      end: "bottom 35%",
-      scrub: 0.8,
-      invalidateOnRefresh: true,
-      // markers: true
-    },
-  });
-}
-
-function initExperienceRowsScroll() {
-  const experience = document.querySelector("#experience");
-  if (!experience) return;
-
-  const rows = [".row3", ".row2", ".row1"]
-    .map((selector) => experience.querySelector(selector))
-    .filter(Boolean);
-  if (!rows.length) return;
-
-  gsap.set(rows, {
-    xPercent: -105,
-    force3D: true,
-  });
-
-  gsap.to(rows, {
-    xPercent: 0,
-    ease: "none",
-    stagger: 0.08,
-    scrollTrigger: {
-      trigger: experience,
-      start: "30% 70%",
-      end: "bottom 35%",
-      scrub: 0.8,
-      invalidateOnRefresh: true,
-      // markers: true
-    },
-  });
-}
-
 function initExperienceList() {
   const items = document.querySelectorAll(".experience-item");
   if (!items.length) return;
@@ -1081,186 +900,6 @@ function initSkillsTextFill() {
         start: "top 85%",
         end: "top 35%",
         scrub: 1,
-      },
-    });
-  });
-}
-
-function initScrollTimeline() {
-  const timeline = document.getElementById("scroll-timeline");
-  const label = document.getElementById("st-label");
-  const isMobile = () => window.innerWidth <= 768;
-
-  // Sections to track — must match data-section attrs in HTML
-  const sections = Array.from(
-    document.querySelectorAll("#st-bar .st-seg[data-section]"),
-  )
-    .map((seg) => ({
-      seg,
-      fill: seg.querySelector(".st-seg-fill"),
-      label: seg.dataset.label,
-      id: seg.dataset.section,
-      el: document.getElementById(seg.dataset.section),
-    }))
-    .filter((s) => s.el);
-
-  if (!sections.length || !timeline) return;
-
-  // Compute proportional flex values based on section heights
-  function setSizes() {
-    const totalHeight = sections.reduce((sum, s) => sum + s.el.offsetHeight, 0);
-    sections.forEach((s) => {
-      const ratio = s.el.offsetHeight / totalHeight;
-      s.seg.style.flex = `${ratio} 1 0%`;
-    });
-  }
-
-  setSizes();
-  ScrollTrigger.addEventListener("refreshInit", setSizes);
-
-  // Build a ScrollTrigger per section that drives the fill height/width
-  sections.forEach((s) => {
-    ScrollTrigger.create({
-      trigger: s.el,
-      start: "top top",
-      end: "bottom top",
-      scrub: true,
-      onUpdate(self) {
-        const pct = Math.min(Math.max(self.progress, 0), 1) * 100;
-        if (isMobile()) {
-          s.fill.style.width = `${pct}%`;
-          s.fill.style.height = "100%";
-        } else {
-          s.fill.style.height = `${pct}%`;
-          s.fill.style.width = "100%";
-        }
-      },
-      onEnter() {
-        if (label) label.textContent = s.label;
-      },
-      onEnterBack() {
-        if (label) label.textContent = s.label;
-      },
-    });
-  });
-
-  // Re-apply fill direction on resize
-  window.addEventListener("resize", () => {
-    sections.forEach((s) => {
-      if (isMobile()) {
-        s.fill.style.width = s.fill.style.height || "0%";
-        s.fill.style.height = "100%";
-      } else {
-        s.fill.style.height = s.fill.style.width || "0%";
-        s.fill.style.width = "100%";
-      }
-    });
-    setSizes();
-    ScrollTrigger.refresh();
-  });
-}
-
-function initRectReveal() {
-  const elements = gsap.utils.toArray("[data-rect-reveal]");
-  if (!elements.length) return;
-
-  elements.forEach((el) => {
-    const color = el.dataset.rectRevealColor || getComputedStyle(el).color;
-    const split = new SplitText(el, { type: "lines" });
-
-    const lineData = split.lines.map((line) => {
-      const wrapper = document.createElement("div");
-      wrapper.classList.add("rect-reveal-wrapper");
-      line.parentNode.insertBefore(wrapper, line);
-      wrapper.appendChild(line);
-
-      const rectEl = document.createElement("div");
-      rectEl.classList.add("rect-reveal-block");
-      rectEl.style.backgroundColor = color;
-      wrapper.appendChild(rectEl);
-
-      gsap.set(line, { opacity: 0 });
-      return { line, rectEl };
-    });
-
-    // Initialise all rects before the timeline runs
-    lineData.forEach(({ rectEl }) => {
-      gsap.set(rectEl, { scaleX: 0, transformOrigin: "0% 50%" });
-    });
-
-    // ── Entry timeline: rect wipes in → text reveals → rect wipes out ──────
-    const tl = gsap.timeline({ paused: true });
-
-    lineData.forEach(({ line, rectEl }, i) => {
-      const o = i * 0.09;
-
-      // Phase 1: rect slides in from the left
-      tl.to(rectEl, { scaleX: 1, duration: 0.34, ease: "power3.inOut" }, o);
-
-      // Flip origin then reveal text (both discrete, same playhead position)
-      tl.set(rectEl, { transformOrigin: "100% 50%" }, o + 0.34);
-      tl.to(line, { opacity: 1, duration: 0.001, overwrite: "auto" }, o + 0.34);
-
-      // Phase 2: rect wipes out to the right
-      tl.to(
-        rectEl,
-        { scaleX: 0, duration: 0.34, ease: "power3.inOut" },
-        o + 0.34,
-      );
-    });
-
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 82%",
-      // Scroll DOWN → play at normal speed
-      onEnter: () => {
-        tl.timeScale(1).play();
-      },
-      // Scroll UP → reverse at 1.6× so it feels snappy, then reset for re-entry
-      onLeaveBack: () => {
-        tl.timeScale(1.6).reverse();
-      },
-    });
-  });
-}
-
-function initTextReveal() {
-  const elements = gsap.utils.toArray("[data-reveal-text]");
-  if (!elements.length) return;
-
-  elements.forEach((el) => {
-    const split = new SplitText(el, { type: "lines" });
-
-    split.lines.forEach((line) => {
-      const mask = document.createElement("div");
-      mask.classList.add("text-reveal-mask");
-      line.parentNode.insertBefore(mask, line);
-      mask.appendChild(line);
-    });
-
-    // Explicit fromTo so forward AND reverse are both clean
-    const tl = gsap.timeline({ paused: true });
-    tl.fromTo(
-      split.lines,
-      { yPercent: 108 },
-      {
-        yPercent: 0,
-        ease: "expo.out",
-        duration: 1.05,
-        stagger: { each: 0.07, from: "start" },
-      },
-    );
-
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 87%",
-      // Scroll DOWN → reveal (normal speed)
-      onEnter: () => {
-        tl.timeScale(1).play();
-      },
-      // Scroll UP → hide (1.6× faster so it feels snappy)
-      onLeaveBack: () => {
-        tl.timeScale(1.6).reverse();
       },
     });
   });
@@ -1411,5 +1050,39 @@ function initNavTooltip() {
     el.addEventListener("blur", () => {
       if (!isMobile()) hide();
     });
+  });
+}
+
+function wrapWordsInSpan(element) {
+  const words = element.textContent.match(/\S+/g);
+
+  element.innerHTML = words
+    .map(word => `<span class="word">${word}</span>`)
+    .join(" ");
+}
+
+function initTextAnimationMISSION() {
+  const paragraph = document.querySelector("#mission .paragraph");
+  wrapWordsInSpan(paragraph);
+
+  const pinHeight = document.querySelector("#mission .pin-height");
+  const container = document.querySelector("#mission .container-grid");
+  const words = document.querySelectorAll("#mission .word");
+
+  gsap.set(words, {
+    x: window.innerWidth,
+  });
+
+  gsap.to(words, {
+    x: 0,
+    stagger: 0.02,
+    ease: "power4.inOut",
+    scrollTrigger: {
+      trigger: pinHeight,
+      start: "top top",
+      end: "+=1200",
+      scrub: 1.5,
+      pin: container,
+    },
   });
 }
