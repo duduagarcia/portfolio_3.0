@@ -38,6 +38,7 @@ uniform float u_rippleStrength;// abs(vel) * 0.18 from JS
 uniform float u_globalRadius; // corner radius in px
 uniform vec2 u_resolution; // viewport size in px (for screenUv)
 uniform float ua; // master alpha
+uniform float u_velY; // signed scroll velocity → vertical parallax
 
 varying vec2 vUv;
 
@@ -88,25 +89,30 @@ vec2 baseUv = vUv;
 baseUv.x -= (screenUv.x - 0.5) * (1.0 - sin(screenUv.y * 3.141592)) * u_rippleStrength;
 
 // ── Rounded-corner entrance mask ─────────────────────────────────────
-float mask = getRoundedCornerMask(baseUv, u_domWH * mix(0.7, 1.0, u_showRatio), u_globalRadius, 1.0);
+float mask = getRoundedCornerMask(baseUv, u_domWH * mix(0.6, 1.0, u_showRatio), u_globalRadius, 1.0);
 
-// ── Motion blur: 9 samples along scroll direction ─────────────────────
-// u_rippleStrength doubles as a velocity proxy here (same magnitude)
-float vel = u_rippleStrength; // already abs'd, keep sign for blur
-vec3 color = vec3(0.0);
-vec2 blurDir = vec2(0.0, vel * 0.005);
-vec2 blurUv = baseUv - blurDir * 4.0;
-for (int i = 0; i < 9; i++) {
-vec2 cv = coverUv(u_domWH, u_textureSize, clamp(blurUv, 0.001, 0.999));
-color += texture2D(u_texture, cv).rgb;
-blurUv += blurDir;
-}
-color /= 9.0;
+// Entrance image zoom — exact frag$l formula:
+// uv = (baseUv - 0.5) * domWH * mix(0.75, 1., showRatio)
+// sample at uv * toUvSpace + 0.5
+// At showRatio=0: image is 133% zoomed in (sampled at 75% of UV range)
+// At showRatio=1: normal cover-fit size
+// Combined with SDF growing 70%→100%, gives the Lusion iris+scale effect
+vec2 toUvSpace = 1.0 / (u_textureSize * max(u_domWH.x / u_textureSize.x,
+u_domWH.y / u_textureSize.y));
+vec2 uv = (baseUv - 0.5) * u_domWH * mix(0.6, 1.0, u_showRatio);
 
-// ── RGB chromatic aberration ──────────────────────────────────────────
-float shift = vel * 0.004;
-color.r = texture2D(u_texture, coverUv(u_domWH, u_textureSize, clamp(baseUv + vec2(shift, 0.0), 0.001, 0.999))).r;
-color.b = texture2D(u_texture, coverUv(u_domWH, u_textureSize, clamp(baseUv - vec2(shift, 0.0), 0.001, 0.999))).b;
+// ── Texture UV with vertical parallax ───────────────────────────────
+// Image drifts opposite to scroll direction → depth illusion inside card
+vec2 texUv = uv * toUvSpace + 0.5;
+texUv.y -= u_velY * 0.018 * u_showRatio;
+
+// ── RGB chromatic aberration ─────────────────────────────────────────
+// R/B channels split horizontally proportional to scroll speed
+float rgbOff = u_rippleStrength * 0.014;
+float r = texture2D(u_texture, texUv + vec2(rgbOff, 0.0)).r;
+float g = texture2D(u_texture, texUv ).g;
+float b = texture2D(u_texture, texUv - vec2(rgbOff, 0.0)).b;
+vec3 color = vec3(r, g, b);
 
 gl_FragColor = vec4(color, mask * ua);
 }
@@ -189,6 +195,7 @@ class LusionGL {
         u_textureSize: { value: new THREE.Vector2(1, 1) },
         u_showRatio: { value: 0.0 },
         u_rippleStrength: { value: 0.0 },
+        u_velY: { value: 0.0 },
         u_globalRadius: { value: 12.0 },
         u_resolution: { value: new THREE.Vector2(this.W, this.H) },
         ua: { value: 0.0 },
@@ -208,8 +215,9 @@ class LusionGL {
       this.scene.add(mesh);
 
       // Per-card entrance state
+      // hasTriggered fires ONCE — showRatio only ever increases, never reverses
       mesh.userData.showRatio = 0;
-      mesh.userData.showRatioTarget = 0;
+      mesh.userData.hasTriggered = false;
 
       this.meshes.push({ mesh, uniforms, img });
 
@@ -280,20 +288,29 @@ class LusionGL {
 
       const rect = wrap.getBoundingClientRect();
 
-      // Off-screen — hide mesh
+      // Off-screen — hide and reset so animation replays on re-entry
+      // (works for both scroll-down AND scroll-up re-entry)
       if (rect.bottom < -100 || rect.top > H + 100) {
         uniforms.ua.value = 0;
+        mesh.userData.hasTriggered = false;
+        mesh.userData.showRatio = 0;
+        uniforms.u_showRatio.value = 0;
         return;
       }
       uniforms.ua.value = 1;
 
-      // Compute show ratio: card fully hidden below H*0.92, fully shown at H*0.1
-      const showTarget = Math.max(
-        0,
-        Math.min(1, (H * 0.88 - rect.top) / (H * 0.55)),
-      );
-      mesh.userData.showRatioTarget = showTarget;
-      mesh.userData.showRatio += (showTarget - mesh.userData.showRatio) * 0.05;
+      // Fire once per entry — when card crosses 90% of viewport height
+      if (
+        !mesh.userData.hasTriggered &&
+        rect.top < H * 0.9 &&
+        rect.bottom > 0
+      ) {
+        mesh.userData.hasTriggered = true;
+      }
+      if (mesh.userData.hasTriggered && mesh.userData.showRatio < 1) {
+        mesh.userData.showRatio += (1 - mesh.userData.showRatio) * 0.06;
+        if (mesh.userData.showRatio > 0.999) mesh.userData.showRatio = 1;
+      }
 
       uniforms.u_showRatio.value = mesh.userData.showRatio;
 
@@ -304,13 +321,13 @@ class LusionGL {
       mesh.scale.set(w, h, 1);
       uniforms.u_domWH.value.set(w, h);
 
-      // Lusion entrance: slide card up from 60px below as showRatio goes 0→1
-      const entranceY = (1.0 - mesh.userData.showRatio) * 60;
-
-      // Three.js world coords: origin at center, Y flipped vs DOM
+      // Round to nearest pixel — Lenis applies sub-pixel CSS transforms
+      // (e.g. translateY(-324.671px)) which make getBoundingClientRect()
+      // return decimal values that change every frame → micro-jitter.
+      // Rounding eliminates the jitter with no visible quality loss.
       mesh.position.set(
-        rect.left + w / 2 - W / 2,
-        -(rect.top + h / 2 - H / 2) + entranceY,
+        Math.round(rect.left + w / 2 - W / 2),
+        -Math.round(rect.top + h / 2 - H / 2),
         0,
       );
     });
@@ -328,14 +345,16 @@ class LusionGL {
       this.smoothV += (this.rawVelocity - this.smoothV) * 0.07;
       this.rawVelocity *= 0.88;
 
-      // Normalize to -1..1 (Lenis velocity is in px/frame; ~20px/frame = fast)
-      const sv = Math.max(-1, Math.min(1, this.smoothV / 22));
+      // Normalize: Lenis px/s velocity, fast scroll ~500px/s → divide by 500
+      const sv = Math.max(-1, Math.min(1, this.smoothV / 500));
 
       this.updateMeshes(sv);
 
       this.meshes.forEach(({ uniforms }) => {
-        // rippleStrength is abs velocity — matches u_rippleStrength in frag$l
-        uniforms.u_rippleStrength.value = Math.abs(sv) * 0.18;
+        // Exact Lusion: Math.min(0.15, easedScrollStrength * 0.5)
+        uniforms.u_rippleStrength.value = Math.min(0.15, Math.abs(sv) * 0.5);
+        // Signed velocity for vertical parallax + RGB shift direction
+        uniforms.u_velY.value = sv;
       });
 
       this.renderer.render(this.scene, this.camera);

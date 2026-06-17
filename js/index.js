@@ -1,27 +1,227 @@
-document.addEventListener("DOMContentLoaded", async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   gsap.registerPlugin(ScrollTrigger, SplitText, CustomEase, Flip);
 
   initFPSCounter();
-  // await initInitialLoader();
-  initLoaderThreeSteps();
+  // initLoaderThreeSteps();
   initLenis();
   initNavPill();
   initNavTooltip();
-  initScrollTimeline();
-  initTextReveal();
-  initRectReveal();
+  // initScrollTimeline();
+  // initTextReveal();
+  // initRectReveal();
   initGlobalParallax();
   initCSSMarquee();
-  initMissionRowsScroll();
-  initExperienceRowsScroll();
+  // initMissionRowsScroll();
+  // initExperienceRowsScroll();
   initExperienceList();
   initSkillsTextFill();
   initMarqueeScrollDirection();
   initFooterParallax();
+
+  initWorksTitleReveal();
+  initWorksCharAnimation();
+
+  const paragraph = document.querySelector(".mwg_effect005 .paragraph");
+  if (!paragraph) return;
+  wrapWordsInSpan(paragraph);
+
+  const pinHeight = document.querySelector(".mwg_effect005 .pin-height");
+  const container = document.querySelector(".mwg_effect005 .container");
+  const words = document.querySelectorAll(".mwg_effect005 .word");
+
+  // Set initial position via GSAP (CSS calc() is not readable by GSAP)
+  gsap.set(words, { x: () => window.innerWidth - 25 });
+
+  gsap.to(words, {
+    x: 0,
+    stagger: 0.02,
+    ease: "power4.inOut",
+    scrollTrigger: {
+      trigger: pinHeight,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      pin: container,
+      pinType: "transform",
+      anticipatePin: 1,
+    },
+  });
+
+  // RESOURCE 29
+
+  const paragraph2 = document.querySelector(".mwg_effect029 .paragraph");
+  wrapWordsInSpan2(paragraph2);
+
+  const words2 = paragraph2.querySelectorAll("span");
+  words2.forEach((word) => {
+    // Assign a class between word0, word1, word2, word3
+    word.classList.add("word" + Math.floor(Math.random() * 4));
+  });
+
+  // For all words with the class word1
+  document.querySelectorAll(".mwg_effect029 .word1").forEach((el) => {
+    gsap.to(el, {
+      x: "-0.8em", // Same value as in CSS
+      ease: "none", // Linear movement
+      scrollTrigger: {
+        trigger: el, // Track the word's position
+        start: "top 80%", // Start when the word’s top reaches 80% of the viewport height
+        end: "bottom 60%", // End when the word’s bottom reaches 60% of the viewport height
+        scrub: 0.2, // Syncs with the scroll and takes 0.2s to update
+      },
+    });
+  });
+  document.querySelectorAll(".mwg_effect029 .word2").forEach((el) => {
+    gsap.to(el, {
+      x: "1.6em", // Same value as in CSS
+      ease: "none",
+      scrollTrigger: {
+        trigger: el, // We listen to the word's position
+        start: "top 80%",
+        end: "bottom 60%",
+        scrub: 0.2,
+      },
+    });
+  });
+  document.querySelectorAll(".mwg_effect029 .word3").forEach((el) => {
+    gsap.to(el, {
+      x: "-2.4em", // Same value as in CSS
+      ease: "none",
+      scrollTrigger: {
+        trigger: el, // We listen to the word's position
+        start: "top 80%",
+        end: "bottom 60%",
+        scrub: 0.2,
+      },
+    });
+  });
 });
+
+function wrapWordsInSpan(element) {
+  const text = element.textContent.trim();
+  element.innerHTML = text
+    .split(/\s+/)
+    .map((word) => `<span class="word">${word}</span>`)
+    .join(" ");
+}
+
+function wrapWordsInSpan2(element) {
+  const text = element.textContent;
+  element.innerHTML = text
+    .split(" ")
+    .map((word) => `<span>${word}</span>`)
+    .join(" ");
+}
 
 let documentTitleStore = document.title;
 const documentTitleOnBlur = "Come back! We miss you"; // Define your custom title here
+
+// ── Works: "Featured" / "Work" heading split-slide reveal ────────────────────
+// Left title slides in from left, right title from right — fires once on entry
+function initWorksTitleReveal() {
+  const featured = document.querySelector(".works-title-featured");
+  const work = document.querySelector(".works-title-work");
+  if (!featured || !work) return;
+
+  gsap.set(featured, { xPercent: -12, opacity: 0 });
+  gsap.set(work, { xPercent: 12, opacity: 0 });
+
+  ScrollTrigger.create({
+    trigger: "#works",
+    start: "top 78%",
+    onEnter: () => {
+      gsap.to(featured, {
+        xPercent: 0,
+        opacity: 1,
+        duration: 1.1,
+        ease: "power3.out",
+      });
+      gsap.to(work, {
+        xPercent: 0,
+        opacity: 1,
+        duration: 1.1,
+        ease: "power3.out",
+        delay: 0.08,
+      });
+    },
+    onLeaveBack: () => {
+      gsap.to([featured, work], {
+        opacity: 0,
+        duration: 0.4,
+        ease: "power2.in",
+      });
+    },
+  });
+}
+
+// ── Works: slot-machine character reveal on project titles ──────────────────
+// Each letter gets a 4-copy reel column (overflow:hidden clip).
+// On ScrollTrigger entry: reel rolls from +25% → -75% (bottom→top),
+// revealing the 4th copy with a staggered wave across all characters.
+function initWorksCharAnimation() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  document.querySelectorAll(".work-item__name").forEach((el) => {
+    const text = el.textContent.trim();
+    el.textContent = "";
+    el.setAttribute("aria-label", text);
+
+    text.split(" ").forEach((word, wi) => {
+      if (wi > 0) {
+        // Word-space column
+        const space = document.createElement("span");
+        space.className = "work-item__char-wrap is-space";
+        space.setAttribute("aria-hidden", "true");
+        el.appendChild(space);
+      }
+
+      [...word].forEach((char) => {
+        const wrap = document.createElement("span");
+        wrap.className = "work-item__char-wrap";
+        wrap.setAttribute("aria-hidden", "true");
+
+        const inner = document.createElement("span");
+        inner.className = "work-item__char-inner";
+        // Start below the clip window so the char is invisible until animated
+        gsap.set(inner, { y: "25%" });
+
+        // 4 identical copies — the reel rolls through them creating tumbling depth
+        for (let i = 0; i < 4; i++) {
+          const span = document.createElement("span");
+          span.textContent = char;
+          inner.appendChild(span);
+        }
+
+        wrap.appendChild(inner);
+        el.appendChild(wrap);
+      });
+    });
+
+    const inners = el.querySelectorAll(".work-item__char-inner");
+    const workItem = el.closest(".work-item");
+
+    ScrollTrigger.create({
+      trigger: workItem,
+      start: "top 87%",
+      onEnter: () => {
+        gsap.to(inners, {
+          y: "-75%",
+          duration: 0.95,
+          ease: "power4.out",
+          stagger: { each: 0.028, from: "start" },
+        });
+      },
+      onLeaveBack: () => {
+        gsap.to(inners, {
+          y: "25%",
+          duration: 0.5,
+          ease: "power3.in",
+          stagger: { each: 0.015, from: "end" },
+        });
+      },
+    });
+  });
+}
 
 // Set original title if user is on the site
 window.addEventListener("focus", () => {
@@ -965,61 +1165,61 @@ function initRectReveal() {
   if (!elements.length) return;
 
   elements.forEach((el) => {
-    const color = el.dataset.rectRevealColor || getComputedStyle(el).color; // defaults to element's own text color
-
+    const color = el.dataset.rectRevealColor || getComputedStyle(el).color;
     const split = new SplitText(el, { type: "lines" });
 
-    // Build wrapper + rect overlay for each line
     const lineData = split.lines.map((line) => {
       const wrapper = document.createElement("div");
       wrapper.classList.add("rect-reveal-wrapper");
       line.parentNode.insertBefore(wrapper, line);
       wrapper.appendChild(line);
 
-      const rect = document.createElement("div");
-      rect.classList.add("rect-reveal-block");
-      rect.style.backgroundColor = color;
-      wrapper.appendChild(rect);
+      const rectEl = document.createElement("div");
+      rectEl.classList.add("rect-reveal-block");
+      rectEl.style.backgroundColor = color;
+      wrapper.appendChild(rectEl);
 
       gsap.set(line, { opacity: 0 });
-
-      return { line, rect };
+      return { line, rectEl };
     });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: "top 85%",
-        toggleActions: "play none restart restart",
+    // Initialise all rects before the timeline runs
+    lineData.forEach(({ rectEl }) => {
+      gsap.set(rectEl, { scaleX: 0, transformOrigin: "0% 50%" });
+    });
+
+    // ── Entry timeline: rect wipes in → text reveals → rect wipes out ──────
+    const tl = gsap.timeline({ paused: true });
+
+    lineData.forEach(({ line, rectEl }, i) => {
+      const o = i * 0.09;
+
+      // Phase 1: rect slides in from the left
+      tl.to(rectEl, { scaleX: 1, duration: 0.34, ease: "power3.inOut" }, o);
+
+      // Flip origin then reveal text (both discrete, same playhead position)
+      tl.set(rectEl, { transformOrigin: "100% 50%" }, o + 0.34);
+      tl.to(line, { opacity: 1, duration: 0.001, overwrite: "auto" }, o + 0.34);
+
+      // Phase 2: rect wipes out to the right
+      tl.to(
+        rectEl,
+        { scaleX: 0, duration: 0.34, ease: "power3.inOut" },
+        o + 0.34,
+      );
+    });
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 82%",
+      // Scroll DOWN → play at normal speed
+      onEnter: () => {
+        tl.timeScale(1).play();
       },
-    });
-
-    lineData.forEach(({ line, rect }, i) => {
-      const offset = i * 0.1;
-
-      // Rect wipes in from the left
-      tl.to(
-        rect,
-        {
-          scaleX: 1,
-          duration: 0.4,
-          ease: "power3.inOut",
-          transformOrigin: "0% 50%",
-        },
-        offset,
-      );
-      // Reveal text and wipe rect out to the right
-      tl.set(line, { opacity: 1 }, offset + 0.4);
-      tl.to(
-        rect,
-        {
-          scaleX: 0,
-          duration: 0.4,
-          ease: "power3.inOut",
-          transformOrigin: "100% 50%",
-        },
-        offset + 0.4,
-      );
+      // Scroll UP → reverse at 1.6× so it feels snappy, then reset for re-entry
+      onLeaveBack: () => {
+        tl.timeScale(1.6).reverse();
+      },
     });
   });
 }
@@ -1029,11 +1229,8 @@ function initTextReveal() {
   if (!elements.length) return;
 
   elements.forEach((el) => {
-    // Split the element into lines
     const split = new SplitText(el, { type: "lines" });
 
-    // Wrap each line in an overflow:clip mask so only the sliding
-    // portion is visible — the "rectangle" wipe effect
     split.lines.forEach((line) => {
       const mask = document.createElement("div");
       mask.classList.add("text-reveal-mask");
@@ -1041,16 +1238,29 @@ function initTextReveal() {
       mask.appendChild(line);
     });
 
-    // Animate all lines in this element together with a stagger
-    gsap.from(split.lines, {
-      yPercent: 110,
-      ease: "power3.out",
-      duration: 0.9,
-      stagger: 0.08,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 88%",
-        toggleActions: "play none restart restart",
+    // Explicit fromTo so forward AND reverse are both clean
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo(
+      split.lines,
+      { yPercent: 108 },
+      {
+        yPercent: 0,
+        ease: "expo.out",
+        duration: 1.05,
+        stagger: { each: 0.07, from: "start" },
+      },
+    );
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 87%",
+      // Scroll DOWN → reveal (normal speed)
+      onEnter: () => {
+        tl.timeScale(1).play();
+      },
+      // Scroll UP → hide (1.6× faster so it feels snappy)
+      onLeaveBack: () => {
+        tl.timeScale(1.6).reverse();
       },
     });
   });
