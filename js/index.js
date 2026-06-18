@@ -18,6 +18,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   initCardsSliderABOUT()
 
+  initTextAnimationTESTIMONY()
+
   initExperienceList();
 
   initSkillsTextFill();
@@ -1140,5 +1142,31 @@ function initCardsSliderABOUT() {
         },
       },
     );
+  });
+}
+
+function initTextAnimationTESTIMONY() {
+  const paragraph = document.querySelector("#testimony .paragraph");
+  wrapWordsInSpan(paragraph);
+
+  const pinHeight = document.querySelector("#testimony .pin-height");
+  const container = document.querySelector("#testimony .container-grid");
+  const words = document.querySelectorAll("#testimony .word");
+
+  gsap.set(words, {
+    x: window.innerWidth,
+  });
+
+  gsap.to(words, {
+    x: 0,
+    stagger: 0.02,
+    ease: "power4.inOut",
+    scrollTrigger: {
+      trigger: pinHeight,
+      start: "top top",
+      end: "+=1200",
+      scrub: 1.5,
+      pin: container,
+    },
   });
 }

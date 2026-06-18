@@ -897,6 +897,61 @@ so any fill here bleeds through during animation. */
   }
 }
 
+
+/* ==================== TESTIMONY ==================== */
+#testimony {
+  width: 100%;
+  background-color: var(--white);
+  color: var(--black);
+}
+
+#testimony .container-grid {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+#testimony .word {
+  display: inline-block;
+  transform: translate(calc(100vw - 25px), 0);
+}
+
+#testimony .paragraph {
+  letter-spacing: -0.03em;
+  grid-column: 1 / span 6;
+  display: block;
+}
+
+@media (max-width: 1200px) {
+  #testimony .paragraph {
+    grid-column: 1 / span 7;
+  }
+}
+
+@media (max-width: 768px) {
+  #testimony .paragraph {
+    grid-column: 1 / span 7;
+  }
+
+  #testimony .word {
+    transform: translate(calc(100vw - 15px), 0);
+  }
+}
+
+@media (max-width: 768px) {
+  #testimony .paragraph {
+    grid-column: 1 / span 9;
+  }
+}
+
+@media (max-width: 400px) {
+  #testimony .paragraph {
+    grid-column: 1 / span 12;
+  }
+}
+
+
 /* ==================== EXPERIENCE ==================== */
 #experience {
   background-color: var(--white);
