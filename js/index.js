@@ -14,94 +14,25 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   initCSSMarquee();
 
-  initTextAnimationMISSION();
+  // initTextAnimationMISSION();
 
-  initCardsSliderABOUT()
+  initCardsSliderABOUT();
 
-  initTextAnimationTESTIMONY()
+  initTextAnimationTESTIMONY();
 
   initExperienceList();
 
   initSkillsTextFill();
 
-  initMarqueeScrollDirection();
 
   initFooterParallax();
 
-  initWorksCharAnimation();
+  createLetterRoll();
 });
 
 let documentTitleStore = document.title;
 const documentTitleOnBlur = "Come back! We miss you"; // Define your custom title here
 
-// ── Works: slot-machine character reveal on project titles ──────────────────
-// Each letter gets a 4-copy reel column (overflow:hidden clip).
-// On ScrollTrigger entry: reel rolls from +25% → -75% (bottom→top),
-// revealing the 4th copy with a staggered wave across all characters.
-function initWorksCharAnimation() {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  document.querySelectorAll(".work-item__name").forEach((el) => {
-    const text = el.textContent.trim();
-    el.textContent = "";
-    el.setAttribute("aria-label", text);
-
-    text.split(" ").forEach((word, wi) => {
-      if (wi > 0) {
-        // Word-space column
-        const space = document.createElement("span");
-        space.className = "work-item__char-wrap is-space";
-        space.setAttribute("aria-hidden", "true");
-        el.appendChild(space);
-      }
-
-      [...word].forEach((char) => {
-        const wrap = document.createElement("span");
-        wrap.className = "work-item__char-wrap";
-        wrap.setAttribute("aria-hidden", "true");
-
-        const inner = document.createElement("span");
-        inner.className = "work-item__char-inner";
-        // Start below the clip window so the char is invisible until animated
-        gsap.set(inner, { y: "25%" });
-
-        // 4 identical copies — the reel rolls through them creating tumbling depth
-        for (let i = 0; i < 4; i++) {
-          const span = document.createElement("span");
-          span.textContent = char;
-          inner.appendChild(span);
-        }
-
-        wrap.appendChild(inner);
-        el.appendChild(wrap);
-      });
-    });
-
-    const inners = el.querySelectorAll(".work-item__char-inner");
-    const workItem = el.closest(".work-item");
-
-    ScrollTrigger.create({
-      trigger: workItem,
-      start: "top 87%",
-      onEnter: () => {
-        gsap.to(inners, {
-          y: "-75%",
-          duration: 0.95,
-          ease: "power4.out",
-          stagger: { each: 0.028, from: "start" },
-        });
-      },
-      onLeaveBack: () => {
-        gsap.to(inners, {
-          y: "25%",
-          duration: 0.5,
-          ease: "power3.in",
-          stagger: { each: 0.015, from: "end" },
-        });
-      },
-    });
-  });
-}
 
 // Set original title if user is on the site
 window.addEventListener("focus", () => {
@@ -1165,8 +1096,53 @@ function initTextAnimationTESTIMONY() {
       trigger: pinHeight,
       start: "top top",
       end: "+=1200",
-      scrub: 1.5,
       pin: container,
+      scrub: 1.5,
+      // markers: true,
+      // start: "top 60%",
+      // end: "70% 70%",
     },
+  });
+}
+
+function createLetterRoll(selector = "[data-letter-roll]") {
+  const elements = document.querySelectorAll(selector);
+
+  elements.forEach((element) => {
+    const text = element.textContent;
+
+    element.innerHTML = "";
+
+    [...text].forEach((char) => {
+      if (char === " ") {
+        element.appendChild(document.createTextNode("\u00A0"));
+        return;
+      }
+
+      const wrapper = document.createElement("span");
+      wrapper.classList.add("letter");
+
+      wrapper.innerHTML = `
+        <span>${char}</span>
+        <span>${char}</span>
+      `;
+
+      element.appendChild(wrapper);
+    });
+
+    gsap.to(element.querySelectorAll(".letter"), {
+      yPercent: 100,
+      ease: "power1.inOut",
+      stagger: {
+        each: 0.05,
+        from: "random",
+      },
+      scrollTrigger: {
+        trigger: element,
+        start: "top 80%",
+        end: "bottom 60%",
+        scrub: 1,
+      },
+    });
   });
 }

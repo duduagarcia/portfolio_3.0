@@ -624,29 +624,53 @@ header .container-grid {
 /* ==================== MISSION ==================== */
 #mission {
   width: 100%;
-  background-color: var(--blue);
-  color: var(--white);
+  background-color: var(--white);
+  color: var(--black);
 }
 
 #mission .container-grid {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   overflow: hidden;
+
 }
+
+#mission .container-grid .grid-12 h2 {
+   /* font-size: clamp(3rem, 8vw, 90px); */
+   /* line-height: 90%; */
+   /* letter-spacing: -3%; */
+}
+
+#mission .container-grid .grid-12 h2:nth-child(1) {
+  grid-column: 6 / span 12;
+  line-height: 90%;
+  margin-bottom: clamp(2rem, 6vw, 80px);
+}
+
+#mission .container-grid .grid-12 p {
+  grid-column: 7 / span 3;
+  color: var(--dark_gray);
+  line-height: 130%;
+}
+
+/* #mission .container-grid .grid-12 h2:nth-child(2) {
+  grid-column: 1 / span 12;
+} */
+
 
 #mission .word {
   display: inline-block;
   transform: translate(calc(100vw - 25px), 0);
 }
 
-#mission .paragraph {
+/* #mission .paragraph {
   letter-spacing: -0.03em;
   grid-column: 1 / span 6;
   display: block;
-}
+} */
 
-@media (max-width: 1200px) {
+/* @media (max-width: 1200px) {
   #mission .paragraph {
     grid-column: 1 / span 7;
   }
@@ -672,7 +696,7 @@ header .container-grid {
   #mission .paragraph {
     grid-column: 1 / span 12;
   }
-}
+} */
 
 /* ==================== WORKS ==================== */
 #works {
@@ -768,10 +792,6 @@ so any fill here bleeds through during animation. */
   line-height: 1;
   font-weight: 500;
   color: var(--black);
-  /* name becomes a flex row of character columns */
-  display: flex;
-  align-items: flex-end;
-  overflow: visible;
 }
 
 /* Each character column: clips to exactly 1 line-height */
@@ -840,15 +860,18 @@ so any fill here bleeds through during animation. */
 .mwg_effect001 {
   overflow: hidden;
   position: relative;
+
+  background-color: #75f0aa;
 }
 
 .mwg_effect001 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100vh;
+  height: min-content;
   width: 100%;
   gap: 100px;
+
 }
 
 .mwg_effect001 .cards {
@@ -897,7 +920,6 @@ so any fill here bleeds through during animation. */
   }
 }
 
-
 /* ==================== TESTIMONY ==================== */
 #testimony {
   width: 100%;
@@ -906,7 +928,8 @@ so any fill here bleeds through during animation. */
 }
 
 #testimony .container-grid {
-  height: 100vh;
+  height: min-content;
+  padding-top: 100px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -951,7 +974,6 @@ so any fill here bleeds through during animation. */
   }
 }
 
-
 /* ==================== EXPERIENCE ==================== */
 #experience {
   background-color: var(--white);
@@ -968,10 +990,9 @@ so any fill here bleeds through during animation. */
   margin-bottom: 22px;
 }
 
-#experience .education-label{
+#experience .education-label {
   margin-top: 80px;
 }
-
 
 .experience-list {
   grid-column: 1 / span 12;
@@ -1367,6 +1388,8 @@ grid-column: 1 / span 4;
   }
 }
 
+/* ==================== CTA ==================== */
+
 /* ==================== SCROLL TIMELINE ==================== */
 /* #scroll-timeline {
 position: fixed;
@@ -1696,4 +1719,20 @@ height: 100%;
   display: block;
   width: 100%;
   height: auto;
+}
+
+
+[data-letter-roll] {
+  overflow: hidden;
+}
+
+[data-letter-roll] .letter {
+  position: relative;
+  display: inline-block;
+}
+
+[data-letter-roll] .letter span:last-child {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
 }
