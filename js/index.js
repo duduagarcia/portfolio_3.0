@@ -832,8 +832,9 @@ function initSkillsTextFill() {
       scrollTrigger: {
         trigger: skill,
         start: "top 85%",
-        end: "top 35%",
+        end: "top 55%",
         scrub: 1,
+        // mar  kers: true
       },
     });
   });
